@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Money Track</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="dollar_sign">$</string>
+    <string name="submit">Submit</string>
+</resources>
