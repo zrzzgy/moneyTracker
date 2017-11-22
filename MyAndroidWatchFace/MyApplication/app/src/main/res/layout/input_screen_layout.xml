@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="runze.myapplication.inputActivity">
+    tools:context="runze.myapplication.HomeActivity">
 
     <!-- input view-->
     <LinearLayout
@@ -27,35 +26,48 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:text="@string/dollar_sign"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorSecondaryLight"
                 android:textSize="50sp" />
             <NumberPicker
                 android:id="@+id/thousandsPicker"
+                android:descendantFocusability="blocksDescendants"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:layout_editor_absoluteX="66dp"
-                tools:layout_editor_absoluteY="210dp" />
+                tools:layout_editor_absoluteY="210dp"
+                android:theme="@style/NumberPickerStyle"
+                />
             <NumberPicker
                 android:id="@+id/hundredsPicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:layout_editor_absoluteX="66dp"
-                tools:layout_editor_absoluteY="210dp" />
+                tools:layout_editor_absoluteY="210dp"
+                android:descendantFocusability="blocksDescendants"
+                android:theme="@style/NumberPickerStyle"
+                />
             <NumberPicker
                 android:id="@+id/tensPicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:layout_editor_absoluteX="66dp"
-                tools:layout_editor_absoluteY="210dp" />
+                tools:layout_editor_absoluteY="210dp"
+                android:descendantFocusability="blocksDescendants"
+                android:theme="@style/NumberPickerStyle"
+                />
             <NumberPicker
                 android:id="@+id/onesPicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:layout_editor_absoluteX="66dp"
-                tools:layout_editor_absoluteY="210dp" />
+                tools:layout_editor_absoluteY="210dp"
+                android:descendantFocusability="blocksDescendants"
+                android:theme="@style/NumberPickerStyle"
+                />
         </android.support.v7.widget.LinearLayoutCompat>
 
         <Spinner
+            android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="@dimen/activity_vertical_margin"
@@ -63,30 +75,18 @@
         </Spinner>
 
         <Button
+            android:id="@+id/submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/submit"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorSecondary"
             android:elevation="@dimen/elevation"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorPrimaryDark"
             android:layout_marginTop="@dimen/activity_vertical_margin"/>
     </LinearLayout>
 
     <!-- stats view-->
 
     <!-- category view-->
-
-    <!-- nav bar-->
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation" />
 
 </RelativeLayout>
