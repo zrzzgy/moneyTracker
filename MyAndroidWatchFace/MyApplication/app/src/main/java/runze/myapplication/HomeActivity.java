@@ -10,13 +10,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import runze.myapplication.fragments.BaseFragment;
 import runze.myapplication.fragments.InputScreenFragment;
 import runze.myapplication.fragments.SettingsScreenFragment;
 import runze.myapplication.fragments.StatsScreenFragment;
@@ -30,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
     private StatsScreenFragment mStatsFragment;
     private SettingsScreenFragment mSettingsFragment;
     protected FrameLayout mContentHolder;
+    private BottomNavigationView mNavigation;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -68,8 +66,8 @@ public class HomeActivity extends AppCompatActivity {
         mInputFragment = new InputScreenFragment();
         mStatsFragment = new StatsScreenFragment();
         mSettingsFragment = new SettingsScreenFragment();
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mNavigation = findViewById(R.id.navigation);
+        mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     private void navigateToFragment(Fragment destFragment) {
