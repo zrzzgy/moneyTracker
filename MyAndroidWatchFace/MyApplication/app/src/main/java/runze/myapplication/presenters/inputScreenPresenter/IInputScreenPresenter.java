@@ -9,5 +9,5 @@ public interface IInputScreenPresenter extends IPresenter<IInputScreenView> {
      */
     void initView();
 
-    void saveData();
+    void saveData(double amount);
 }

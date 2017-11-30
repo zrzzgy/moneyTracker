@@ -1,5 +1,7 @@
 package runze.myapplication.presenters.inputScreenPresenter;
 
+import android.widget.Toast;
+
 import runze.myapplication.HomeActivity;
 import runze.myapplication.views.inputScreenView.IInputScreenView;
 
@@ -23,8 +25,11 @@ public class InputScreenPresenter implements IInputScreenPresenter {
         mView = null;
     }
 
-    public void saveData(){
-        int total = 0;
-        mParentActivity.mEditor.putInt("total", total);
+    public void saveData(double amount){
+        if (amount > 0) {
+            mParentActivity.mEditor.putLong("amount", (long) amount);
+        }else {
+            Toast.makeText(mParentActivity.getApplicationContext(), "Amount must be larger than zero", Toast.LENGTH_SHORT).show();
+        }
     }
 }

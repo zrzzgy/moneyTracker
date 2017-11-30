@@ -4,18 +4,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.NumberPicker;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import runze.myapplication.R;
 import runze.myapplication.presenters.inputScreenPresenter.IInputScreenPresenter;
 
 public class InputScreenView extends RelativeLayout implements IInputScreenView {
-    public NumberPicker mThousandsPicker;
-    public NumberPicker mHundredsPicker;
-    public NumberPicker mTensPicker;
-    public NumberPicker mOnesPicker;
-    public Button mSubmit;
+    private EditText mInputAmount;
+    private Button mSubmit;
 
     private IInputScreenPresenter mPresenter;
 
@@ -26,53 +24,10 @@ public class InputScreenView extends RelativeLayout implements IInputScreenView 
     }
 
     private void init(View view){
-        mThousandsPicker = view.findViewById(R.id.thousandsPicker);
-        mHundredsPicker = view.findViewById(R.id.hundredsPicker);
-        mTensPicker = view.findViewById(R.id.tensPicker);
-        mOnesPicker = view.findViewById(R.id.onesPicker);
+        mInputAmount = view.findViewById(R.id.inputAmount);
         mSubmit = view.findViewById(R.id.submit);
         mSubmit.setOnClickListener(mOnClickListener);
 
-        mThousandsPicker.setMaxValue(9);
-        mThousandsPicker.setMinValue(0);
-        mThousandsPicker.setWrapSelectorWheel(true);
-        mThousandsPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-            @Override
-            public void onScrollStateChange(NumberPicker numberPicker, int i) {
-                numberPicker.setHapticFeedbackEnabled(true);
-                numberPicker.performHapticFeedback(5);
-            }
-        });
-        mHundredsPicker.setMaxValue(9);
-        mHundredsPicker.setMinValue(0);
-        mHundredsPicker.setWrapSelectorWheel(true);
-        mHundredsPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-            @Override
-            public void onScrollStateChange(NumberPicker numberPicker, int i) {
-                numberPicker.setHapticFeedbackEnabled(true);
-                numberPicker.performHapticFeedback(5);
-            }
-        });
-        mTensPicker.setMaxValue(9);
-        mTensPicker.setMinValue(0);
-        mTensPicker.setWrapSelectorWheel(true);
-        mTensPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-            @Override
-            public void onScrollStateChange(NumberPicker numberPicker, int i) {
-                numberPicker.setHapticFeedbackEnabled(true);
-                numberPicker.performHapticFeedback(5);
-            }
-        });
-        mOnesPicker.setMaxValue(9);
-        mOnesPicker.setMinValue(0);
-        mOnesPicker.setWrapSelectorWheel(true);
-        mOnesPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-            @Override
-            public void onScrollStateChange(NumberPicker numberPicker, int i) {
-                numberPicker.setHapticFeedbackEnabled(true);
-                numberPicker.performHapticFeedback(5);
-            }
-        });
     }
 
     public void attachPresenter(IInputScreenPresenter presenter){
@@ -89,7 +44,18 @@ public class InputScreenView extends RelativeLayout implements IInputScreenView 
     private OnClickListener mOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            mPresenter.saveData();
+            try {
+                Double amount = Double.parseDouble(mInputAmount.getText().toString());
+                mPresenter.saveData(amount);
+                clearText();
+            }catch (NumberFormatException e){
+                Toast.makeText(getContext(), "Text cannot be empty", Toast.LENGTH_SHORT).show();
+            }
+
         }
     };
+
+    public void clearText(){
+        mInputAmount.setText("");
+    }
 }

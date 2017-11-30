@@ -21,7 +21,6 @@ import runze.myapplication.fragments.InputScreenFragment;
 
 public class HomeActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
-    private TextView mTextMessage;
     private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
@@ -35,13 +34,10 @@ public class HomeActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_input:
-                    mTextMessage.setText(R.string.title_input);
                     return true;
                 case R.id.navigation_stats:
-                    mTextMessage.setText(R.string.title_stats);
                     return true;
                 case R.id.navigation_settings:
-                    mTextMessage.setText(R.string.title_settings);
                     return true;
             }
             return false;
@@ -63,7 +59,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.home_activity);
         mContentHolder = findViewById(R.id.home_content_holder);
         mInputFragment = new InputScreenFragment();
-        mTextMessage = findViewById(R.id.message);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }

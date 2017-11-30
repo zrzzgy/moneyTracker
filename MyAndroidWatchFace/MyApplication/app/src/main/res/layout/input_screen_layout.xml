@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="@dimen/activity_vertical_margin">
+            android:layout_margin="@dimen/activity_vertical_margin">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -28,42 +28,15 @@
                 android:text="@string/dollar_sign"
                 android:textColor="@color/colorSecondaryLight"
                 android:textSize="50sp" />
-            <NumberPicker
-                android:id="@+id/thousandsPicker"
-                android:descendantFocusability="blocksDescendants"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="66dp"
-                tools:layout_editor_absoluteY="210dp"
-                android:theme="@style/NumberPickerStyle"
-                />
-            <NumberPicker
-                android:id="@+id/hundredsPicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="66dp"
-                tools:layout_editor_absoluteY="210dp"
-                android:descendantFocusability="blocksDescendants"
-                android:theme="@style/NumberPickerStyle"
-                />
-            <NumberPicker
-                android:id="@+id/tensPicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="66dp"
-                tools:layout_editor_absoluteY="210dp"
-                android:descendantFocusability="blocksDescendants"
-                android:theme="@style/NumberPickerStyle"
-                />
-            <NumberPicker
-                android:id="@+id/onesPicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="66dp"
-                tools:layout_editor_absoluteY="210dp"
-                android:descendantFocusability="blocksDescendants"
-                android:theme="@style/NumberPickerStyle"
-                />
+            <EditText
+                android:id="@+id/inputAmount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/input_amount_hint"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:inputType="numberDecimal"/>
+
         </android.support.v7.widget.LinearLayoutCompat>
 
         <Spinner
@@ -71,7 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="@dimen/activity_vertical_margin"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimary"
+            android:prompt="@string/drop_down_title">
         </Spinner>
 
         <Button
