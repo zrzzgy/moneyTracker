@@ -18,13 +18,17 @@ import android.widget.TextView;
 
 import runze.myapplication.fragments.BaseFragment;
 import runze.myapplication.fragments.InputScreenFragment;
+import runze.myapplication.fragments.SettingsScreenFragment;
+import runze.myapplication.fragments.StatsScreenFragment;
 
 public class HomeActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
-    private BaseFragment mInputFragment;
+    private InputScreenFragment mInputFragment;
+    private StatsScreenFragment mStatsFragment;
+    private SettingsScreenFragment mSettingsFragment;
     protected FrameLayout mContentHolder;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -34,10 +38,13 @@ public class HomeActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_input:
+                    navigateToFragment(mInputFragment);
                     return true;
                 case R.id.navigation_stats:
+                    navigateToFragment(mStatsFragment);
                     return true;
                 case R.id.navigation_settings:
+                    navigateToFragment(mSettingsFragment);
                     return true;
             }
             return false;
@@ -59,6 +66,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.home_activity);
         mContentHolder = findViewById(R.id.home_content_holder);
         mInputFragment = new InputScreenFragment();
+        mStatsFragment = new StatsScreenFragment();
+        mSettingsFragment = new SettingsScreenFragment();
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }

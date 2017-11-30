@@ -1,8 +1,10 @@
 package runze.myapplication.presenters.statsScreenPresenter;
 
-/**
- * Created by zrzzg on 11/29/2017.
- */
+import runze.myapplication.presenters.IPresenter;
+import runze.myapplication.views.statsScreenView.IStatsScreenView;
 
-public interface IStatsScreenPresenter {
+
+
+public interface IStatsScreenPresenter extends IPresenter<IStatsScreenView> {
+    void initView();
 }

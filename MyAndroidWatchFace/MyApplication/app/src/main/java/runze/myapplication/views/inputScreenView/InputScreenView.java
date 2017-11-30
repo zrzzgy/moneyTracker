@@ -27,7 +27,6 @@ public class InputScreenView extends RelativeLayout implements IInputScreenView 
         mInputAmount = view.findViewById(R.id.inputAmount);
         mSubmit = view.findViewById(R.id.submit);
         mSubmit.setOnClickListener(mOnClickListener);
-
     }
 
     public void attachPresenter(IInputScreenPresenter presenter){
