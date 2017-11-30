@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import runze.myapplication.HomeActivity;
-import runze.myapplication.presenters.inputScreenPresenter.IInputScreenPresenter;
 import runze.myapplication.presenters.settingsScreenPresenter.ISettingsScreenPresenter;
 import runze.myapplication.presenters.settingsScreenPresenter.SettingsScreenPresenter;
 import runze.myapplication.views.settingsScreenView.ISettingsScreenView;
