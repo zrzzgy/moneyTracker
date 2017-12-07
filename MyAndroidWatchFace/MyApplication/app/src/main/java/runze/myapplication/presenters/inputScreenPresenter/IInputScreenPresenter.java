@@ -7,7 +7,7 @@ public interface IInputScreenPresenter extends IPresenter<IInputScreenView> {
     /**
      * Presenter method for populating home screen
      */
-    void initView();
+    void updateView();
 
-    void saveData(double amount);
+    void saveData(String category, double amount);
 }

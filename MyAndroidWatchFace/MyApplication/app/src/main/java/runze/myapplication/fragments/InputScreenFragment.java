@@ -42,7 +42,7 @@ public class InputScreenFragment extends BaseFragment<IInputScreenView, IInputSc
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.initView();
+        mPresenter.updateView();
     }
 
     @Override
@@ -57,6 +57,6 @@ public class InputScreenFragment extends BaseFragment<IInputScreenView, IInputSc
      * Refreshing views in this fragment
      */
     public void refresh() {
-        mPresenter.initView();
+        mPresenter.updateView();
     }
 }

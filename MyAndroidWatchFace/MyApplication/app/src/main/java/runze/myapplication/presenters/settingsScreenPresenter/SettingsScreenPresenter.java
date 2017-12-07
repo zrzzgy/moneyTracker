@@ -10,13 +10,13 @@ import java.util.Set;
 import runze.myapplication.HomeActivity;
 import runze.myapplication.views.settingsScreenView.ISettingsScreenView;
 
+import static runze.myapplication.HomeActivity.CATEGORIES_KEY;
 
 
 public class SettingsScreenPresenter implements ISettingsScreenPresenter {
     private HomeActivity mParentActivity;
     private ISettingsScreenView mView;
     private Set<String> mCategories;
-    private final String CATEGORIES_KEY = "CATEGORIES_KEY";
 
     public SettingsScreenPresenter(HomeActivity activity){
         mParentActivity = activity;

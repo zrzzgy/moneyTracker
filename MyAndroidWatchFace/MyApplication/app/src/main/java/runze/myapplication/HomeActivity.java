@@ -28,6 +28,8 @@ public class HomeActivity extends AppCompatActivity {
     private SettingsScreenFragment mSettingsFragment;
     protected FrameLayout mContentHolder;
     private BottomNavigationView mNavigation;
+    public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
+    public static final String EXPENSES = "EXPENSES";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
