@@ -37,14 +37,13 @@ public class SettingsScreenFragment extends BaseFragment {
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
 
-
         return (View) mView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.initView();
+        mPresenter.updateView();
     }
 
     @Override
@@ -59,6 +58,6 @@ public class SettingsScreenFragment extends BaseFragment {
      * Refreshing views in this fragment
      */
     public void refresh() {
-        mPresenter.initView();
+        mPresenter.updateView();
     }
 }

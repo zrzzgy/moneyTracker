@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import runze.myapplication.HomeActivity;
 import runze.myapplication.presenters.statsScreenPresenter.IStatsScreenPresenter;
 import runze.myapplication.presenters.statsScreenPresenter.StatsScreenPresenter;
 import runze.myapplication.views.statsScreenView.IStatsScreenView;
@@ -29,7 +30,7 @@ public class StatsScreenFragment extends BaseFragment {
 
         // Construct the view if it does not yet exist
         if (mView == null) {
-            mView = new StatsScreenView(getActivity());
+            mView = new StatsScreenView((HomeActivity) getActivity());
         }
         mPresenter = new StatsScreenPresenter(getContext());
         mPresenter.attachView(mView);

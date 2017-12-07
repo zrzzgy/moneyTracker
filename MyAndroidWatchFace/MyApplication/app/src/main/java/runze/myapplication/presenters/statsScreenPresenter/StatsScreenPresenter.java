@@ -1,12 +1,7 @@
 package runze.myapplication.presenters.statsScreenPresenter;
 
 import android.content.Context;
-
 import runze.myapplication.views.statsScreenView.IStatsScreenView;
-
-/**
- * Created by zrzzg on 11/29/2017.
- */
 
 public class StatsScreenPresenter implements IStatsScreenPresenter {
     public StatsScreenPresenter(Context context){
@@ -24,6 +19,10 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
     }
 
     public void initView(){
+
+    }
+
+    public void loadData(){
 
     }
 }
