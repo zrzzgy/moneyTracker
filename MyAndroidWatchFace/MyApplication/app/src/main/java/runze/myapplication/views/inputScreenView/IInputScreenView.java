@@ -7,5 +7,10 @@ import runze.myapplication.views.IView;
 
 public interface IInputScreenView extends IView<IInputScreenPresenter> {
     void updateSpinner(ArrayAdapter<String> adapter);
+
     void clearText();
+
+    int getSpinnerIndex();
+
+    void setSpinnerIndex(int index);
 }

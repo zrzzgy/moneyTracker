@@ -2,6 +2,9 @@ package runze.myapplication.presenters.settingsScreenPresenter;
 
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,13 +17,20 @@ import static runze.myapplication.HomeActivity.CATEGORIES_KEY;
 
 
 public class SettingsScreenPresenter implements ISettingsScreenPresenter {
+    private final String TAG = this.getClass().getSimpleName();
+
     private HomeActivity mParentActivity;
     private ISettingsScreenView mView;
     private Set<String> mCategories;
 
     public SettingsScreenPresenter(HomeActivity activity){
         mParentActivity = activity;
-        mCategories = mParentActivity.mSharedPreferences.getStringSet(CATEGORIES_KEY, new HashSet<String>());
+        String stringCategories = mParentActivity.mSharedPreferences.getString(CATEGORIES_KEY, "");
+        Gson gson = new Gson();
+        mCategories = gson.fromJson(stringCategories, new TypeToken<Set<String>>(){}.getType());
+        if (mCategories == null){
+            mCategories = new HashSet<>();
+        }
     }
 
     public void updateView(){
@@ -39,11 +49,19 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
 
     @Override
     public void saveCategory(String newCategory){
+        Gson gson = new Gson();
+
         if (newCategory.isEmpty()){
             Toast.makeText(mParentActivity.getApplicationContext(), "No category name entered", Toast.LENGTH_SHORT).show();
-        }else {
+        }else if(mCategories.contains(newCategory)){
+            Toast.makeText(mParentActivity.getApplicationContext(), "Category already exists", Toast.LENGTH_SHORT).show();
+        } else{
             mCategories.add(newCategory);
-            mParentActivity.mEditor.putStringSet(CATEGORIES_KEY, mCategories).apply();
+            if (mParentActivity.mEditor.putString(CATEGORIES_KEY, gson.toJson(mCategories)).commit()){
+                Toast.makeText(mParentActivity.getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(mParentActivity.getApplicationContext(), "Save Failed", Toast.LENGTH_SHORT).show();
+            }
         }
         updateView();
     }

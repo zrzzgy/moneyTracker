@@ -16,6 +16,7 @@ import runze.myapplication.R;
 import runze.myapplication.presenters.inputScreenPresenter.IInputScreenPresenter;
 
 public class InputScreenView extends RelativeLayout implements IInputScreenView {
+    private final String TAG = this.getClass().getSimpleName();
     private EditText mInputAmount;
     private Button mSubmit;
     private Spinner mSpinner;
@@ -64,7 +65,19 @@ public class InputScreenView extends RelativeLayout implements IInputScreenView 
     public void updateSpinner(ArrayAdapter<String> adapter){
         mSpinner.setAdapter(adapter);
     }
+
+    @Override
     public void clearText(){
         mInputAmount.setText("");
+    }
+
+    @Override
+    public int getSpinnerIndex(){
+        return mSpinner.getSelectedItemPosition();
+    }
+
+    @Override
+    public void setSpinnerIndex(int index){
+        mSpinner.setSelection(index);
     }
 }

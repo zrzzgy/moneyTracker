@@ -16,6 +16,8 @@ public class InputScreenFragment extends BaseFragment<IInputScreenView, IInputSc
     private IInputScreenView mView;
     private IInputScreenPresenter mPresenter;
 
+    private int spinnerIndexWhenPaused = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,14 +37,19 @@ public class InputScreenFragment extends BaseFragment<IInputScreenView, IInputSc
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
 
-
         return (View) mView;
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        spinnerIndexWhenPaused = mView.getSpinnerIndex();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.updateView();
+        refresh();
     }
 
     @Override
@@ -57,6 +64,6 @@ public class InputScreenFragment extends BaseFragment<IInputScreenView, IInputSc
      * Refreshing views in this fragment
      */
     public void refresh() {
-        mPresenter.updateView();
+        mPresenter.updateView(spinnerIndexWhenPaused);
     }
 }

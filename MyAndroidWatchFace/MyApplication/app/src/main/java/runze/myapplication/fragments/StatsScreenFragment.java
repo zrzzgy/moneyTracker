@@ -30,12 +30,11 @@ public class StatsScreenFragment extends BaseFragment {
 
         // Construct the view if it does not yet exist
         if (mView == null) {
-            mView = new StatsScreenView((HomeActivity) getActivity());
+            mView = new StatsScreenView(getActivity());
         }
-        mPresenter = new StatsScreenPresenter(getContext());
+        mPresenter = new StatsScreenPresenter((HomeActivity) getActivity());
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
-
 
         return (View) mView;
     }
@@ -43,7 +42,7 @@ public class StatsScreenFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.initView();
+        refresh();
     }
 
     @Override
@@ -58,6 +57,6 @@ public class StatsScreenFragment extends BaseFragment {
      * Refreshing views in this fragment
      */
     public void refresh() {
-        mPresenter.initView();
+        mPresenter.updateView();
     }
 }

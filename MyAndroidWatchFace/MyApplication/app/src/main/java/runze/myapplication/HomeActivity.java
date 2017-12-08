@@ -57,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
         initComponents();
         navigateToFragment(mInputFragment);
 
-        mSharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
         logBackStack();
     }
