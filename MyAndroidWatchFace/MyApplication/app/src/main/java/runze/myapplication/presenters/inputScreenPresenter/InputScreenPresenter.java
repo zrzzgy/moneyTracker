@@ -40,7 +40,7 @@ public class InputScreenPresenter implements IInputScreenPresenter {
     public void updateView(int index){
         Log.d(TAG, "categories are: " + mCategories.toString());
         ArrayAdapter<String > adapter =
-                new ArrayAdapter<>(mParentActivity.getApplicationContext(), R.layout.category_item, new ArrayList<>(mCategories));
+                new ArrayAdapter<>(mParentActivity.getApplicationContext(), R.layout.spinner_item, new ArrayList<>(mCategories));
         mView.updateSpinner(adapter);
         mView.setSpinnerIndex(index);
     }

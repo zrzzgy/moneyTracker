@@ -49,11 +49,14 @@ public class StatsScreenView extends RelativeLayout implements IStatsScreenView 
     public void renderData(List<String> data){
         if (!data.isEmpty()){
             if (mAdapter == null) {
-                mAdapter = new ArrayAdapter<>(getContext(), R.layout.category_item, data);
+                mAdapter = new ArrayAdapter<>(getContext(), R.layout.stats_item);
+                mAdapter.add(getResources().getString(R.string.stats_list_title));
+                mAdapter.addAll(data);
                 mListView.setAdapter(mAdapter);
             }else{
                 Set<String> listToSet = new HashSet<>(data);
                 mAdapter.clear();
+                mAdapter.add(getResources().getString(R.string.stats_list_title));
                 mAdapter.addAll(listToSet);
             }
         }

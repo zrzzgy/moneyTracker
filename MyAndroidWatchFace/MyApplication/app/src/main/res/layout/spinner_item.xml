@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="40dp"
+    android:layout_height="60dp"
     android:layout_width="match_parent"
+    android:layout_marginTop="@dimen/stats_item_margin"
     android:textColor="@color/colorPrimary"
-    android:textSize="@dimen/category_list_text_size"
-    android:textStyle="bold"
+    android:textSize="@dimen/spinner_text_size"
+    android:gravity="center_vertical"
     android:textAlignment="center">
 
 </TextView>

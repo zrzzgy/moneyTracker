@@ -8,7 +8,10 @@
         <item name="colorAccent">@color/colorSecondary</item>
     </style>
 
-    <style name="NumberPickerStyle">
-        <item name="android:textSize">25dp</item>
+    <style name="BigBrightText">
+        <item name="android:textSize">50sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/colorSecondaryLight</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 </resources>

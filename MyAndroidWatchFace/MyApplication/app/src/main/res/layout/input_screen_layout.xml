@@ -5,6 +5,9 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
     tools:context="runze.myapplication.HomeActivity">
 
     <!-- input view-->
@@ -14,20 +17,19 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <!--input field -->
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_margin="@dimen/activity_vertical_margin">
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="2">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
                 android:text="@string/dollar_sign"
-                android:textColor="@color/colorSecondaryLight"
-                android:textSize="50sp" />
+                android:theme="@style/BigBrightText"/>
             <EditText
                 android:id="@+id/inputAmount"
                 android:layout_width="match_parent"
@@ -35,28 +37,45 @@
                 android:hint="@string/input_amount_hint"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:textSize="@dimen/category_list_text_size"/>
 
         </android.support.v7.widget.LinearLayoutCompat>
 
-        <Spinner
-            android:id="@+id/spinner"
+        <!--category spinner-->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_margin="@dimen/activity_vertical_margin"
-            android:background="@color/colorPrimary"
-            android:prompt="@string/drop_down_title">
-        </Spinner>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/BigBrightText"
+                android:text="@string/category_text"/>
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorSecondaryLight"
+                android:textAlignment="center"
+                android:popupElevation="@dimen/elevation"
+                android:popupBackground="@color/colorSecondaryLight">
+            </Spinner>
+        </LinearLayout>
 
+        <!--submit button-->
         <Button
             android:id="@+id/submit"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/submit"
             android:background="@color/colorSecondary"
             android:elevation="@dimen/elevation"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginTop="@dimen/activity_vertical_margin"/>
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/category_list_text_size"
+            android:layout_weight="2"/>
     </LinearLayout>
 
     <!-- stats view-->

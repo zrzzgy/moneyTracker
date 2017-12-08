@@ -52,8 +52,13 @@ public class InputScreenView extends RelativeLayout implements IInputScreenView 
         public void onClick(View view) {
             try {
                 Double amount = Double.parseDouble(mInputAmount.getText().toString());
-                mPresenter.saveData(mSpinner.getSelectedItem().toString(), amount);
-                clearText();
+                if (mSpinner.getSelectedItem() != null) {
+                    mPresenter.saveData(mSpinner.getSelectedItem().toString(), amount);
+                    clearText();
+                }else{
+                    Toast.makeText(getContext(), "No category selected", Toast.LENGTH_SHORT).show();
+
+                }
             }catch (NumberFormatException e){
                 Toast.makeText(getContext(), "Text cannot be empty", Toast.LENGTH_SHORT).show();
             }
