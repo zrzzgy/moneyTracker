@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">记账</string>
+    <string name="title_input">输入</string>
+    <string name="title_stats">统计</string>
+    <string name="title_settings">设置</string>
+    <string name="dollar_sign">￥</string>
+    <string name="category_text">类别: </string>
+    <string name="submit">保存</string>
+    <string name="add_category_button">保存类别</string>
+    <string name="drop_down_title">选择类别</string>
+    <string name="input_amount_hint">0.00</string>
+    <string name="null_category_place_holder_text">没有类别，请添加一个类别</string>
+    <string name="stats_list_title">类别 : 总计</string>
+    <string name="saved">已保存</string>
+    <string name="save_failed">保存失败</string>
+    <string name="value_smaller_than_zero">数字小于零</string>
+    <string name="no_category_selected">没有选择类别</string>
+    <string name="no_text_entered">没有输入数字</string>
+    <string name="no_category_entered">没有输入类别</string>
+    <string name="category_already_exists">类别已存在</string>
+</resources>

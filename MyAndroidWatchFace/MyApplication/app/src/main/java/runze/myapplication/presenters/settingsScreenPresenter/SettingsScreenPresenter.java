@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import runze.myapplication.HomeActivity;
+import runze.myapplication.R;
 import runze.myapplication.views.settingsScreenView.ISettingsScreenView;
 
 import static runze.myapplication.HomeActivity.CATEGORIES_KEY;
@@ -52,15 +53,15 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
         Gson gson = new Gson();
 
         if (newCategory.isEmpty()){
-            Toast.makeText(mParentActivity.getApplicationContext(), "No category name entered", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.no_category_entered), Toast.LENGTH_SHORT).show();
         }else if(mCategories.contains(newCategory)){
-            Toast.makeText(mParentActivity.getApplicationContext(), "Category already exists", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.category_already_exists), Toast.LENGTH_SHORT).show();
         } else{
             mCategories.add(newCategory);
             if (mParentActivity.mEditor.putString(CATEGORIES_KEY, gson.toJson(mCategories)).commit()){
-                Toast.makeText(mParentActivity.getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(mParentActivity.getApplicationContext(), "Save Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.save_failed), Toast.LENGTH_SHORT).show();
             }
         }
         updateView();

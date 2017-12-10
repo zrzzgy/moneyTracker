@@ -11,4 +11,11 @@
     <string name="input_amount_hint">0.00</string>
     <string name="null_category_place_holder_text">No category, add a category to start.</string>
     <string name="stats_list_title">Category : Total Expense</string>
+    <string name="saved">Saved</string>
+    <string name="save_failed">Save failed</string>
+    <string name="value_smaller_than_zero">Amount must be greater than zero</string>
+    <string name="no_category_selected">No category selected</string>
+    <string name="no_text_entered">No category selected</string>
+    <string name="no_category_entered">No category entered</string>
+    <string name="category_already_exists">Category already exists</string>
 </resources>

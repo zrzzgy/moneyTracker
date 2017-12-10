@@ -75,12 +75,12 @@ public class InputScreenPresenter implements IInputScreenPresenter {
 
             //save edited data
             if (mParentActivity.mEditor.putString(EXPENSES, gson.toJson(expenseList)).commit()) {
-                Toast.makeText(mParentActivity.getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(mParentActivity.getApplicationContext(), "Save Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.save_failed), Toast.LENGTH_SHORT).show();
             }
         }else {
-            Toast.makeText(mParentActivity.getApplicationContext(), "Amount must be larger than zero", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.value_smaller_than_zero), Toast.LENGTH_SHORT).show();
         }
     }
 }

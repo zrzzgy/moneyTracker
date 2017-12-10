@@ -56,11 +56,11 @@ public class InputScreenView extends RelativeLayout implements IInputScreenView 
                     mPresenter.saveData(mSpinner.getSelectedItem().toString(), amount);
                     clearText();
                 }else{
-                    Toast.makeText(getContext(), "No category selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_category_selected), Toast.LENGTH_SHORT).show();
 
                 }
             }catch (NumberFormatException e){
-                Toast.makeText(getContext(), "Text cannot be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.no_text_entered), Toast.LENGTH_SHORT).show();
             }
 
         }
