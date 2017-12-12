@@ -30,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
     private BottomNavigationView mNavigation;
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES = "EXPENSES";
+    public static final String STATS_TYPE = "STATS_TYPE";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {

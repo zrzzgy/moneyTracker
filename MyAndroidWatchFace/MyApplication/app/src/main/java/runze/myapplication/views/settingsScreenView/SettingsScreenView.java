@@ -11,7 +11,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import runze.myapplication.R;
@@ -29,7 +28,7 @@ public class SettingsScreenView extends LinearLayout implements ISettingsScreenV
 
     public SettingsScreenView(Context context){
         super(context);
-        View v = LayoutInflater.from(context).inflate(R.layout.settings_screen_layout, this);
+        View v = LayoutInflater.from(context).inflate(R.layout.settings_view_layout, this);
         init(v);
     }
 
@@ -70,7 +69,7 @@ public class SettingsScreenView extends LinearLayout implements ISettingsScreenV
         hideShowPlaceHolderText(cate);
         if (cate != null) {
             if (mAdapter == null) {
-                mAdapter = new ArrayAdapter<>(getContext(), R.layout.category_item, new ArrayList<>(cate));
+                mAdapter = new ArrayAdapter<>(getContext(), R.layout.settings_category_item, new ArrayList<>(cate));
                 mListView.setAdapter(mAdapter);
             }else{
                 mAdapter.clear();

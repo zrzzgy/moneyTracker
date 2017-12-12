@@ -10,8 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import runze.myapplication.R;
 import runze.myapplication.presenters.inputScreenPresenter.IInputScreenPresenter;
 
@@ -25,7 +23,7 @@ public class InputScreenView extends RelativeLayout implements IInputScreenView 
 
     public InputScreenView(Context context){
         super(context);
-        View v = LayoutInflater.from(context).inflate(R.layout.input_screen_layout, this);
+        View v = LayoutInflater.from(context).inflate(R.layout.input_view_layout, this);
         init(v);
     }
 

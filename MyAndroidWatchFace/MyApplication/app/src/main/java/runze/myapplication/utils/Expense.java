@@ -1,5 +1,7 @@
 package runze.myapplication.utils;
 
+import java.util.Date;
+
 /**
  * Created by zhengr2 on 12/7/2017.
  */
@@ -7,30 +9,23 @@ package runze.myapplication.utils;
 public class Expense {
     private String mCategory;
     private Double mAmount;
+    private Date mDate;
 
-    public Expense(){
-        mCategory = "";
-        mAmount = 0.00;
-    }
-
-    public Expense(String cate, Double amount){
+    public Expense(String cate, Double amount, Date date){
         mCategory = cate;
         mAmount = amount;
+        mDate = date;
     }
 
     public String getmCategory() {
         return mCategory;
     }
 
-    public void setmCategory(String mCategory) {
-        this.mCategory = mCategory;
-    }
-
     public Double getmAmount() {
         return mAmount;
     }
 
-    public void setmAmount(Double mAmount) {
-        this.mAmount = mAmount;
+    public Date getmDate() {
+        return mDate;
     }
 }

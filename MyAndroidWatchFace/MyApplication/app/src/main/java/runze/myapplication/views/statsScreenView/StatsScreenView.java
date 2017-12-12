@@ -3,17 +3,12 @@ package runze.myapplication.views.statsScreenView;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.PieData;
 
 import runze.myapplication.R;
 import runze.myapplication.presenters.IPresenter;
@@ -21,18 +16,20 @@ import runze.myapplication.presenters.statsScreenPresenter.IStatsScreenPresenter
 
 
 public class StatsScreenView extends RelativeLayout implements IStatsScreenView {
+    private final String TAG = getClass().getSimpleName();
     private IStatsScreenPresenter mPresenter;
-    private ListView mListView;
-    private ArrayAdapter<String> mAdapter;
+    private BarChart mBarChart;
+    private PieChart mPieChart;
 
     public StatsScreenView(Context  context){
         super(context);
-        View v = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.stats_screen_layout, this);
+        View v = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.stats_view_layout, this);
         init(v);
     }
 
     private void init(View view){
-        mListView = view.findViewById(R.id.statsList);
+        mBarChart = findViewById(R.id.barChart);
+        mPieChart = findViewById(R.id.pieChart);
     }
 
     @Override
@@ -46,19 +43,10 @@ public class StatsScreenView extends RelativeLayout implements IStatsScreenView 
     }
 
     @Override
-    public void renderData(List<String> data){
-        if (!data.isEmpty()){
-            if (mAdapter == null) {
-                mAdapter = new ArrayAdapter<>(getContext(), R.layout.stats_item);
-                mAdapter.add(getResources().getString(R.string.stats_list_title));
-                mAdapter.addAll(data);
-                mListView.setAdapter(mAdapter);
-            }else{
-                Set<String> listToSet = new HashSet<>(data);
-                mAdapter.clear();
-                mAdapter.add(getResources().getString(R.string.stats_list_title));
-                mAdapter.addAll(listToSet);
-            }
-        }
+    public void drawCharts(BarData barData, PieData pieData){
+        mBarChart.setData(barData);
+        mBarChart.setFitBars(true);
+        mBarChart.invalidate();
+        mPieChart.setData(pieData);
     }
 }

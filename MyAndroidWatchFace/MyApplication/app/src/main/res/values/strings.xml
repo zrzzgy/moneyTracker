@@ -1,21 +1,34 @@
 <resources>
+    <!--navigation titles-->
     <string name="app_name">Money Track</string>
     <string name="title_input">Input</string>
     <string name="title_stats">Stats</string>
     <string name="title_settings">Settings</string>
+
+    <!--input screen-->
     <string name="dollar_sign">$</string>
-    <string name="category_text">Category: </string>
-    <string name="submit">Submit</string>
-    <string name="add_category_button">Add</string>
-    <string name="drop_down_title">Choose a Category</string>
     <string name="input_amount_hint">0.00</string>
-    <string name="null_category_place_holder_text">No category, add a category to start.</string>
-    <string name="stats_list_title">Category : Total Expense</string>
+    <string name="category_text">Category: </string>
+    <string name="no_category_selected">No category selected</string>
+    <string name="submit">Submit</string>
     <string name="saved">Saved</string>
     <string name="save_failed">Save failed</string>
     <string name="value_smaller_than_zero">Amount must be greater than zero</string>
-    <string name="no_category_selected">No category selected</string>
-    <string name="no_text_entered">No category selected</string>
+    <string name="no_text_entered">No amount entered</string>
+
+    <!--settings screen-->
+    <string name="null_category_place_holder_text">No category, add a category to start.</string>
+    <string name="add_category_button">Add</string>
+    <string name="drop_down_title">Choose a Category</string>
     <string name="no_category_entered">No category entered</string>
     <string name="category_already_exists">Category already exists</string>
+
+    <!--stats screen-->
+    <string name="stats_list_title">Category : Total Expense</string>
+    <string-array name="stats_type_list">
+        <item>Table</item>
+        <item>Pie Chart</item>
+        <item>Histogram</item>
+    </string-array>
+
 </resources>

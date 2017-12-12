@@ -9,5 +9,4 @@ import runze.myapplication.views.statsScreenView.IStatsScreenView;
 
 public interface IStatsScreenPresenter extends IPresenter<IStatsScreenView> {
     void updateView();
-    List<String> analyzeData();
 }

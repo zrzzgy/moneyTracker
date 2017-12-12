@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +41,7 @@ public class InputScreenPresenter implements IInputScreenPresenter {
     public void updateView(int index){
         Log.d(TAG, "categories are: " + mCategories.toString());
         ArrayAdapter<String > adapter =
-                new ArrayAdapter<>(mParentActivity.getApplicationContext(), R.layout.spinner_item, new ArrayList<>(mCategories));
+                new ArrayAdapter<>(mParentActivity.getApplicationContext(), R.layout.input_spinner_item, new ArrayList<>(mCategories));
         mView.updateSpinner(adapter);
         mView.setSpinnerIndex(index);
     }
@@ -59,7 +60,7 @@ public class InputScreenPresenter implements IInputScreenPresenter {
             Gson gson = new Gson();
 
             //create new Expense object based on data given
-            Expense newExpense = new Expense(category, amount);
+            Expense newExpense = new Expense(category, amount, new Date());
 
             //read saved data from preferences
             String savedExpenses = mParentActivity.mSharedPreferences.getString(EXPENSES, "");
