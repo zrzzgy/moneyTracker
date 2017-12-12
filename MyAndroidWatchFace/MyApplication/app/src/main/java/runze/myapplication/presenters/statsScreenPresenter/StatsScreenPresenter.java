@@ -1,8 +1,5 @@
 package runze.myapplication.presenters.statsScreenPresenter;
 
-import android.content.res.AssetManager;
-import android.util.Log;
-
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -12,14 +9,12 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import runze.myapplication.HomeActivity;
@@ -27,7 +22,6 @@ import runze.myapplication.utils.Expense;
 import runze.myapplication.views.statsScreenView.IStatsScreenView;
 
 import static runze.myapplication.HomeActivity.EXPENSES;
-import static runze.myapplication.HomeActivity.STATS_TYPE;
 
 public class StatsScreenPresenter implements IStatsScreenPresenter {
     private final String TAG = this.getClass().getSimpleName();
@@ -64,15 +58,16 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         float xPosition = 0;
         for (Map.Entry<Date, Double> entry: dataForBarChart) {
             barEntries.add(new BarEntry(xPosition++, entry.getValue().floatValue()));
+            xPosition += 0.4;
         }
 
         for (Map.Entry<String, Double> entry: dataForPieChart) {
-            pieEntries.add(new PieEntry(entry.getValue().floatValue()));
+            pieEntries.add(new PieEntry(entry.getValue().floatValue(), entry.getKey()));
         }
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Date");
         BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.9f);
+        barData.setBarWidth(0.4f);
 
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "Category");
         PieData pieData = new PieData(pieDataSet);
