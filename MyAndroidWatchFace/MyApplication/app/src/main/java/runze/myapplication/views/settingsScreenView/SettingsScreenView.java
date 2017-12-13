@@ -2,7 +2,9 @@ package runze.myapplication.views.settingsScreenView;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Set;
 
+import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.presenters.IPresenter;
 import runze.myapplication.presenters.settingsScreenPresenter.ISettingsScreenPresenter;
@@ -34,6 +37,7 @@ public class SettingsScreenView extends LinearLayout implements ISettingsScreenV
 
     private void init(View view){
         mListView = view.findViewById(R.id.categoryList);
+        ((HomeActivity) getContext()).registerForContextMenu(mListView);
         mPlaceHolderText = view.findViewById(R.id.nullCategoryPlaceHolder);
         mNewCategoryText = view.findViewById(R.id.category_edit_text);
         mAddButton = view.findViewById(R.id.add_button);

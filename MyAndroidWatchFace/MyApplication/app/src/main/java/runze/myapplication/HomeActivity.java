@@ -11,7 +11,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -94,8 +97,27 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        menu.setHeaderTitle(R.string.title_context_menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        switch ( item.getItemId()){
+            case R.id.option_menu_edit:
+                return true;
+            case R.id.option_menu_delete:
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public void onBackPressed(){
            logBackStack();
+           finish();
     }
 
     private  void logBackStack(){
