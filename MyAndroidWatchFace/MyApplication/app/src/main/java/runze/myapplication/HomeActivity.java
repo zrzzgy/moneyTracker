@@ -14,6 +14,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import runze.myapplication.fragments.InputScreenFragment;
 import runze.myapplication.fragments.SettingsScreenFragment;
 import runze.myapplication.fragments.StatsScreenFragment;
@@ -28,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     private SettingsScreenFragment mSettingsFragment;
     protected FrameLayout mContentHolder;
     private BottomNavigationView mNavigation;
+    public List<Integer> mColorList = new ArrayList<>();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES = "EXPENSES";
 

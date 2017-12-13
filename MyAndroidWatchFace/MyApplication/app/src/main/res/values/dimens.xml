@@ -2,6 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">20dp</dimen>
+    <dimen name="tight_activity_horizontal_margin">8dp</dimen>
+    <dimen name="tight_activity_vertical_margin">10dp</dimen>
     <dimen name="elevation">20dp</dimen>
 
     <!-- spinner -->
@@ -13,4 +15,5 @@
     <!-- stats list -->
     <dimen name="stats_text_size">25sp</dimen>
     <dimen name="stats_item_margin">3dp</dimen>
+    <dimen name="space_between_charts">40dp</dimen>
 </resources>

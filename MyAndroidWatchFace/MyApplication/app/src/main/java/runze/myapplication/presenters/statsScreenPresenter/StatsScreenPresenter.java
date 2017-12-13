@@ -1,5 +1,8 @@
 package runze.myapplication.presenters.statsScreenPresenter;
 
+import android.graphics.Color;
+import android.text.format.DateUtils;
+
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -10,7 +13,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import java.util.Random;
 import java.util.Set;
 
 import runze.myapplication.HomeActivity;
+import runze.myapplication.R;
 import runze.myapplication.utils.Expense;
 import runze.myapplication.views.statsScreenView.IStatsScreenView;
 
@@ -50,26 +53,37 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
     private void analyzeData(){
         List<Expense> expenses = loadData();
         Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(expenses);
-        Set<Map.Entry<Date, Double>> dataForBarChart = dateAsKey(expenses);
+        Set<Map.Entry<String, Double>> dataForBarChart = dateAsKey(expenses);
 
         List<BarEntry> barEntries = new ArrayList<>();
         List<PieEntry> pieEntries = new ArrayList<>();
 
+        //bar chart
         float xPosition = 0;
-        for (Map.Entry<Date, Double> entry: dataForBarChart) {
+        for (Map.Entry<String, Double> entry: dataForBarChart) {
             barEntries.add(new BarEntry(xPosition++, entry.getValue().floatValue()));
-            xPosition += 0.4;
-        }
-
-        for (Map.Entry<String, Double> entry: dataForPieChart) {
-            pieEntries.add(new PieEntry(entry.getValue().floatValue(), entry.getKey()));
+            xPosition += 0.3;
         }
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Date");
         BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.4f);
+        barData.setBarWidth(0.2f);
 
+        //pir chart
+        for (Map.Entry<String, Double> entry: dataForPieChart) {
+            pieEntries.add(new PieEntry(entry.getValue().floatValue(), entry.getKey()));
+        }
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "Category");
+        if (pieEntries.size() > mParentActivity.mColorList.size()) {
+            Random rng = new Random();
+            for (int i = mParentActivity.mColorList.size(); i < pieEntries.size(); i++) {
+                mParentActivity.mColorList.add(Color.rgb(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)));
+            }
+        }
+        pieDataSet.setColors(mParentActivity.mColorList);
+        pieDataSet.setValueTextSize(25);
+        pieDataSet.setValueTextColor(Color.WHITE);
+        pieDataSet.setLabel(mParentActivity.getResources().getString(R.string.pie_label));
         PieData pieData = new PieData(pieDataSet);
 
         mView.drawCharts(barData, pieData);
@@ -89,15 +103,16 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         return  expenseList;
     }
 
-    private Set<Map.Entry<Date, Double>> dateAsKey(List<Expense> expenses){
-        HashMap<Date, Double> sortedData = new HashMap<>();
+    private Set<Map.Entry<String, Double>> dateAsKey(List<Expense> expenses){
+        HashMap<String, Double> sortedData = new HashMap<>();
         for (int i = 0; i < expenses.size(); i++) {
             Expense expense = expenses.get(i);
-            if (sortedData.containsKey(expense.getmDate())){
-                double sum = sortedData.get(expense.getmDate()) + expense.getmAmount();
-                sortedData.put(expense.getmDate(), sum);
+           String dateForCurrentExpense = DateUtils.formatDateTime(mParentActivity.getApplicationContext(), expense.getmDate().getTime(), DateUtils.FORMAT_SHOW_DATE);
+            if (sortedData.containsKey(dateForCurrentExpense)){
+                double sum = sortedData.get(dateForCurrentExpense) + expense.getmAmount();
+                sortedData.put(dateForCurrentExpense, sum);
             }else{
-                sortedData.put(expense.getmDate(), expense.getmAmount());
+                sortedData.put(dateForCurrentExpense, expense.getmAmount());
             }
         }
        return sortedData.entrySet();

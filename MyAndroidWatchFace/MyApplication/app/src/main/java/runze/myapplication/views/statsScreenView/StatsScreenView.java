@@ -46,7 +46,10 @@ public class StatsScreenView extends RelativeLayout implements IStatsScreenView 
     public void drawCharts(BarData barData, PieData pieData){
         mBarChart.setData(barData);
         mBarChart.setFitBars(true);
+        mBarChart.setAutoScaleMinMaxEnabled(true);
+        mBarChart.getXAxis().setDrawLabels(true);
         mBarChart.invalidate();
+
         mPieChart.setData(pieData);
         mPieChart.invalidate();
     }

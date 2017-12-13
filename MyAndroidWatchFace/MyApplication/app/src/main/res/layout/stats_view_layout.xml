@@ -10,12 +10,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/tight_activity_horizontal_margin">
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pieChart"
                 android:layout_width="match_parent"
                 android:layout_height="500dp">
             </com.github.mikephil.charting.charts.PieChart>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_between_charts" />
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChart"

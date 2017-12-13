@@ -25,10 +25,7 @@
 
     <!--stats screen-->
     <string name="stats_list_title">Category : Total Expense</string>
-    <string-array name="stats_type_list">
-        <item>Table</item>
-        <item>Pie Chart</item>
-        <item>Histogram</item>
-    </string-array>
+    <string name="pie_label">Sort by category</string>
+    <string name="bar_label">Sort by date</string>
 
 </resources>
