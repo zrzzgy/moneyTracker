@@ -6,6 +6,10 @@
     <string name="title_settings">Settings</string>
     <string name="title_context_menu">Options</string>
 
+    <!--snack bar-->
+    <string name="snack_bar_message">Item deleted</string>
+    <string name="snack_bar_undo">Undo</string>
+
     <!--input screen-->
     <string name="dollar_sign">$</string>
     <string name="input_amount_hint">0.00</string>

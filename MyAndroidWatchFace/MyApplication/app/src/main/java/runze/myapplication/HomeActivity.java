@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -109,6 +111,13 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.option_menu_edit:
                 return true;
             case R.id.option_menu_delete:
+                Snackbar.make(mContentHolder, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
+                        .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        }).show();
                 return true;
         }
         return false;
