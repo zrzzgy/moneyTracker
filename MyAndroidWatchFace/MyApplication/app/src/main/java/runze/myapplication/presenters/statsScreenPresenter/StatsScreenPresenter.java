@@ -54,6 +54,7 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         List<Expense> expenses = loadData();
         Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(expenses);
         Set<Map.Entry<String, Double>> dataForBarChart = dateAsKey(expenses);
+        List<String> tableData = dataToTable(expenses);
 
         List<BarEntry> barEntries = new ArrayList<>();
         List<PieEntry> pieEntries = new ArrayList<>();
@@ -66,10 +67,11 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         }
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Date");
+        barDataSet.setLabel(mParentActivity.getResources().getString(R.string.bar_label));
         BarData barData = new BarData(barDataSet);
         barData.setBarWidth(0.2f);
 
-        //pir chart
+        //pie chart
         for (Map.Entry<String, Double> entry: dataForPieChart) {
             pieEntries.add(new PieEntry(entry.getValue().floatValue(), entry.getKey()));
         }
@@ -86,7 +88,9 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         pieDataSet.setLabel(mParentActivity.getResources().getString(R.string.pie_label));
         PieData pieData = new PieData(pieDataSet);
 
-        mView.drawCharts(barData, pieData);
+        mView.displayBarChart(barData);
+        mView.displayPieChart(pieData);
+        mView.displayTable(tableData);
     }
 
     private List<Expense> loadData(){
@@ -130,5 +134,15 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
             }
         }
         return sortedData.entrySet();
+    }
+
+    private List<String> dataToTable(List<Expense> expenses){
+        List<String> result = new ArrayList<>();
+        for (Expense expense: expenses) {
+            result.add(expense.getmDate().toString() + " " +
+            expense.getmCategory() + " " +
+            expense.getmAmount());
+        }
+        return result;
     }
 }

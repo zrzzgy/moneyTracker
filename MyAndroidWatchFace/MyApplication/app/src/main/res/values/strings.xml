@@ -31,7 +31,7 @@
     <string name="delete">Delete</string>
 
     <!--stats screen-->
-    <string name="stats_list_title">Category : Total Expense</string>
+    <string name="stats_list_title">Date : Category : Total Expense</string>
     <string name="pie_label">Sort by category</string>
     <string name="bar_label">Sort by date</string>
 
