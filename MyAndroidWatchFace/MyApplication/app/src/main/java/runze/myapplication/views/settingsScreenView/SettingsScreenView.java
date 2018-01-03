@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import runze.myapplication.HomeActivity;
@@ -61,7 +62,7 @@ public class SettingsScreenView extends LinearLayout implements ISettingsScreenV
         mPresenter = null;
     }
 
-    private void hideShowPlaceHolderText(Set<String> cate){
+    private void hideShowPlaceHolderText(List<String> cate){
         if (!cate.isEmpty()){
             mPlaceHolderText.setVisibility(GONE);
         }else{
@@ -69,7 +70,7 @@ public class SettingsScreenView extends LinearLayout implements ISettingsScreenV
         }
     }
 
-    public void populateListView(Set<String> cate){
+    public void populateListView(List<String> cate){
         hideShowPlaceHolderText(cate);
         if (cate != null) {
             if (mAdapter == null) {

@@ -51,7 +51,7 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
     }
 
     private void analyzeData(){
-        List<Expense> expenses = loadData();
+        List<Expense> expenses = mParentActivity.loadData();
         Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(expenses);
         Set<Map.Entry<String, Double>> dataForBarChart = dateAsKey(expenses);
         List<String> tableData = dataToTable(expenses);
@@ -91,20 +91,6 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         mView.displayBarChart(barData);
         mView.displayPieChart(pieData);
         mView.displayTable(tableData);
-    }
-
-    private List<Expense> loadData(){
-        Gson gson = new Gson();
-        List<Expense> expenseList = new ArrayList<>();
-
-        //read saved data from preferences
-        String savedExpenses = mParentActivity.mSharedPreferences.getString(EXPENSES, "");
-
-        //if there is saved data, put it in first
-        if (!savedExpenses.equals("")){
-            expenseList = gson.fromJson(savedExpenses, new TypeToken<List<Expense>>(){}.getType());
-        }
-        return  expenseList;
     }
 
     private Set<Map.Entry<String, Double>> dateAsKey(List<Expense> expenses){

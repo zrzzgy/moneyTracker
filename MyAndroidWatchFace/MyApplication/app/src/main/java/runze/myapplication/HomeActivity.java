@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,26 +18,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import runze.myapplication.fragments.InputScreenFragment;
 import runze.myapplication.fragments.SettingsScreenFragment;
 import runze.myapplication.fragments.StatsScreenFragment;
+import runze.myapplication.utils.Expense;
+import runze.myapplication.views.settingsScreenView.SettingsScreenView;
+import runze.myapplication.views.statsScreenView.StatsScreenView;
 
 public class HomeActivity extends AppCompatActivity {
-    private final String TAG = this.getClass().getSimpleName();
-    private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
+    public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
+    public static final String EXPENSES = "EXPENSES";
+
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
+    public List<Integer> mColorList = new ArrayList<>();
+
+    protected FrameLayout mContentHolder;
+
+    private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
+    private final String TAG = this.getClass().getSimpleName();
     private InputScreenFragment mInputFragment;
     private StatsScreenFragment mStatsFragment;
     private SettingsScreenFragment mSettingsFragment;
-    protected FrameLayout mContentHolder;
     private BottomNavigationView mNavigation;
-    public List<Integer> mColorList = new ArrayList<>();
-    public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
-    public static final String EXPENSES = "EXPENSES";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -107,18 +115,36 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item){
-        switch ( item.getItemId()){
-            case R.id.option_menu_edit:
-                return true;
-            case R.id.option_menu_delete:
-                Snackbar.make(mContentHolder, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
-                        .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+        Fragment currentFragment = getCurrentFragment();
+        if (currentFragment instanceof SettingsScreenFragment){
+            switch (item.getItemId()){
+                case R.id.option_menu_edit:
+                    return true;
+                case R.id.option_menu_delete:
+                    ((SettingsScreenFragment) currentFragment).getmPresenter().removeCategory(item);
+                    Snackbar.make(mContentHolder, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
+                            .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                   undoRemoveCategory();
+                                }
+                            }).show();
+                    return true;
+            }
+        }else if (currentFragment instanceof StatsScreenFragment){
+            switch (item.getItemId()){
+                case R.id.option_menu_edit:
+                    return true;
+                case R.id.option_menu_delete:
+                    Snackbar.make(mContentHolder, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
+                            .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
 
-                            }
-                        }).show();
-                return true;
+                                }
+                            }).show();
+                    return true;
+            }
         }
         return false;
     }
@@ -137,5 +163,34 @@ public class HomeActivity extends AppCompatActivity {
             sb.append(fm.getBackStackEntryAt(entry).getName()).append(", ");
         }
         Log.d(TAG, sb.toString());
+    }
+
+    protected Fragment getCurrentFragment() {
+        Fragment fragment = null;
+        FragmentManager fm = getFragmentManager();
+        if (fm != null && fm.getBackStackEntryCount() > 0) {
+            FragmentManager.BackStackEntry backEntry = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1);
+            String fragmentTag = backEntry.getName();
+            fragment = getFragmentManager().findFragmentByTag(fragmentTag);
+        }
+        return fragment;
+    }
+
+    public List<Expense> loadData(){
+        Gson gson = new Gson();
+        List<Expense> expenseList = new ArrayList<>();
+
+        //read saved data from preferences
+        String savedExpenses = mSharedPreferences.getString(EXPENSES, "");
+
+        //if there is saved data, put it in first
+        if (!savedExpenses.equals("")){
+            expenseList = gson.fromJson(savedExpenses, new TypeToken<List<Expense>>(){}.getType());
+        }
+        return  expenseList;
+    }
+
+    private void undoRemoveCategory(){
+        ((SettingsScreenFragment) getCurrentFragment()).getmPresenter().undoRemoveCategory();
     }
 }

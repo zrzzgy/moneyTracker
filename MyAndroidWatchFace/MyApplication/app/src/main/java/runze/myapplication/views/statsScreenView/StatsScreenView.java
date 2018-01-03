@@ -71,18 +71,18 @@ public class StatsScreenView extends RelativeLayout implements IStatsScreenView 
 
     @Override
     public void displayTable(List<String> data){
-        if (!data.isEmpty()){
-            if (mAdapter == null) {
-                mAdapter = new ArrayAdapter<>(getContext(), R.layout.stats_table_item);
-                mAdapter.add(getResources().getString(R.string.stats_list_title));
-                mAdapter.addAll(data);
-                mStatsList.setAdapter(mAdapter);
-            }else{
-                Set<String> listToSet = new HashSet<>(data);
-                mAdapter.clear();
-                mAdapter.add(getResources().getString(R.string.stats_list_title));
-                mAdapter.addAll(listToSet);
-            }
-        }
+//        if (!data.isEmpty()){
+//            if (mAdapter == null) {
+//                mAdapter = new ArrayAdapter<>(getContext(), R.layout.stats_table_item);
+//                mAdapter.add(getResources().getString(R.string.stats_list_title));
+//                mAdapter.addAll(data);
+//                mStatsList.setAdapter(mAdapter);
+//            }else{
+//                Set<String> listToSet = new HashSet<>(data);
+//                mAdapter.clear();
+//                mAdapter.add(getResources().getString(R.string.stats_list_title));
+//                mAdapter.addAll(listToSet);
+//            }
+//        }
     }
 }

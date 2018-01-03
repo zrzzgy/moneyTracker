@@ -54,6 +54,10 @@ public class SettingsScreenFragment extends BaseFragment {
         mView = null;
     }
 
+    public ISettingsScreenPresenter getmPresenter() {
+        return mPresenter;
+    }
+
     /**
      * Refreshing views in this fragment
      */
