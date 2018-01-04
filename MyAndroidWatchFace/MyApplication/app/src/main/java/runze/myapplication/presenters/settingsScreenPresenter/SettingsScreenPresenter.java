@@ -1,20 +1,18 @@
 package runze.myapplication.presenters.settingsScreenPresenter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.function.Predicate;
 
 import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
@@ -45,6 +43,8 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
         if (mCategories == null){
             mCategories = new ArrayList<>();
         }
+        backupCategories = new ArrayList<>();
+        backupExpenses = new ArrayList<>();
     }
 
     public void updateView(){
@@ -79,18 +79,45 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
     }
 
     @Override
+    public void editCategory(MenuItem item){
+        final EditText input = new EditText(mParentActivity);
+        int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
+        final String cate = mCategories.get(position);
+        input.setText(cate);
+        AlertDialog alertDialog = new AlertDialog.Builder(mParentActivity).create();
+        alertDialog.setTitle(R.string.edit);
+        alertDialog.setView(input);
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, mParentActivity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, mParentActivity.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                replaceCategory(cate, input.getText().toString());
+                dialogInterface.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
+    @Override
     public void removeCategory(MenuItem item){
         int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
         String cate = mCategories.get(position);
-        backupCategories = mCategories;
+        backupCategories.clear();
+        backupCategories.addAll(mCategories);
         mCategories.remove(position);
         mParentActivity.mEditor.putString(CATEGORIES_KEY, gson.toJson(mCategories)).apply();
         List<Expense> expenses = mParentActivity.loadData();
-        backupExpenses = expenses;
+        backupExpenses.clear();
+        backupExpenses.addAll(expenses);
         Iterator<Expense> expenseIterator = expenses.iterator();
         while(expenseIterator.hasNext()){
             Expense expense = expenseIterator.next();
-            if (expense.getmCategory().equals(cate)){
+            if (expense.getCategory().equals(cate)){
                 expenseIterator.remove();
             }
         }
@@ -100,9 +127,24 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
 
     @Override
     public void undoRemoveCategory(){
-        mCategories = backupCategories;
+        mCategories.clear();
+        mCategories.addAll(backupCategories);
         mParentActivity.mEditor.putString(CATEGORIES_KEY, gson.toJson(mCategories)).apply();
         mParentActivity.mEditor.putString(EXPENSES, gson.toJson(backupExpenses)).apply();
+        updateView();
+    }
+
+    private void replaceCategory(String oldCategory, String newCategory){
+        mCategories.set(mCategories.indexOf(oldCategory), newCategory);
+        mParentActivity.mEditor.putString(CATEGORIES_KEY, gson.toJson(mCategories)).apply();
+
+        List<Expense> expenses = mParentActivity.loadData();
+        for (Expense expense : expenses) {
+            if (expense.getCategory().equals(oldCategory)) {
+                expense.setCategory(newCategory);
+            }
+        }
+        mParentActivity.mEditor.putString(EXPENSES, gson.toJson(expenses)).apply();
         updateView();
     }
 }

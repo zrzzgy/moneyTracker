@@ -29,6 +29,8 @@
     <string name="category_already_exists">Category already exists</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 
     <!--stats screen-->
     <string name="stats_list_title">Date : Category : Total Expense</string>

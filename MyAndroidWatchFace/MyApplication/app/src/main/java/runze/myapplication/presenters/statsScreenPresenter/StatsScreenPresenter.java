@@ -9,8 +9,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,8 +21,6 @@ import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.utils.Expense;
 import runze.myapplication.views.statsScreenView.IStatsScreenView;
-
-import static runze.myapplication.HomeActivity.EXPENSES;
 
 public class StatsScreenPresenter implements IStatsScreenPresenter {
     private final String TAG = this.getClass().getSimpleName();
@@ -97,12 +93,12 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         HashMap<String, Double> sortedData = new HashMap<>();
         for (int i = 0; i < expenses.size(); i++) {
             Expense expense = expenses.get(i);
-           String dateForCurrentExpense = DateUtils.formatDateTime(mParentActivity.getApplicationContext(), expense.getmDate().getTime(), DateUtils.FORMAT_SHOW_DATE);
+           String dateForCurrentExpense = DateUtils.formatDateTime(mParentActivity.getApplicationContext(), expense.getDate().getTime(), DateUtils.FORMAT_SHOW_DATE);
             if (sortedData.containsKey(dateForCurrentExpense)){
-                double sum = sortedData.get(dateForCurrentExpense) + expense.getmAmount();
+                double sum = sortedData.get(dateForCurrentExpense) + expense.getAmount();
                 sortedData.put(dateForCurrentExpense, sum);
             }else{
-                sortedData.put(dateForCurrentExpense, expense.getmAmount());
+                sortedData.put(dateForCurrentExpense, expense.getAmount());
             }
         }
        return sortedData.entrySet();
@@ -112,11 +108,11 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         HashMap<String, Double> sortedData = new HashMap<>();
         for (int i = 0; i < expenses.size(); i++) {
             Expense expense = expenses.get(i);
-            if (sortedData.containsKey(expense.getmCategory())){
-                double sum = sortedData.get(expense.getmCategory()) + expense.getmAmount();
-                sortedData.put(expense.getmCategory(), sum);
+            if (sortedData.containsKey(expense.getCategory())){
+                double sum = sortedData.get(expense.getCategory()) + expense.getAmount();
+                sortedData.put(expense.getCategory(), sum);
             }else{
-                sortedData.put(expense.getmCategory(), expense.getmAmount());
+                sortedData.put(expense.getCategory(), expense.getAmount());
             }
         }
         return sortedData.entrySet();
@@ -125,10 +121,15 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
     private List<String> dataToTable(List<Expense> expenses){
         List<String> result = new ArrayList<>();
         for (Expense expense: expenses) {
-            result.add(expense.getmDate().toString() + " " +
-            expense.getmCategory() + " " +
-            expense.getmAmount());
+            result.add(expense.getDate().toString() + " " +
+            expense.getCategory() + " " +
+            expense.getAmount());
         }
         return result;
+    }
+
+    @Override
+    public void undoRemoveExpense(){
+
     }
 }

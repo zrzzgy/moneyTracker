@@ -59,4 +59,8 @@ public class StatsScreenFragment extends BaseFragment {
     public void refresh() {
         mPresenter.updateView();
     }
+
+    public IStatsScreenPresenter getPresenter(){
+        return mPresenter;
+    }
 }

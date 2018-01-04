@@ -28,8 +28,6 @@ import runze.myapplication.fragments.InputScreenFragment;
 import runze.myapplication.fragments.SettingsScreenFragment;
 import runze.myapplication.fragments.StatsScreenFragment;
 import runze.myapplication.utils.Expense;
-import runze.myapplication.views.settingsScreenView.SettingsScreenView;
-import runze.myapplication.views.statsScreenView.StatsScreenView;
 
 public class HomeActivity extends AppCompatActivity {
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
@@ -119,9 +117,10 @@ public class HomeActivity extends AppCompatActivity {
         if (currentFragment instanceof SettingsScreenFragment){
             switch (item.getItemId()){
                 case R.id.option_menu_edit:
+                    ((SettingsScreenFragment) currentFragment).getPresenter().editCategory(item);
                     return true;
                 case R.id.option_menu_delete:
-                    ((SettingsScreenFragment) currentFragment).getmPresenter().removeCategory(item);
+                    ((SettingsScreenFragment) currentFragment).getPresenter().removeCategory(item);
                     Snackbar.make(mContentHolder, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
                             .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
                                 @Override
@@ -191,6 +190,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void undoRemoveCategory(){
-        ((SettingsScreenFragment) getCurrentFragment()).getmPresenter().undoRemoveCategory();
+        ((SettingsScreenFragment) getCurrentFragment()).getPresenter().undoRemoveCategory();
+    }
+
+    private void undoRemoveExpense(){
+        ((StatsScreenFragment) getCurrentFragment()).getPresenter().undoRemoveExpense();
     }
 }

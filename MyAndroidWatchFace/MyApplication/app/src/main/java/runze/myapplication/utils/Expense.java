@@ -17,15 +17,19 @@ public class Expense {
         mDate = date;
     }
 
-    public String getmCategory() {
+    public String getCategory() {
         return mCategory;
     }
 
-    public Double getmAmount() {
+    public void setCategory(String newCategory){
+        mCategory = newCategory;
+    }
+
+    public Double getAmount() {
         return mAmount;
     }
 
-    public Date getmDate() {
+    public Date getDate() {
         return mDate;
     }
 }
