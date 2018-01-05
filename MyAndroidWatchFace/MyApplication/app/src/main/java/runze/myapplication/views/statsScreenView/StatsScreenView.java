@@ -3,7 +3,6 @@ package runze.myapplication.views.statsScreenView;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -13,14 +12,13 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.PieData;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.presenters.IPresenter;
 import runze.myapplication.presenters.statsScreenPresenter.IStatsScreenPresenter;
+import runze.myapplication.utils.MyXAxisValueFormatter;
 
 
 public class StatsScreenView extends RelativeLayout implements IStatsScreenView {
@@ -55,10 +53,11 @@ public class StatsScreenView extends RelativeLayout implements IStatsScreenView 
     }
 
     @Override
-    public void displayBarChart(BarData barData) {
+    public void displayBarChart(BarData barData, String[] dateList) {
         mBarChart.setData(barData);
-        mBarChart.setFitBars(true);
         mBarChart.setAutoScaleMinMaxEnabled(true);
+        mBarChart.getXAxis().setValueFormatter(new MyXAxisValueFormatter(dateList));
+        mBarChart.getXAxis().setLabelRotationAngle(45);
         mBarChart.getXAxis().setDrawLabels(true);
         mBarChart.invalidate();
     }

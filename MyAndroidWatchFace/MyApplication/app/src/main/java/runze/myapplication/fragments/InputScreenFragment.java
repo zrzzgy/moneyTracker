@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
 import runze.myapplication.HomeActivity;
 import runze.myapplication.presenters.inputScreenPresenter.IInputScreenPresenter;
 import runze.myapplication.presenters.inputScreenPresenter.InputScreenPresenter;
@@ -13,8 +15,8 @@ import runze.myapplication.views.inputScreenView.IInputScreenView;
 import runze.myapplication.views.inputScreenView.InputScreenView;
 
 public class InputScreenFragment extends BaseFragment<IInputScreenView, IInputScreenPresenter> {
-    private IInputScreenView mView;
-    private IInputScreenPresenter mPresenter;
+    @Inject IInputScreenView mView;
+    @Inject IInputScreenPresenter mPresenter;
 
     private int spinnerIndexWhenPaused = 0;
 
@@ -28,12 +30,7 @@ public class InputScreenFragment extends BaseFragment<IInputScreenView, IInputSc
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        // Construct the view if it does not yet exist
-        if (mView == null) {
-            mView = new InputScreenView(getActivity());
-        }
-        mPresenter = new InputScreenPresenter((HomeActivity) getActivity());
+        ((HomeActivity) getActivity()).getAppComponent().inject(this);
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
 

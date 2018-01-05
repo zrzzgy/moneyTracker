@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
 import runze.myapplication.HomeActivity;
 import runze.myapplication.presenters.settingsScreenPresenter.ISettingsScreenPresenter;
 import runze.myapplication.presenters.settingsScreenPresenter.SettingsScreenPresenter;
@@ -15,8 +17,8 @@ import runze.myapplication.views.settingsScreenView.SettingsScreenView;
 
 
 public class SettingsScreenFragment extends BaseFragment {
-    private ISettingsScreenView mView;
-    private ISettingsScreenPresenter mPresenter;
+    @Inject ISettingsScreenView mView;
+    @Inject ISettingsScreenPresenter mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,12 +30,8 @@ public class SettingsScreenFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        ((HomeActivity) getActivity()).getAppComponent().inject(this);
 
-        // Construct the view if it does not yet exist
-        if (mView == null) {
-            mView = new SettingsScreenView(getActivity());
-        }
-        mPresenter = new SettingsScreenPresenter((HomeActivity) getActivity());
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
 

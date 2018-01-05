@@ -24,15 +24,21 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import runze.myapplication.dependencyinjection.AppComponent;
+import runze.myapplication.dependencyinjection.AppModule;
+import runze.myapplication.dependencyinjection.DaggerAppComponent;
 import runze.myapplication.fragments.InputScreenFragment;
 import runze.myapplication.fragments.SettingsScreenFragment;
 import runze.myapplication.fragments.StatsScreenFragment;
 import runze.myapplication.utils.Expense;
 
 public class HomeActivity extends AppCompatActivity {
+    private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES = "EXPENSES";
-
+    private AppComponent mAppComponent;
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
     public List<Integer> mColorList = new ArrayList<>();
@@ -40,11 +46,10 @@ public class HomeActivity extends AppCompatActivity {
     protected FrameLayout mContentHolder;
 
     private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
-    private final String TAG = this.getClass().getSimpleName();
-    private InputScreenFragment mInputFragment;
-    private StatsScreenFragment mStatsFragment;
-    private SettingsScreenFragment mSettingsFragment;
     private BottomNavigationView mNavigation;
+    @Inject InputScreenFragment mInputFragment;
+    @Inject StatsScreenFragment mStatsFragment;
+    @Inject SettingsScreenFragment mSettingsFragment;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -74,15 +79,17 @@ public class HomeActivity extends AppCompatActivity {
 
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
-        logBackStack();
+
     }
 
     public void initComponents(){
         setContentView(R.layout.home_activity);
+
+        //fulfill injected objects
+        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+        mAppComponent.inject(this);
+
         mContentHolder = findViewById(R.id.home_content_holder);
-        mInputFragment = new InputScreenFragment();
-        mStatsFragment = new StatsScreenFragment();
-        mSettingsFragment = new SettingsScreenFragment();
         mNavigation = findViewById(R.id.navigation);
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -195,5 +202,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private void undoRemoveExpense(){
         ((StatsScreenFragment) getCurrentFragment()).getPresenter().undoRemoveExpense();
+    }
+
+    public AppComponent getAppComponent(){
+        return mAppComponent;
     }
 }

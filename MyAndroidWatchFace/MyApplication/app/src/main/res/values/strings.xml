@@ -12,7 +12,7 @@
 
     <!--input screen-->
     <string name="dollar_sign">$</string>
-    <string name="input_amount_hint">0.00</string>
+    <string name="input_amount_hint">Amount</string>
     <string name="category_text">Category: </string>
     <string name="no_category_selected">No category selected</string>
     <string name="submit">Submit</string>
@@ -20,6 +20,8 @@
     <string name="save_failed">Save failed</string>
     <string name="value_smaller_than_zero">Amount must be greater than zero</string>
     <string name="no_text_entered">No amount entered</string>
+    <string name="expenses_by_category">Expenses By Category</string>
+    <string name="expenses_by_date">Expenses By Date</string>
 
     <!--settings screen-->
     <string name="null_category_place_holder_text">No category, add a category to start.</string>

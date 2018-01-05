@@ -9,7 +9,7 @@ import runze.myapplication.views.IView;
 
 
 public interface IStatsScreenView extends IView {
-    void displayBarChart(BarData barData);
+    void displayBarChart(BarData barData, String[] dateList);
     void displayPieChart(PieData pieData);
     void displayTable(List<String> data);
 }

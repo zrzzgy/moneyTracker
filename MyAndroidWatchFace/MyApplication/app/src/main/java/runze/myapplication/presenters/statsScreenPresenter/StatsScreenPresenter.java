@@ -57,13 +57,15 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
 
         //bar chart
         float xPosition = 0;
+        int index = 0;
+        String[] dateList = new String[dataForBarChart.size()];
         for (Map.Entry<String, Double> entry: dataForBarChart) {
             barEntries.add(new BarEntry(xPosition++, entry.getValue().floatValue()));
+            dateList[index++] = entry.getKey();
             xPosition += 0.3;
         }
 
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Date");
-        barDataSet.setLabel(mParentActivity.getResources().getString(R.string.bar_label));
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Date");;
         BarData barData = new BarData(barDataSet);
         barData.setBarWidth(0.2f);
 
@@ -84,7 +86,7 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         pieDataSet.setLabel(mParentActivity.getResources().getString(R.string.pie_label));
         PieData pieData = new PieData(pieDataSet);
 
-        mView.displayBarChart(barData);
+        mView.displayBarChart(barData, dateList);
         mView.displayPieChart(pieData);
         mView.displayTable(tableData);
     }

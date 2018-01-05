@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
 import runze.myapplication.HomeActivity;
 import runze.myapplication.presenters.statsScreenPresenter.IStatsScreenPresenter;
 import runze.myapplication.presenters.statsScreenPresenter.StatsScreenPresenter;
@@ -14,8 +16,8 @@ import runze.myapplication.views.statsScreenView.StatsScreenView;
 
 
 public class StatsScreenFragment extends BaseFragment {
-    private IStatsScreenView mView;
-    private IStatsScreenPresenter mPresenter;
+    @Inject IStatsScreenView mView;
+    @Inject IStatsScreenPresenter mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class StatsScreenFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        ((HomeActivity) getActivity()).getAppComponent().inject(this);
 
         // Construct the view if it does not yet exist
         if (mView == null) {

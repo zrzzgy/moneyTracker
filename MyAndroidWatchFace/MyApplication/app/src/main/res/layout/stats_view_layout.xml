@@ -13,15 +13,25 @@
             android:orientation="vertical"
             android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
             android:layout_marginEnd="@dimen/tight_activity_horizontal_margin">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/expenses_by_category"
+                android:textAlignment="center"
+                android:textSize="@dimen/stats_title_size"/>
+
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pieChart"
                 android:layout_width="match_parent"
                 android:layout_height="500dp">
             </com.github.mikephil.charting.charts.PieChart>
 
-            <Space
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/space_between_charts" />
+                android:layout_height="wrap_content"
+                android:text="@string/expenses_by_date"
+                android:textAlignment="center"
+                android:textSize="@dimen/stats_title_size"/>
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChart"
