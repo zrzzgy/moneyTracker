@@ -1,22 +1,22 @@
 package runze.myapplication;
 
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,20 +33,22 @@ import runze.myapplication.fragments.InputScreenFragment;
 import runze.myapplication.fragments.SettingsScreenFragment;
 import runze.myapplication.fragments.StatsScreenFragment;
 import runze.myapplication.utils.Expense;
+import runze.myapplication.utils.MTFragmentPagerAdapter;
 
 public class HomeActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES = "EXPENSES";
+    private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
+
     private AppComponent mAppComponent;
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
     public List<Integer> mColorList = new ArrayList<>();
 
-    protected FrameLayout mContentHolder;
-
-    private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
     private BottomNavigationView mNavigation;
+    private ViewPager mViewPager;
+
     @Inject InputScreenFragment mInputFragment;
     @Inject StatsScreenFragment mStatsFragment;
     @Inject SettingsScreenFragment mSettingsFragment;
@@ -58,14 +60,14 @@ public class HomeActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_input:
-                    navigateToFragment(mInputFragment);
+                    mViewPager.setCurrentItem(0);
                     return true;
                 case R.id.navigation_stats:
-                    navigateToFragment(mStatsFragment);
+                    mViewPager.setCurrentItem(1);
                     return true;
                 case R.id.navigation_settings:
-                    navigateToFragment(mSettingsFragment);
-                    return true;
+                   mViewPager.setCurrentItem(2);
+                   return true;
             }
             return false;
         }
@@ -74,32 +76,59 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.home_activity);
         initComponents();
         navigateToFragment(mInputFragment);
 
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
-
     }
 
     public void initComponents(){
-        setContentView(R.layout.home_activity);
+        MTFragmentPagerAdapter mFragmentPagerAdapter = new MTFragmentPagerAdapter(getSupportFragmentManager());
+        mFragmentPagerAdapter.addFragment(mInputFragment);
+        mFragmentPagerAdapter.addFragment(mStatsFragment);
+        mFragmentPagerAdapter.addFragment(mSettingsFragment);
 
         //fulfill injected objects
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         mAppComponent.inject(this);
 
-        mContentHolder = findViewById(R.id.home_content_holder);
+        mViewPager = findViewById(R.id.home_view_pager);
+        mViewPager.setAdapter(mFragmentPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (int i = 0; i < 3; i++) {
+                    if (i == position) {
+                        mNavigation.getMenu().getItem(position).setChecked(true);
+                    }else {
+                        mNavigation.getMenu().getItem(position).setChecked(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         mNavigation = findViewById(R.id.navigation);
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     private void navigateToFragment(Fragment destFragment) {
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         fm.executePendingTransactions();
         FragmentTransaction ft = fm.beginTransaction();
         String fragmentTag = destFragment.getClass().getSimpleName();
-        ft.replace(mContentHolder.getId(), destFragment, fragmentTag);
+        ft.replace(mViewPager.getId(), destFragment, fragmentTag);
 
         if (fm.getBackStackEntryCount() > 0){
             if (fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).toString().equals(fragmentTag)) {
@@ -128,7 +157,7 @@ public class HomeActivity extends AppCompatActivity {
                     return true;
                 case R.id.option_menu_delete:
                     ((SettingsScreenFragment) currentFragment).getPresenter().removeCategory(item);
-                    Snackbar.make(mContentHolder, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
+                    Snackbar.make(mViewPager, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
                             .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -142,7 +171,7 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.option_menu_edit:
                     return true;
                 case R.id.option_menu_delete:
-                    Snackbar.make(mContentHolder, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
+                    Snackbar.make(mViewPager, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
                             .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -157,27 +186,16 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-           logBackStack();
            finish();
-    }
-
-    private  void logBackStack(){
-        FragmentManager fm = getFragmentManager();
-
-        StringBuilder sb = new StringBuilder("Backstack = : ");
-        for (int entry = 0; entry < fm.getBackStackEntryCount(); entry++) {
-            sb.append(fm.getBackStackEntryAt(entry).getName()).append(", ");
-        }
-        Log.d(TAG, sb.toString());
     }
 
     protected Fragment getCurrentFragment() {
         Fragment fragment = null;
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         if (fm != null && fm.getBackStackEntryCount() > 0) {
             FragmentManager.BackStackEntry backEntry = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1);
             String fragmentTag = backEntry.getName();
-            fragment = getFragmentManager().findFragmentByTag(fragmentTag);
+            fragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
         }
         return fragment;
     }
