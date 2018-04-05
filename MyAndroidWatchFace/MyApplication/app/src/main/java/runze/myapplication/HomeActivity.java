@@ -1,8 +1,6 @@
 package runze.myapplication;
 
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,9 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -76,9 +75,12 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //fulfill injected objects
+        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+        mAppComponent.inject(this);
+
         setContentView(R.layout.home_activity);
         initComponents();
-        navigateToFragment(mInputFragment);
 
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
@@ -89,10 +91,6 @@ public class HomeActivity extends AppCompatActivity {
         mFragmentPagerAdapter.addFragment(mInputFragment);
         mFragmentPagerAdapter.addFragment(mStatsFragment);
         mFragmentPagerAdapter.addFragment(mSettingsFragment);
-
-        //fulfill injected objects
-        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
-        mAppComponent.inject(this);
 
         mViewPager = findViewById(R.id.home_view_pager);
         mViewPager.setAdapter(mFragmentPagerAdapter);
@@ -118,26 +116,10 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+        mViewPager.setCurrentItem(0);
 
         mNavigation = findViewById(R.id.navigation);
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
-
-    private void navigateToFragment(Fragment destFragment) {
-        FragmentManager fm = getSupportFragmentManager();
-        fm.executePendingTransactions();
-        FragmentTransaction ft = fm.beginTransaction();
-        String fragmentTag = destFragment.getClass().getSimpleName();
-        ft.replace(mViewPager.getId(), destFragment, fragmentTag);
-
-        if (fm.getBackStackEntryCount() > 0){
-            if (fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).toString().equals(fragmentTag)) {
-                fm.popBackStackImmediate();
-            }
-        }
-        ft.addToBackStack(fragmentTag);
-        ft.commit();
-        fm.executePendingTransactions();
     }
 
     @Override
