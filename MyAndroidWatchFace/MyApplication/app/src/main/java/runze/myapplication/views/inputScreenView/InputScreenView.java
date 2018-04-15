@@ -1,6 +1,8 @@
 package runze.myapplication.views.inputScreenView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -10,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.presenters.inputScreenPresenter.IInputScreenPresenter;
 
@@ -18,6 +21,7 @@ public class InputScreenView extends RelativeLayout implements IInputScreenView 
     private EditText mInputAmount;
     private Button mSubmit;
     private Spinner mSpinner;
+    private FloatingActionButton mFab;
 
     private IInputScreenPresenter mPresenter;
 
@@ -31,6 +35,8 @@ public class InputScreenView extends RelativeLayout implements IInputScreenView 
         mInputAmount = view.findViewById(R.id.inputAmount);
         mSpinner = view.findViewById(R.id.spinner);
         mSubmit = view.findViewById(R.id.submit);
+        mFab = view.findViewById(R.id.newItemFab);
+        mFab.setOnClickListener(mFabListener);
         mSubmit.setOnClickListener(mOnClickListener);
     }
 
@@ -60,6 +66,14 @@ public class InputScreenView extends RelativeLayout implements IInputScreenView 
             }catch (NumberFormatException e){
                 Toast.makeText(getContext(), getResources().getString(R.string.no_text_entered), Toast.LENGTH_SHORT).show();
             }
+
+        }
+    };
+
+    private OnClickListener mFabListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
 
         }
     };
