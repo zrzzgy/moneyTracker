@@ -22,7 +22,7 @@ import runze.myapplication.views.statsScreenView.IStatsScreenView;
 import runze.myapplication.views.statsScreenView.StatsScreenView;
 
 /**
- * App Module for dependency injection
+ * App Module for dependency injection n
  */
 @Module
 public class AppModule {
