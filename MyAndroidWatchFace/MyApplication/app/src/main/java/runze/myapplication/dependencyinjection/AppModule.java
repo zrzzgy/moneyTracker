@@ -1,5 +1,7 @@
 package runze.myapplication.dependencyinjection;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import runze.myapplication.HomeActivity;
@@ -31,45 +33,54 @@ public class AppModule {
     }
 
     @Provides
+    @Singleton
     InputScreenFragment provideInputScreenFragment(){
         return new InputScreenFragment();
     }
 
     @Provides
+    @Singleton
     StatsScreenFragment provideStatsScreenFragment(){
         return new StatsScreenFragment();
     }
 
     @Provides
+    @Singleton
     SettingsScreenFragment provideSettingsScreenFragment(){
         return new SettingsScreenFragment();
     }
 
     @Provides
+    @Singleton
     IInputScreenView provideInputScreenView(){
         return new InputScreenView(homeActivity);
     }
 
     @Provides
+    @Singleton
     IInputScreenPresenter provideInputScreenPresenter(){
         return new InputScreenPresenter(homeActivity);
     }
 
     @Provides
+    @Singleton
     IStatsScreenView provideStatsScreenView(){
         return new StatsScreenView(homeActivity);
     }
 
     @Provides
+    @Singleton
     IStatsScreenPresenter provideStatsScreenPresenter(){
         return new StatsScreenPresenter(homeActivity);
     }
     @Provides
+    @Singleton
     ISettingsScreenView provideSettingsScreenView(){
         return new SettingsScreenView(homeActivity);
     }
 
     @Provides
+    @Singleton
     ISettingsScreenPresenter provideSettingsScreenPresenter(){
         return new SettingsScreenPresenter(homeActivity);
     }
