@@ -10,14 +10,12 @@ import javax.inject.Inject;
 
 import runze.myapplication.HomeActivity;
 import runze.myapplication.presenters.settingsScreenPresenter.ISettingsScreenPresenter;
-import runze.myapplication.presenters.settingsScreenPresenter.SettingsScreenPresenter;
-import runze.myapplication.views.settingsScreenView.ISettingsScreenView;
-import runze.myapplication.views.settingsScreenView.SettingsScreenView;
+import runze.myapplication.views.SettingsScreenView;
 
 
 
 public class SettingsScreenFragment extends BaseFragment {
-    @Inject ISettingsScreenView mView;
+    @Inject SettingsScreenView mView;
     @Inject ISettingsScreenPresenter mPresenter;
 
     @Override

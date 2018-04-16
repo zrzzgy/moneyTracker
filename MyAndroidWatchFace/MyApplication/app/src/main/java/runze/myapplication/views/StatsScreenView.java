@@ -1,4 +1,4 @@
-package runze.myapplication.views.statsScreenView;
+package runze.myapplication.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -21,7 +21,7 @@ import runze.myapplication.presenters.statsScreenPresenter.IStatsScreenPresenter
 import runze.myapplication.utils.MyXAxisValueFormatter;
 
 
-public class StatsScreenView extends RelativeLayout implements IStatsScreenView {
+public class StatsScreenView extends RelativeLayout {
     private final String TAG = getClass().getSimpleName();
     private IStatsScreenPresenter mPresenter;
     private BarChart mBarChart;
@@ -42,17 +42,14 @@ public class StatsScreenView extends RelativeLayout implements IStatsScreenView 
         mStatsList = findViewById(R.id.statsList);
     }
 
-    @Override
     public void attachPresenter(IPresenter presenter) {
         mPresenter = (IStatsScreenPresenter) presenter;
     }
 
-    @Override
     public void detachPresenter() {
         mPresenter = null;
     }
 
-    @Override
     public void displayBarChart(BarData barData, String[] dateList) {
         mBarChart.setData(barData);
         mBarChart.setAutoScaleMinMaxEnabled(true);
@@ -62,13 +59,11 @@ public class StatsScreenView extends RelativeLayout implements IStatsScreenView 
         mBarChart.invalidate();
     }
 
-    @Override
     public void displayPieChart(PieData pieData){
         mPieChart.setData(pieData);
         mPieChart.invalidate();
     }
 
-    @Override
     public void displayTable(List<String> data){
 //        if (!data.isEmpty()){
 //            if (mAdapter == null) {

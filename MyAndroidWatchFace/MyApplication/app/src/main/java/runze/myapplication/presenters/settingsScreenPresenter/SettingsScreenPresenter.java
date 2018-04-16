@@ -17,7 +17,7 @@ import java.util.List;
 import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.utils.Expense;
-import runze.myapplication.views.settingsScreenView.ISettingsScreenView;
+import runze.myapplication.views.SettingsScreenView;
 
 import static runze.myapplication.HomeActivity.CATEGORIES_KEY;
 import static runze.myapplication.HomeActivity.EXPENSES;
@@ -27,7 +27,7 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
     private final String TAG = this.getClass().getSimpleName();
 
     private HomeActivity mParentActivity;
-    private ISettingsScreenView mView;
+    private SettingsScreenView mView;
     private List<String> mCategories;
     private Gson gson = new Gson();
 
@@ -52,7 +52,7 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
     }
 
     @Override
-    public void attachView(ISettingsScreenView view) {
+    public void attachView(SettingsScreenView view) {
         mView = view;
     }
 

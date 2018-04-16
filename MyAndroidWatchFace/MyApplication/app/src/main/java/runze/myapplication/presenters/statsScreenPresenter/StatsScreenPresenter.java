@@ -20,11 +20,11 @@ import java.util.Set;
 import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.utils.Expense;
-import runze.myapplication.views.statsScreenView.IStatsScreenView;
+import runze.myapplication.views.StatsScreenView;
 
 public class StatsScreenPresenter implements IStatsScreenPresenter {
     private final String TAG = this.getClass().getSimpleName();
-    private IStatsScreenView mView;
+    private StatsScreenView mView;
     private HomeActivity mParentActivity;
 
     public StatsScreenPresenter(HomeActivity activity){
@@ -32,7 +32,7 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
     }
 
     @Override
-    public void attachView(IStatsScreenView view) {
+    public void attachView(StatsScreenView view) {
         mView = view;
     }
 

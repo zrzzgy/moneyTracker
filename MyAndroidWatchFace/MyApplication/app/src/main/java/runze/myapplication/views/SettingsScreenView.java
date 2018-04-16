@@ -1,4 +1,4 @@
-package runze.myapplication.views.settingsScreenView;
+package runze.myapplication.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -22,7 +22,7 @@ import runze.myapplication.presenters.IPresenter;
 import runze.myapplication.presenters.settingsScreenPresenter.ISettingsScreenPresenter;
 
 
-public class SettingsScreenView extends LinearLayout implements ISettingsScreenView {
+public class SettingsScreenView extends LinearLayout {
     private ISettingsScreenPresenter mPresenter;
     private ListView mListView;
     private TextView mPlaceHolderText;
@@ -52,12 +52,10 @@ public class SettingsScreenView extends LinearLayout implements ISettingsScreenV
         });
     }
 
-    @Override
     public void attachPresenter(IPresenter presenter) {
         mPresenter = (ISettingsScreenPresenter) presenter;
     }
 
-    @Override
     public void detachPresenter() {
         mPresenter = null;
     }

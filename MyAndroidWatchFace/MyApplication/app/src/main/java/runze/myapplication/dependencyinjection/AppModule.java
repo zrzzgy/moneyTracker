@@ -8,18 +8,14 @@ import runze.myapplication.HomeActivity;
 import runze.myapplication.fragments.InputScreenFragment;
 import runze.myapplication.fragments.SettingsScreenFragment;
 import runze.myapplication.fragments.StatsScreenFragment;
-import runze.myapplication.presenters.inputScreenPresenter.IInputScreenPresenter;
 import runze.myapplication.presenters.inputScreenPresenter.InputScreenPresenter;
 import runze.myapplication.presenters.settingsScreenPresenter.ISettingsScreenPresenter;
 import runze.myapplication.presenters.settingsScreenPresenter.SettingsScreenPresenter;
 import runze.myapplication.presenters.statsScreenPresenter.IStatsScreenPresenter;
 import runze.myapplication.presenters.statsScreenPresenter.StatsScreenPresenter;
-import runze.myapplication.views.inputScreenView.IInputScreenView;
-import runze.myapplication.views.inputScreenView.InputScreenView;
-import runze.myapplication.views.settingsScreenView.ISettingsScreenView;
-import runze.myapplication.views.settingsScreenView.SettingsScreenView;
-import runze.myapplication.views.statsScreenView.IStatsScreenView;
-import runze.myapplication.views.statsScreenView.StatsScreenView;
+import runze.myapplication.views.InputScreenView;
+import runze.myapplication.views.SettingsScreenView;
+import runze.myapplication.views.StatsScreenView;
 
 /**
  * App Module for dependency injection n
@@ -52,19 +48,19 @@ public class AppModule {
 
     @Provides
     @Singleton
-    IInputScreenView provideInputScreenView(){
+    InputScreenView provideInputScreenView(){
         return new InputScreenView(homeActivity);
     }
 
     @Provides
     @Singleton
-    IInputScreenPresenter provideInputScreenPresenter(){
+    InputScreenPresenter provideInputScreenPresenter(){
         return new InputScreenPresenter(homeActivity);
     }
 
     @Provides
     @Singleton
-    IStatsScreenView provideStatsScreenView(){
+    StatsScreenView provideStatsScreenView(){
         return new StatsScreenView(homeActivity);
     }
 
@@ -75,7 +71,7 @@ public class AppModule {
     }
     @Provides
     @Singleton
-    ISettingsScreenView provideSettingsScreenView(){
+    SettingsScreenView provideSettingsScreenView(){
         return new SettingsScreenView(homeActivity);
     }
 

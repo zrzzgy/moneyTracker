@@ -1,8 +1,10 @@
 package runze.myapplication.presenters;
 
 /**
- * Created by zhengr2 on 11/22/2017.
+ * Interface for presenter base
  */
+
+import android.view.View;
 
 import runze.myapplication.views.IView;
 
@@ -11,7 +13,7 @@ import runze.myapplication.views.IView;
  * to be linked to a view should implement this interface.
  * @param <V> The interface will control a view type of type {@link IView}
  */
-public interface IPresenter<V extends IView> {
+public interface IPresenter<V extends View> {
 
     /**
      * Attach the view to the presenter.
