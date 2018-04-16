@@ -16,7 +16,7 @@ import java.util.Set;
 import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.utils.Expense;
-import runze.myapplication.views.inputScreenView.IInputScreenView;
+import runze.myapplication.views.InputScreenView;
 
 import static runze.myapplication.HomeActivity.CATEGORIES_KEY;
 import static runze.myapplication.HomeActivity.EXPENSES;
@@ -25,8 +25,9 @@ public class InputScreenPresenter implements IInputScreenPresenter {
     private final String TAG = this.getClass().getSimpleName();
 
     private HomeActivity mParentActivity;
-    private IInputScreenView mView;
+    private InputScreenView mView;
     private Set<String> mCategories;
+
 
     public InputScreenPresenter(HomeActivity activity){
             mParentActivity = activity;
@@ -42,11 +43,11 @@ public class InputScreenPresenter implements IInputScreenPresenter {
         Log.d(TAG, "categories are: " + mCategories.toString());
         ArrayAdapter<String > adapter =
                 new ArrayAdapter<>(mParentActivity.getApplicationContext(), R.layout.input_spinner_item, new ArrayList<>(mCategories));
-        mView.updateSpinner(adapter);
-        mView.setSpinnerIndex(index);
+//        mView.updateSpinner(adapter);
+//        mView.setSpinnerIndex(index);
     }
 
-    public void attachView(IInputScreenView view){
+    public void attachView(InputScreenView view){
         mView = view;
     }
 

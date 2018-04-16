@@ -1,7 +1,9 @@
 package runze.myapplication;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,10 +11,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -207,4 +209,28 @@ public class HomeActivity extends AppCompatActivity {
     public AppComponent getAppComponent(){
         return mAppComponent;
     }
+
+    private View.OnClickListener mFabListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            LayoutInflater inflater = getLayoutInflater();
+            View alertLayout = inflater.inflate(R.layout.input_dialog, null);
+            AlertDialog alertDialog = new AlertDialog.Builder(HomeActivity.this).create();
+            alertDialog.setTitle("Add new");
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            alertDialog.show();
+
+        }
+    };
 }

@@ -11,12 +11,11 @@ import javax.inject.Inject;
 import runze.myapplication.HomeActivity;
 import runze.myapplication.presenters.statsScreenPresenter.IStatsScreenPresenter;
 import runze.myapplication.presenters.statsScreenPresenter.StatsScreenPresenter;
-import runze.myapplication.views.statsScreenView.IStatsScreenView;
-import runze.myapplication.views.statsScreenView.StatsScreenView;
+import runze.myapplication.views.StatsScreenView;
 
 
 public class StatsScreenFragment extends BaseFragment {
-    @Inject IStatsScreenView mView;
+    @Inject StatsScreenView mView;
     @Inject IStatsScreenPresenter mPresenter;
 
     @Override
@@ -39,7 +38,7 @@ public class StatsScreenFragment extends BaseFragment {
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
 
-        return (View) mView;
+        return mView;
     }
 
     @Override

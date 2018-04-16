@@ -1,5 +1,7 @@
 package runze.myapplication.dependencyinjection;
 
+import javax.inject.Singleton;
+
 import dagger.Component;
 import runze.myapplication.HomeActivity;
 import runze.myapplication.fragments.InputScreenFragment;
@@ -13,6 +15,7 @@ import runze.myapplication.presenters.statsScreenPresenter.StatsScreenPresenter;
  *  App component for dependency injection
  */
 @Component(modules = {AppModule.class})
+@Singleton
 public interface AppComponent {
     void inject(HomeActivity activity);
     void inject(InputScreenFragment fragment);

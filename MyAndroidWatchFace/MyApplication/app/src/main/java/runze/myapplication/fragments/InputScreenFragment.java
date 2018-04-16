@@ -9,14 +9,12 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import runze.myapplication.HomeActivity;
-import runze.myapplication.presenters.inputScreenPresenter.IInputScreenPresenter;
 import runze.myapplication.presenters.inputScreenPresenter.InputScreenPresenter;
-import runze.myapplication.views.inputScreenView.IInputScreenView;
-import runze.myapplication.views.inputScreenView.InputScreenView;
+import runze.myapplication.views.InputScreenView;
 
-public class InputScreenFragment extends BaseFragment<IInputScreenView, IInputScreenPresenter> {
-    @Inject IInputScreenView mView;
-    @Inject IInputScreenPresenter mPresenter;
+public class InputScreenFragment extends BaseFragment<InputScreenView, InputScreenPresenter> {
+    @Inject InputScreenView mView;
+    @Inject InputScreenPresenter mPresenter;
 
     private int spinnerIndexWhenPaused = 0;
 
@@ -40,7 +38,7 @@ public class InputScreenFragment extends BaseFragment<IInputScreenView, IInputSc
     @Override
     public void onPause(){
         super.onPause();
-        spinnerIndexWhenPaused = mView.getSpinnerIndex();
+//        spinnerIndexWhenPaused = mView.getSpinnerIndex();
     }
 
     @Override
