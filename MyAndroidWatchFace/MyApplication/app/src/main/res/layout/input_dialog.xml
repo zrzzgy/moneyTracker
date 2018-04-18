@@ -1,87 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- input view-->
     <LinearLayout
-        android:layout_width="410dp"
-        android:layout_height="190dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <!--input field -->
-        <android.support.v7.widget.LinearLayoutCompat
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_weight="2"
-            android:gravity="center">
+            android:layout_weight="1">
 
             <TextView
+                android:id="@+id/dollar_sign"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="70dp"
                 android:text="@string/dollar_sign"
-                android:textSize="27sp"
+                android:textSize="@dimen/stats_text_size"
                 android:theme="@style/BigBrightText" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:focusableInTouchMode="true">
+                android:focusableInTouchMode="true"
+                android:layout_toEndOf="@id/dollar_sign"
+                android:layout_alignBottom="@id/dollar_sign">
 
                 <EditText
                     android:id="@+id/inputAmount"
-                    android:layout_width="264dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/input_amount_hint"
-
                     android:inputType="numberDecimal"
-                    android:textSize="27sp" />
+                    android:textSize="@dimen/stats_text_size" />
             </android.support.design.widget.TextInputLayout>
-        </android.support.v7.widget.LinearLayoutCompat>
+        </RelativeLayout>
 
         <!--category spinner-->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_weight="2"
             android:orientation="horizontal">
 
             <TextView
-                style="@style/BigBrightText"
-                android:layout_width="127dp"
-                android:layout_height="match_parent"
+                android:id="@+id/category_label"
+                android:theme="@style/BigBrightText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/category_text"
-                android:textSize="27sp" />
+                android:textSize="@dimen/spinner_text_size" />
 
             <Spinner
                 android:id="@+id/spinner"
-                android:layout_width="166dp"
-                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@color/colorSecondaryLight"
                 android:popupBackground="@color/colorSecondaryLight"
+                android:layout_toEndOf="@id/category_label"
+                android:layout_alignBottom="@id/category_label"
+                android:layout_alignTop="@id/category_label"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:popupElevation="@dimen/elevation"
-                android:textAlignment="center"></Spinner>
-        </LinearLayout>
+                android:textAlignment="center" />
+        </RelativeLayout>
 
-        <!--submit button-->
-        <!--Button
-            android:id="@+id/submit"
-            android:layout_width="273dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_weight="2"
-            android:background="@color/colorSecondary"
-            android:elevation="@dimen/elevation"
-            android:text="@string/submit"
-            android:textColor="@color/colorPrimary"
-            android:textSize="25sp" /-->
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
