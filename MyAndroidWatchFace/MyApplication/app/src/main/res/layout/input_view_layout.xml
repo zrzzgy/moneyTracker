@@ -11,9 +11,13 @@
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     tools:context="runze.myapplication.HomeActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/newItemFab"
+        android:id="@+id/new_item_fab"
         android:layout_width="90dp"
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"

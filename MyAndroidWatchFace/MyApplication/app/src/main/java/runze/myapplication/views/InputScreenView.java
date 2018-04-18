@@ -4,25 +4,26 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.Toast;
 
-import runze.myapplication.HomeActivity;
+import java.util.ArrayList;
+
 import runze.myapplication.R;
 import runze.myapplication.presenters.inputScreenPresenter.IInputScreenPresenter;
+import runze.myapplication.utils.Expense;
+import runze.myapplication.utils.MTRecyclerAdapter;
 
 public class InputScreenView extends RelativeLayout {
     private final String TAG = this.getClass().getSimpleName();
-//    private EditText mInputAmount;
-//    private Button mSubmit;
-//    private Spinner mSpinner;
+
     private FloatingActionButton mFab;
+    private RecyclerView mRecyclerView;
+    private MTRecyclerAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
 
     private IInputScreenPresenter mPresenter;
 
@@ -33,12 +34,20 @@ public class InputScreenView extends RelativeLayout {
     }
 
     private void init(View view){
-//        mInputAmount = view.findViewById(R.id.inputAmount);
-//        mSpinner = view.findViewById(R.id.spinner);
-//        mSubmit = view.findViewById(R.id.submit);
-        mFab = view.findViewById(R.id.newItemFab);
+
+        mFab = view.findViewById(R.id.new_item_fab);
         mFab.setOnClickListener(mFabListener);
-//        mSubmit.setOnClickListener(mOnClickListener);
+
+        mRecyclerView = view.findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new MTRecyclerAdapter(new ArrayList<Expense>());
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     public void attachPresenter(IInputScreenPresenter presenter){
@@ -51,25 +60,6 @@ public class InputScreenView extends RelativeLayout {
     public void detachPresenter(){
         mPresenter = null;
     }
-
-//    private OnClickListener mOnClickListener = new OnClickListener() {
-//        @Override
-//        public void onClick(View view) {
-//            try {
-//                Double amount = Double.parseDouble(mInputAmount.getText().toString());
-//                if (mSpinner.getSelectedItem() != null) {
-//                    mPresenter.saveData(mSpinner.getSelectedItem().toString(), amount);
-//                    clearText();
-//                }else{
-//                    Toast.makeText(getContext(), getResources().getString(R.string.no_category_selected), Toast.LENGTH_SHORT).show();
-//
-//                }
-//            }catch (NumberFormatException e){
-//                Toast.makeText(getContext(), getResources().getString(R.string.no_text_entered), Toast.LENGTH_SHORT).show();
-//            }
-//
-//        }
-//    };
 
     private View.OnClickListener mFabListener = new View.OnClickListener() {
         @Override
@@ -96,24 +86,22 @@ public class InputScreenView extends RelativeLayout {
         }
     };
 
-
-//    @Override
-//    public void updateSpinner(ArrayAdapter<String> adapter){
-//        mSpinner.setAdapter(adapter);
-//    }
+    //    private OnClickListener mOnClickListener = new OnClickListener() {
+//        @Override
+//        public void onClick(View view) {
+//            try {
+//                Double amount = Double.parseDouble(mInputAmount.getText().toString());
+//                if (mSpinner.getSelectedItem() != null) {
+//                    mPresenter.saveData(mSpinner.getSelectedItem().toString(), amount);
+//                    clearText();
+//                }else{
+//                    Toast.makeText(getContext(), getResources().getString(R.string.no_category_selected), Toast.LENGTH_SHORT).show();
 //
-//    @Override
-//    public void clearText(){
-//        mInputAmount.setText("");
-//    }
+//                }
+//            }catch (NumberFormatException e){
+//                Toast.makeText(getContext(), getResources().getString(R.string.no_text_entered), Toast.LENGTH_SHORT).show();
+//            }
 //
-//    @Override
-//    public int getSpinnerIndex(){
-//        return mSpinner.getSelectedItemPosition();
-//    }
-//
-//    @Override
-//    public void setSpinnerIndex(int index){
-//        mSpinner.setSelection(index);
-//    }
+//        }
+//    };
 }
