@@ -14,7 +14,7 @@
     <string name="saved">已保存</string>
     <string name="save_failed">保存失败</string>
     <string name="value_smaller_than_zero">金额小于零</string>
-    <string name="no_text_entered">没有输入金额</string>
+    <string name="no_amount_entered">没有输入金额</string>
 
     <!--settings screen-->
     <string name="null_category_place_holder_text">没有类别，请添加一个类别</string>

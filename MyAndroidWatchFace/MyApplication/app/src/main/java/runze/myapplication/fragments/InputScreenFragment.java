@@ -32,13 +32,12 @@ public class InputScreenFragment extends BaseFragment<InputScreenView, InputScre
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
 
-        return (View) mView;
+        return mView;
     }
 
     @Override
     public void onPause(){
         super.onPause();
-//        spinnerIndexWhenPaused = mView.getSpinnerIndex();
     }
 
     @Override

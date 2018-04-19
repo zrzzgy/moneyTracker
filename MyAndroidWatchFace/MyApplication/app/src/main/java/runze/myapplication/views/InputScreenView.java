@@ -6,9 +6,14 @@ import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,8 +34,8 @@ public class InputScreenView extends RelativeLayout {
 
     public InputScreenView(Context context){
         super(context);
-        View v = LayoutInflater.from(context).inflate(R.layout.input_view_layout, this);
-        init(v);
+        View view = LayoutInflater.from(context).inflate(R.layout.input_view_layout, this);
+        init(view);
     }
 
     private void init(View view){
@@ -62,46 +67,51 @@ public class InputScreenView extends RelativeLayout {
     }
 
     private View.OnClickListener mFabListener = new View.OnClickListener() {
+
+        //fab click
         @Override
         public void onClick(View view) {
+            Log.v(TAG, "creating new item dialog");
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-            View alertLayout = inflater.inflate(R.layout.input_dialog, null);
+            assert inflater != null;
+            final View alertLayout = inflater.inflate(R.layout.input_dialog, null);
             AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
             alertDialog.setView(alertLayout);
-            alertDialog.setTitle("Add new");
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getContext().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            alertDialog.setTitle(getResources().getString(R.string.input_dialog_title));
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+
+                //Cancel dialog
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    Log.v(TAG, "input dialog cancelled");
                     dialogInterface.cancel();
                 }
             });
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getContext().getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+
+                //Confirm dialog
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
+                    Log.v(TAG, "input dialog confirmed");
+
+                    try {
+                        Double amount = Double.parseDouble(((EditText) alertLayout.findViewById(R.id.inputAmount)).getText().toString());
+                        String selectedCategory = (String) ((Spinner) alertLayout.findViewById(R.id.spinner)).getSelectedItem();
+                        if (selectedCategory != null) {
+                            mPresenter.saveData(selectedCategory, amount);
+                            Log.v(TAG, "dismiss input dialog");
+                            dialogInterface.dismiss();
+                        }else{
+                            Toast.makeText(getContext(), getResources().getString(R.string.no_category_selected), Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (NumberFormatException e){
+                        Toast.makeText(getContext(), getResources().getString(R.string.no_amount_entered), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             alertDialog.show();
-
         }
     };
-
-    //    private OnClickListener mOnClickListener = new OnClickListener() {
-//        @Override
-//        public void onClick(View view) {
-//            try {
-//                Double amount = Double.parseDouble(mInputAmount.getText().toString());
-//                if (mSpinner.getSelectedItem() != null) {
-//                    mPresenter.saveData(mSpinner.getSelectedItem().toString(), amount);
-//                    clearText();
-//                }else{
-//                    Toast.makeText(getContext(), getResources().getString(R.string.no_category_selected), Toast.LENGTH_SHORT).show();
-//
-//                }
-//            }catch (NumberFormatException e){
-//                Toast.makeText(getContext(), getResources().getString(R.string.no_text_entered), Toast.LENGTH_SHORT).show();
-//            }
-//
-//        }
-//    };
 }

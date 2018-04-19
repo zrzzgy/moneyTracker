@@ -28,7 +28,6 @@ public class InputScreenPresenter implements IInputScreenPresenter {
     private InputScreenView mView;
     private Set<String> mCategories;
 
-
     public InputScreenPresenter(HomeActivity activity){
             mParentActivity = activity;
             String stringCategories = mParentActivity.mSharedPreferences.getString(CATEGORIES_KEY, "");
