@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import runze.myapplication.HomeActivity;
-import runze.myapplication.presenters.SettingsScreenPresenter;
-import runze.myapplication.views.SettingsScreenView;
+import runze.myapplication.presenters.SpendingDetailPresenter;
+import runze.myapplication.views.SpendingDetailView;
 
-
-
-public class SettingsScreenFragment extends BaseFragment {
-    @Inject SettingsScreenView mView;
-    @Inject SettingsScreenPresenter mPresenter;
+public class SpendingDetailFragment extends BaseFragment {
+    @Inject
+    SpendingDetailView mView;
+    @Inject
+    SpendingDetailPresenter mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,6 @@ public class SettingsScreenFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ((HomeActivity) getActivity()).getAppComponent().inject(this);
-
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
 
@@ -37,9 +36,13 @@ public class SettingsScreenFragment extends BaseFragment {
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        mPresenter.updateView();
     }
 
     @Override
@@ -48,16 +51,5 @@ public class SettingsScreenFragment extends BaseFragment {
         mPresenter.detachView();
         mView.detachPresenter();
         mView = null;
-    }
-
-    public SettingsScreenPresenter getPresenter() {
-        return mPresenter;
-    }
-
-    /**
-     * Refreshing views in this fragment
-     */
-    public void refresh() {
-        mPresenter.updateView();
     }
 }

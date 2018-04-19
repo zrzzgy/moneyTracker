@@ -3,7 +3,7 @@ package runze.myapplication.utils;
 import java.util.Date;
 
 /**
- * Created by zhengr2 on 12/7/2017.
+ * Object that saves info about a spending
  */
 
 public class Expense {
@@ -11,8 +11,8 @@ public class Expense {
     private Double mAmount;
     private Date mDate;
 
-    public Expense(String cate, Double amount, Date date){
-        mCategory = cate;
+    public Expense(String category, Double amount, Date date){
+        mCategory = category;
         mAmount = amount;
         mDate = date;
     }

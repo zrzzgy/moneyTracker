@@ -1,4 +1,4 @@
-package runze.myapplication.presenters.statsScreenPresenter;
+package runze.myapplication.presenters;
 
 import android.graphics.Color;
 import android.text.format.DateUtils;
@@ -20,9 +20,10 @@ import java.util.Set;
 import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.utils.Expense;
+import runze.myapplication.views.IView;
 import runze.myapplication.views.StatsScreenView;
 
-public class StatsScreenPresenter implements IStatsScreenPresenter {
+public class StatsScreenPresenter implements IPresenter{
     private final String TAG = this.getClass().getSimpleName();
     private StatsScreenView mView;
     private HomeActivity mParentActivity;
@@ -32,8 +33,8 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
     }
 
     @Override
-    public void attachView(StatsScreenView view) {
-        mView = view;
+    public void attachView(IView view) {
+        mView = (StatsScreenView) view;
     }
 
     @Override
@@ -41,7 +42,6 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         mView = null;
     }
 
-    @Override
     public void updateView(){
         analyzeData();
     }
@@ -50,7 +50,6 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         List<Expense> expenses = mParentActivity.loadData();
         Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(expenses);
         Set<Map.Entry<String, Double>> dataForBarChart = dateAsKey(expenses);
-        List<String> tableData = dataToTable(expenses);
 
         List<BarEntry> barEntries = new ArrayList<>();
         List<PieEntry> pieEntries = new ArrayList<>();
@@ -88,7 +87,6 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
 
         mView.displayBarChart(barData, dateList);
         mView.displayPieChart(pieData);
-        mView.displayTable(tableData);
     }
 
     private Set<Map.Entry<String, Double>> dateAsKey(List<Expense> expenses){
@@ -130,7 +128,6 @@ public class StatsScreenPresenter implements IStatsScreenPresenter {
         return result;
     }
 
-    @Override
     public void undoRemoveExpense(){
 
     }

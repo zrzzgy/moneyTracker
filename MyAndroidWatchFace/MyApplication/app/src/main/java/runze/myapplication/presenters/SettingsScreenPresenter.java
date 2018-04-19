@@ -1,7 +1,8 @@
-package runze.myapplication.presenters.settingsScreenPresenter;
+package runze.myapplication.presenters;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -17,13 +18,14 @@ import java.util.List;
 import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.utils.Expense;
+import runze.myapplication.views.IView;
 import runze.myapplication.views.SettingsScreenView;
 
 import static runze.myapplication.HomeActivity.CATEGORIES_KEY;
 import static runze.myapplication.HomeActivity.EXPENSES;
 
 
-public class SettingsScreenPresenter implements ISettingsScreenPresenter {
+public class SettingsScreenPresenter implements IPresenter{
     private final String TAG = this.getClass().getSimpleName();
 
     private HomeActivity mParentActivity;
@@ -52,8 +54,8 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
     }
 
     @Override
-    public void attachView(SettingsScreenView view) {
-        mView = view;
+    public void attachView(IView view) {
+        mView = (SettingsScreenView) view;
     }
 
     @Override
@@ -61,8 +63,8 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
         mView = null;
     }
 
-    @Override
     public void saveCategory(String newCategory){
+        Log.v(TAG, "Save new category: " + newCategory);
         if (newCategory.isEmpty()){
             Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.no_category_entered), Toast.LENGTH_SHORT).show();
         }else if(mCategories.contains(newCategory)){
@@ -78,7 +80,6 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
         updateView();
     }
 
-    @Override
     public void editCategory(MenuItem item){
         final EditText input = new EditText(mParentActivity);
         int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
@@ -103,7 +104,6 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
         alertDialog.show();
     }
 
-    @Override
     public void removeCategory(MenuItem item){
         int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
         String cate = mCategories.get(position);
@@ -125,7 +125,6 @@ public class SettingsScreenPresenter implements ISettingsScreenPresenter {
         updateView();
     }
 
-    @Override
     public void undoRemoveCategory(){
         mCategories.clear();
         mCategories.addAll(backupCategories);

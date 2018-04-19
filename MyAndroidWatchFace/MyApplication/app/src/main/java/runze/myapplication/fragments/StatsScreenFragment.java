@@ -9,14 +9,13 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import runze.myapplication.HomeActivity;
-import runze.myapplication.presenters.statsScreenPresenter.IStatsScreenPresenter;
-import runze.myapplication.presenters.statsScreenPresenter.StatsScreenPresenter;
+import runze.myapplication.presenters.StatsScreenPresenter;
 import runze.myapplication.views.StatsScreenView;
 
 
 public class StatsScreenFragment extends BaseFragment {
     @Inject StatsScreenView mView;
-    @Inject IStatsScreenPresenter mPresenter;
+    @Inject StatsScreenPresenter mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +61,7 @@ public class StatsScreenFragment extends BaseFragment {
         mPresenter.updateView();
     }
 
-    public IStatsScreenPresenter getPresenter(){
+    public StatsScreenPresenter getPresenter(){
         return mPresenter;
     }
 }

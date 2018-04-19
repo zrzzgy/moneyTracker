@@ -2,9 +2,7 @@ package runze.myapplication.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,16 +12,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.presenters.IPresenter;
-import runze.myapplication.presenters.settingsScreenPresenter.ISettingsScreenPresenter;
+import runze.myapplication.presenters.SettingsScreenPresenter;
 
 
-public class SettingsScreenView extends LinearLayout {
-    private ISettingsScreenPresenter mPresenter;
+public class SettingsScreenView extends LinearLayout implements IView{
+    private SettingsScreenPresenter mPresenter;
     private ListView mListView;
     private TextView mPlaceHolderText;
     private EditText mNewCategoryText;
@@ -52,10 +49,12 @@ public class SettingsScreenView extends LinearLayout {
         });
     }
 
+    @Override
     public void attachPresenter(IPresenter presenter) {
-        mPresenter = (ISettingsScreenPresenter) presenter;
+        mPresenter = (SettingsScreenPresenter) presenter;
     }
 
+    @Override
     public void detachPresenter() {
         mPresenter = null;
     }

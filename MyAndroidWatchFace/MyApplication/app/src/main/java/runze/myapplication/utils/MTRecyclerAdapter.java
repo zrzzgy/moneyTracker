@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +14,9 @@ import java.util.List;
 
 import runze.myapplication.R;
 
+/**
+ *  Class used by the spending list recycler view
+ */
 public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.ViewHolder> {
     private List<Expense> mDataSet;
 
@@ -48,16 +52,23 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.stats_table_item, parent, false);
-        ViewHolder vh = new ViewHolder(linearLayout);
-        return vh;
+        return new ViewHolder(linearLayout);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.mAmountTextView.setText(mDataSet.get(position).getAmount().toString());
-        holder.mCategoryTextView.setText(mDataSet.get(position).getCategory());
+        Expense singleExpense = mDataSet.get(position);
 
+        holder.mAmountTextView.setText(singleExpense.getAmount().toString());
+        holder.mCategoryTextView.setText(singleExpense.getCategory());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // on list item click
+                //TODO add switch fragment
+            }
+        });
     }
 
     @Override

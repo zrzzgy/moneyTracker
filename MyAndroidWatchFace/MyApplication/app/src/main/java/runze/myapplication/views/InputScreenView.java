@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -18,11 +17,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import runze.myapplication.R;
-import runze.myapplication.presenters.inputScreenPresenter.IInputScreenPresenter;
+import runze.myapplication.presenters.IPresenter;
+import runze.myapplication.presenters.InputScreenPresenter;
 import runze.myapplication.utils.Expense;
 import runze.myapplication.utils.MTRecyclerAdapter;
 
-public class InputScreenView extends RelativeLayout {
+public class InputScreenView extends RelativeLayout implements IView{
     private final String TAG = this.getClass().getSimpleName();
 
     private FloatingActionButton mFab;
@@ -30,7 +30,7 @@ public class InputScreenView extends RelativeLayout {
     private MTRecyclerAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
 
-    private IInputScreenPresenter mPresenter;
+    private InputScreenPresenter mPresenter;
 
     public InputScreenView(Context context){
         super(context);
@@ -53,15 +53,18 @@ public class InputScreenView extends RelativeLayout {
         // specify an adapter (see also next example)
         mAdapter = new MTRecyclerAdapter(new ArrayList<Expense>());
         mRecyclerView.setAdapter(mAdapter);
+
     }
 
-    public void attachPresenter(IInputScreenPresenter presenter){
+    @Override
+    public void attachPresenter(IPresenter presenter){
         if (presenter == null) {
             throw new IllegalArgumentException("presenter cannot be null.");
         }
-        mPresenter = presenter;
+        mPresenter = (InputScreenPresenter) presenter;
     }
 
+    @Override
     public void detachPresenter(){
         mPresenter = null;
     }

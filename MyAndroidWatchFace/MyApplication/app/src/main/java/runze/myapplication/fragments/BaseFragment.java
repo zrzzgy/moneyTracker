@@ -1,14 +1,14 @@
 package runze.myapplication.fragments;
 
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
 import java.io.Serializable;
+
 import runze.myapplication.HomeActivity;
 import runze.myapplication.presenters.IPresenter;
-import runze.myapplication.views.IView;
 
 public abstract class BaseFragment<V extends View, P extends IPresenter<V>> extends Fragment {
     protected String TAG;

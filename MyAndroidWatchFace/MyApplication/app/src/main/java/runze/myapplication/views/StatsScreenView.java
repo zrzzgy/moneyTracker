@@ -17,35 +17,37 @@ import java.util.List;
 import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.presenters.IPresenter;
-import runze.myapplication.presenters.statsScreenPresenter.IStatsScreenPresenter;
+import runze.myapplication.presenters.StatsScreenPresenter;
 import runze.myapplication.utils.MyXAxisValueFormatter;
 
 
-public class StatsScreenView extends RelativeLayout {
+public class StatsScreenView extends RelativeLayout implements IView {
     private final String TAG = getClass().getSimpleName();
-    private IStatsScreenPresenter mPresenter;
+    private StatsScreenPresenter mPresenter;
     private BarChart mBarChart;
     private PieChart mPieChart;
     private ListView mStatsList;
     private ArrayAdapter<String> mAdapter;
 
-    public StatsScreenView(Context  context){
+    public StatsScreenView(Context context) {
         super(context);
         View v = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.stats_view_layout, this);
         init(v);
         ((HomeActivity) getContext()).registerForContextMenu(mStatsList);
     }
 
-    private void init(View view){
+    private void init(View view) {
         mBarChart = findViewById(R.id.barChart);
         mPieChart = findViewById(R.id.pieChart);
         mStatsList = findViewById(R.id.statsList);
     }
 
+    @Override
     public void attachPresenter(IPresenter presenter) {
-        mPresenter = (IStatsScreenPresenter) presenter;
+        mPresenter = (StatsScreenPresenter) presenter;
     }
 
+    @Override
     public void detachPresenter() {
         mPresenter = null;
     }
@@ -59,24 +61,8 @@ public class StatsScreenView extends RelativeLayout {
         mBarChart.invalidate();
     }
 
-    public void displayPieChart(PieData pieData){
+    public void displayPieChart(PieData pieData) {
         mPieChart.setData(pieData);
         mPieChart.invalidate();
-    }
-
-    public void displayTable(List<String> data){
-//        if (!data.isEmpty()){
-//            if (mAdapter == null) {
-//                mAdapter = new ArrayAdapter<>(getContext(), R.layout.stats_table_item);
-//                mAdapter.add(getResources().getString(R.string.stats_list_title));
-//                mAdapter.addAll(data);
-//                mStatsList.setAdapter(mAdapter);
-//            }else{
-//                Set<String> listToSet = new HashSet<>(data);
-//                mAdapter.clear();
-//                mAdapter.add(getResources().getString(R.string.stats_list_title));
-//                mAdapter.addAll(listToSet);
-//            }
-//        }
     }
 }

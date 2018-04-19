@@ -1,4 +1,4 @@
-package runze.myapplication.presenters.inputScreenPresenter;
+package runze.myapplication.presenters;
 
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -16,12 +16,13 @@ import java.util.Set;
 import runze.myapplication.HomeActivity;
 import runze.myapplication.R;
 import runze.myapplication.utils.Expense;
+import runze.myapplication.views.IView;
 import runze.myapplication.views.InputScreenView;
 
 import static runze.myapplication.HomeActivity.CATEGORIES_KEY;
 import static runze.myapplication.HomeActivity.EXPENSES;
 
-public class InputScreenPresenter implements IInputScreenPresenter {
+public class InputScreenPresenter implements IPresenter {
     private final String TAG = this.getClass().getSimpleName();
 
     private HomeActivity mParentActivity;
@@ -46,10 +47,12 @@ public class InputScreenPresenter implements IInputScreenPresenter {
 //        mView.setSpinnerIndex(index);
     }
 
-    public void attachView(InputScreenView view){
-        mView = view;
+    @Override
+    public void attachView(IView view){
+        mView = (InputScreenView) view;
     }
 
+    @Override
     public void detachView(){
         mView = null;
     }
