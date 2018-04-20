@@ -14,4 +14,9 @@
         <item name="android:textColor">@color/colorSecondaryLight</item>
         <item name="android:gravity">center_vertical</item>
     </style>
+
+    <style name="invalid_data_error">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
 </resources>

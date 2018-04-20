@@ -118,16 +118,6 @@ public class StatsScreenPresenter implements IPresenter{
         return sortedData.entrySet();
     }
 
-    private List<String> dataToTable(List<Expense> expenses){
-        List<String> result = new ArrayList<>();
-        for (Expense expense: expenses) {
-            result.add(expense.getDate().toString() + " " +
-            expense.getCategory() + " " +
-            expense.getAmount());
-        }
-        return result;
-    }
-
     public void undoRemoveExpense(){
 
     }

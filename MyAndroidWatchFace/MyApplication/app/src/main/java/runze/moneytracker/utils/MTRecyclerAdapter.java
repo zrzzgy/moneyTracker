@@ -27,26 +27,18 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
         private LinearLayout mView;
         private TextView mAmountTextView;
         private TextView mCategoryTextView;
-        private ViewGroup mViewGroup;
 
         ViewHolder(LinearLayout v, ViewGroup viewGroup) {
             super(v);
             mView = v;
             mAmountTextView = mView.findViewById(R.id.list_amount);
             mCategoryTextView = mView.findViewById(R.id.list_category);
-            mViewGroup = viewGroup;
         }
 
     }
 
     public MTRecyclerAdapter(List<Expense> dataSet) {
         mDataSet = dataSet;
-        mDataSet.add(new Expense("food", 99.00, new Date()));
-        mDataSet.add(new Expense("food", 91.00, new Date()));
-        mDataSet.add(new Expense("food", 92.00, new Date()));
-        mDataSet.add(new Expense("food", 93.00, new Date()));
-        mDataSet.add(new Expense("food", 94.00, new Date()));
-        mDataSet.add(new Expense("food", 95.00, new Date()));
     }
 
     @NonNull

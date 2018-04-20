@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,10 +27,8 @@ import runze.moneytracker.utils.MTRecyclerAdapter;
 public class InputScreenView extends RelativeLayout implements IView{
     private final String TAG = this.getClass().getSimpleName();
 
-    private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
-    private MTRecyclerAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private TextView mErrorMessage;
     private AlertDialog mAlertDialog;
     private  View mAlertLayout;
 
@@ -42,21 +41,20 @@ public class InputScreenView extends RelativeLayout implements IView{
     }
 
     private void init(View view){
-
-        mFab = view.findViewById(R.id.new_item_fab);
-        mFab.setOnClickListener(mFabListener);
+        FloatingActionButton fab = view.findViewById(R.id.new_item_fab);
+        fab.setOnClickListener(mFabListener);
 
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
+    }
 
-        // specify an adapter (see also next example)
-        mAdapter = new MTRecyclerAdapter(new ArrayList<Expense>());
-        mRecyclerView.setAdapter(mAdapter);
-
+    public void updateViewWithData(){
+        // populate the view with data
+        updateRecyclerViewWithData();
     }
 
     @Override
@@ -82,21 +80,23 @@ public class InputScreenView extends RelativeLayout implements IView{
             mAlertDialog  = new AlertDialog.Builder(getContext())
                     .setView(mAlertLayout)
                     .setTitle(getResources().getString(R.string.input_dialog_title))
-                    .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-
-                        //Cancel dialog
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Log.v(TAG, "input dialog cancelled");
-                            dialogInterface.cancel();
-                        }
-                    })
+                    .setNegativeButton(getResources().getString(R.string.cancel), mCancelListener)
                     .setPositiveButton(getResources().getString(R.string.ok), null)
                     .create();
-            mAlertDialog.setCanceledOnTouchOutside(false);
 
+            mAlertDialog.setCanceledOnTouchOutside(false);
             mAlertDialog.setOnShowListener(mOnShowListener);
             mAlertDialog.show();
+
+            mErrorMessage = mAlertLayout.findViewById(R.id.error_message);
+        }
+    };
+
+    private DialogInterface.OnClickListener mCancelListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            Log.v(TAG, "input dialog cancelled");
+            dialogInterface.cancel();
         }
     };
 
@@ -112,20 +112,27 @@ public class InputScreenView extends RelativeLayout implements IView{
     private OnClickListener mInputDialogConfirmListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.v(TAG, "input dialog confirmed");
-            try {
-                Double amount = Double.parseDouble(((EditText) mAlertLayout.findViewById(R.id.inputAmount)).getText().toString());
-                String selectedCategory = (String) ((Spinner) mAlertLayout.findViewById(R.id.spinner)).getSelectedItem();
-                if (selectedCategory != null) {
+            Log.v(TAG, "confirming input dialog");
+
+            Double amount = Double.parseDouble(((EditText) mAlertLayout.findViewById(R.id.inputAmount)).getText().toString());
+            if (amount <= 0){
+                mErrorMessage.setText(getResources().getString(R.string.amount_invalid));
+            }else {
+                String selectedCategory = ((EditText) mAlertLayout.findViewById(R.id.inputCategory)).getText().toString();
+                if (!selectedCategory.isEmpty()) {
                     mPresenter.saveData(selectedCategory, amount);
-                    Log.v(TAG, "input valid, dismissing input dialog");
+                    Log.v(TAG, "input validated, dismissing input dialog");
                     mAlertDialog.dismiss();
+                    updateRecyclerViewWithData();
                 } else {
-                    Toast.makeText(getContext(), getResources().getString(R.string.no_category_selected), Toast.LENGTH_SHORT).show();
+                    mErrorMessage.setText(getResources().getString(R.string.no_category_entered));
                 }
-            } catch (NumberFormatException e) {
-                Toast.makeText(getContext(), getResources().getString(R.string.no_amount_entered), Toast.LENGTH_SHORT).show();
             }
         }
     };
+
+    private void updateRecyclerViewWithData(){
+        MTRecyclerAdapter mAdapter = new MTRecyclerAdapter(mPresenter.loadData());
+        mRecyclerView.setAdapter(mAdapter);
+    }
 }

@@ -29,7 +29,7 @@ public class InputScreenFragment extends BaseFragment<InputScreenView, InputScre
         ((HomeActivity) getActivity()).getAppComponent().inject(this);
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
-
+        mView.updateViewWithData();
         return mView;
     }
 

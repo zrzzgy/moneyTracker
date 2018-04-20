@@ -58,33 +58,33 @@ public class InputScreenPresenter implements IPresenter {
     }
 
     public void saveData(String category, double amount){
-        if (amount > 0) {
-            List<Expense> expenseList = new ArrayList<>();
-            Gson gson = new Gson();
+        List<Expense> expenseList = new ArrayList<>();
+        Gson gson = new Gson();
 
-            //create new Expense object based on data given
-            Expense newExpense = new Expense(category, amount, new Date());
+        //create new Expense object based on data given
+        Expense newExpense = new Expense(category, amount, new Date());
 
-            //read saved data from preferences
-            String savedExpenses = mParentActivity.mSharedPreferences.getString(EXPENSES, "");
+        //read saved data from preferences
+        String savedExpenses = mParentActivity.mSharedPreferences.getString(EXPENSES, "");
 
-            //if there is saved data, put it in first
-            if (!savedExpenses.equals("")){
-                List<Expense> oldExpenseList = gson.fromJson(savedExpenses, new TypeToken<List<Expense>>(){}.getType());
-                expenseList.addAll(oldExpenseList);
-            }
-
-            //put in new data
-            expenseList.add(newExpense);
-
-            //save edited data
-            if (mParentActivity.mEditor.putString(EXPENSES, gson.toJson(expenseList)).commit()) {
-                Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.save_failed), Toast.LENGTH_SHORT).show();
-            }
-        }else {
-            Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.value_smaller_than_zero), Toast.LENGTH_SHORT).show();
+        //if there is saved data, put it in first
+        if (!savedExpenses.equals("")){
+            List<Expense> oldExpenseList = gson.fromJson(savedExpenses, new TypeToken<List<Expense>>(){}.getType());
+            expenseList.addAll(oldExpenseList);
         }
+
+        //put in new data
+        expenseList.add(newExpense);
+
+        //save edited data
+        if (mParentActivity.mEditor.putString(EXPENSES, gson.toJson(expenseList)).commit()) {
+            Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.save_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public List<Expense> loadData(){
+        return mParentActivity.loadData();
     }
 }
