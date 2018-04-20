@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -29,6 +30,8 @@ public class InputScreenView extends RelativeLayout implements IView{
     private RecyclerView mRecyclerView;
     private MTRecyclerAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
+    private AlertDialog mAlertDialog;
+    private  View mAlertLayout;
 
     private InputScreenPresenter mPresenter;
 
@@ -69,52 +72,60 @@ public class InputScreenView extends RelativeLayout implements IView{
         mPresenter = null;
     }
 
-    private View.OnClickListener mFabListener = new View.OnClickListener() {
-
-        //fab click
+    private OnClickListener mFabListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
             Log.v(TAG, "creating new item dialog");
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             assert inflater != null;
-            final View alertLayout = inflater.inflate(R.layout.input_dialog, null);
-            AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-            alertDialog.setView(alertLayout);
-            alertDialog.setTitle(getResources().getString(R.string.input_dialog_title));
-            alertDialog.setCanceledOnTouchOutside(false);
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            mAlertLayout = inflater.inflate(R.layout.input_dialog, null);
+            mAlertDialog  = new AlertDialog.Builder(getContext())
+                    .setView(mAlertLayout)
+                    .setTitle(getResources().getString(R.string.input_dialog_title))
+                    .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
-                //Cancel dialog
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Log.v(TAG, "input dialog cancelled");
-                    dialogInterface.cancel();
-                }
-            });
-
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-
-                //Confirm dialog
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Log.v(TAG, "input dialog confirmed");
-
-                    try {
-                        Double amount = Double.parseDouble(((EditText) alertLayout.findViewById(R.id.inputAmount)).getText().toString());
-                        String selectedCategory = (String) ((Spinner) alertLayout.findViewById(R.id.spinner)).getSelectedItem();
-                        if (selectedCategory != null) {
-                            mPresenter.saveData(selectedCategory, amount);
-                            Log.v(TAG, "dismiss input dialog");
-                            dialogInterface.dismiss();
-                        }else{
-                            Toast.makeText(getContext(), getResources().getString(R.string.no_category_selected), Toast.LENGTH_SHORT).show();
+                        //Cancel dialog
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Log.v(TAG, "input dialog cancelled");
+                            dialogInterface.cancel();
                         }
-                    }catch (NumberFormatException e){
-                        Toast.makeText(getContext(), getResources().getString(R.string.no_amount_entered), Toast.LENGTH_SHORT).show();
-                    }
+                    })
+                    .setPositiveButton(getResources().getString(R.string.ok), null)
+                    .create();
+            mAlertDialog.setCanceledOnTouchOutside(false);
+
+            mAlertDialog.setOnShowListener(mOnShowListener);
+            mAlertDialog.show();
+        }
+    };
+
+    private DialogInterface.OnShowListener mOnShowListener = new DialogInterface.OnShowListener() {
+        //Confirm dialog
+        @Override
+        public void onShow(DialogInterface dialogInterface) {
+            Button confirmButton = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            confirmButton.setOnClickListener(mInputDialogConfirmListener);
+        }
+    };
+
+    private OnClickListener mInputDialogConfirmListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Log.v(TAG, "input dialog confirmed");
+            try {
+                Double amount = Double.parseDouble(((EditText) mAlertLayout.findViewById(R.id.inputAmount)).getText().toString());
+                String selectedCategory = (String) ((Spinner) mAlertLayout.findViewById(R.id.spinner)).getSelectedItem();
+                if (selectedCategory != null) {
+                    mPresenter.saveData(selectedCategory, amount);
+                    Log.v(TAG, "input valid, dismissing input dialog");
+                    mAlertDialog.dismiss();
+                } else {
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_category_selected), Toast.LENGTH_SHORT).show();
                 }
-            });
-            alertDialog.show();
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), getResources().getString(R.string.no_amount_entered), Toast.LENGTH_SHORT).show();
+            }
         }
     };
 }
