@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/spending_detail_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="123"
+        android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
+        android:layout_marginTop="@dimen/tight_activity_vertical_margin"
+        android:layout_marginBottom="@dimen/tight_activity_vertical_margin"
+        android:textSize="@dimen/stats_text_size"/>
+
+    <TextView
+        android:id="@+id/spending_detail_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
+        android:layout_marginTop="@dimen/tight_activity_vertical_margin"
+        android:layout_marginBottom="@dimen/tight_activity_vertical_margin"
+        android:textSize="@dimen/stats_text_size"
+        android:layout_below="@+id/spending_detail_amount"
+        android:text="Food"/>
+
+    <TextView
+        android:id="@+id/spending_detail_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
+        android:layout_marginTop="@dimen/tight_activity_vertical_margin"
+        android:layout_marginBottom="@dimen/tight_activity_vertical_margin"
+        android:textSize="@dimen/stats_text_size"
+        android:layout_below="@id/spending_detail_category"
+        android:text="2012-12-12 12:12"/>
+
+    <ImageButton
+        android:id="@+id/spending_detail_edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/edit"
+        android:layout_below="@+id/spending_detail_date"
+        android:background="@drawable/ic_edit_black_50dp"
+        android:elevation="@dimen/elevation"/>
+
+    <ImageButton
+        android:id="@+id/spending_detail_delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/edit"
+        android:layout_below="@+id/spending_detail_date"
+        android:layout_toEndOf="@+id/spending_detail_edit_button"
+        android:background="@drawable/ic_delete_black_50dp"
+        android:elevation="@dimen/elevation"/>
+</RelativeLayout>

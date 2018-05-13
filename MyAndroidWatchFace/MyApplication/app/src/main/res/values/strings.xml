@@ -11,6 +11,7 @@
     <string name="snack_bar_undo">Undo</string>
 
     <!--input screen-->
+    <string name="input_dialog_title">Add New</string>
     <string name="dollar_sign">$</string>
     <string name="input_amount_hint">Amount</string>
     <string name="category_text">Category: </string>
@@ -19,7 +20,7 @@
     <string name="saved">Saved</string>
     <string name="save_failed">Save failed</string>
     <string name="value_smaller_than_zero">Amount must be greater than zero</string>
-    <string name="no_text_entered">No amount entered</string>
+    <string name="no_amount_entered">No amount entered</string>
     <string name="expenses_by_category">Expenses By Category</string>
     <string name="expenses_by_date">Expenses By Date</string>
 
