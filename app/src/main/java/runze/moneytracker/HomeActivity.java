@@ -63,17 +63,21 @@ public class HomeActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_input:
                     mViewPager.setCurrentItem(0);
+                    mInputFragment.onResume();
                     return true;
                 case R.id.navigation_stats:
                     mViewPager.setCurrentItem(1);
+                    mStatsFragment.onResume();
                     return true;
                 case R.id.navigation_settings:
                    mViewPager.setCurrentItem(2);
+                   mSettingsFragment.onResume();
                    return true;
             }
             return false;
         }
     };
+
 
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -121,6 +125,18 @@ public class HomeActivity extends AppCompatActivity {
                     }else {
                         mNavigation.getMenu().getItem(position).setChecked(false);
                     }
+                }
+
+                switch (position) {
+                    case 0:
+                        mInputFragment.onResume();
+                        break;
+                    case 1:
+                        mStatsFragment.onResume();
+                        break;
+                    case 2:
+                        mSettingsFragment.onResume();
+                        break;
                 }
             }
 
