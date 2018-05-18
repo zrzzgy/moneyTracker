@@ -64,7 +64,7 @@
             android:focusableInTouchMode="true">
 
             <EditText
-                android:id="@+id/description"
+                android:id="@+id/inputDescription"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:hint="@string/input_description_hint"

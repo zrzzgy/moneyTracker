@@ -119,8 +119,9 @@ public class InputScreenView extends RelativeLayout implements IView{
                 mErrorMessage.setText(getResources().getString(R.string.amount_invalid));
             }else {
                 String selectedCategory = ((EditText) mAlertLayout.findViewById(R.id.inputCategory)).getText().toString();
+                String description = ((EditText) mAlertLayout.findViewById(R.id.inputDescription)).getText().toString();
                 if (!selectedCategory.isEmpty()) {
-                    mPresenter.saveData(selectedCategory, amount);
+                    mPresenter.saveData(selectedCategory, amount, description);
                     Log.v(TAG, "input validated, dismissing input dialog");
                     mAlertDialog.dismiss();
                     updateRecyclerViewWithData();

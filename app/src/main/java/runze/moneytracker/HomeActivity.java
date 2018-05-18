@@ -62,15 +62,15 @@ public class HomeActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_input:
-                    mViewPager.setCurrentItem(0);
+                    mViewPager.setCurrentItem(0);  // display page 0
                     mInputFragment.onResume();
                     return true;
                 case R.id.navigation_stats:
-                    mViewPager.setCurrentItem(1);
+                    mViewPager.setCurrentItem(1);   // display page 1
                     mStatsFragment.onResume();
                     return true;
                 case R.id.navigation_settings:
-                   mViewPager.setCurrentItem(2);
+                   mViewPager.setCurrentItem(2);    // display page 2
                    mSettingsFragment.onResume();
                    return true;
             }
@@ -84,7 +84,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        if (LeakCanary.isInAnalyzerProcess(this)) {  //  create LeakCanary to check memory leak
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
