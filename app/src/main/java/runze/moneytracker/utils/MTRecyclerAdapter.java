@@ -3,6 +3,7 @@ package runze.moneytracker.utils;
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import runze.moneytracker.models.Expense;
  *  Class used by the spending list recycler view
  */
 public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.ViewHolder> {
+    private final String TAG = this.getClass().getSimpleName();
     private List<Expense> mDataSet;
 
     // Provide a reference to the views for each data item
@@ -27,12 +29,16 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
         private LinearLayout mView;
         private TextView mAmountTextView;
         private TextView mCategoryTextView;
+        private TextView mDateTextView;
+        private TextView mDescriptionTextView;
 
         ViewHolder(LinearLayout v, ViewGroup viewGroup) {
             super(v);
             mView = v;
             mAmountTextView = mView.findViewById(R.id.list_amount);
             mCategoryTextView = mView.findViewById(R.id.list_category);
+            mDateTextView = mView.findViewById(R.id.list_date);
+            mDescriptionTextView = mView.findViewById(R.id.list_description);
         }
 
     }
@@ -56,11 +62,19 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
 
         holder.mAmountTextView.setText(singleExpense.getAmount().toString());
         holder.mCategoryTextView.setText(singleExpense.getCategory());
+        holder.mDateTextView.setText(singleExpense.getDate().toString());
+        holder.mDescriptionTextView.setText(singleExpense.getDescription());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // on list item click
                 //TODO add switch fragment
+                Log.v(TAG, "Clicked " + view.getId());
+                if (((TextView) view.findViewById(R.id.list_description)).getMaxLines() == 1){
+                    ((TextView) view.findViewById(R.id.list_description)).setMaxLines(Integer.MAX_VALUE);
+                }else{
+                    ((TextView) view.findViewById(R.id.list_description)).setMaxLines(1);
+                }
             }
         });
     }
