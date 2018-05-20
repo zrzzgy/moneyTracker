@@ -34,7 +34,7 @@ import runze.moneytracker.dependencyinjection.DaggerAppComponent;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.fragments.StatsScreenFragment;
-import runze.moneytracker.utils.Expense;
+import runze.moneytracker.models.Expense;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
 
 public class HomeActivity extends AppCompatActivity {

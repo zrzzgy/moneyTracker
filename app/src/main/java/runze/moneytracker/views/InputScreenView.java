@@ -12,16 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import runze.moneytracker.R;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.presenters.InputScreenPresenter;
-import runze.moneytracker.utils.Expense;
 import runze.moneytracker.utils.MTRecyclerAdapter;
 
 public class InputScreenView extends RelativeLayout implements IView{

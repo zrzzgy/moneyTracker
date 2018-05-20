@@ -1,4 +1,4 @@
-package runze.moneytracker.utils;
+package runze.moneytracker.models;
 
 import java.util.Date;
 
