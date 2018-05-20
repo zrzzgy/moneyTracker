@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Date;
 import java.util.List;
 
 import runze.moneytracker.R;
+import runze.moneytracker.models.Expense;
 
 /**
  *  Class used by the spending list recycler view

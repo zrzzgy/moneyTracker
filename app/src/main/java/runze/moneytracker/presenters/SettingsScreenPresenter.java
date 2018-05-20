@@ -17,7 +17,7 @@ import java.util.List;
 
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
-import runze.moneytracker.utils.Expense;
+import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.SettingsScreenView;
 

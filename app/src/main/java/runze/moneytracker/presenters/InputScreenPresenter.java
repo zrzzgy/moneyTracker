@@ -1,7 +1,5 @@
 package runze.moneytracker.presenters;
 
-import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -15,7 +13,7 @@ import java.util.Set;
 
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
-import runze.moneytracker.utils.Expense;
+import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.InputScreenView;
 
@@ -37,14 +35,6 @@ public class InputScreenPresenter implements IPresenter {
             if (mCategories == null){
                 mCategories = new HashSet<>();
             }
-    }
-
-    public void updateView(int index){
-        Log.d(TAG, "categories are: " + mCategories.toString());
-        ArrayAdapter<String > adapter =
-                new ArrayAdapter<>(mParentActivity.getApplicationContext(), R.layout.input_spinner_item, new ArrayList<>(mCategories));
-//        mView.updateSpinner(adapter);
-//        mView.setSpinnerIndex(index);
     }
 
     @Override
