@@ -57,12 +57,12 @@ public class InputScreenPresenter implements IPresenter {
         mView = null;
     }
 
-    public void saveData(String category, double amount){
+    public void saveData(String category, double amount, String description){
         List<Expense> expenseList = new ArrayList<>();
         Gson gson = new Gson();
 
         //create new Expense object based on data given
-        Expense newExpense = new Expense(category, amount, new Date());
+        Expense newExpense = new Expense(category, amount, new Date(), description);
 
         //read saved data from preferences
         String savedExpenses = mParentActivity.mSharedPreferences.getString(EXPENSES, "");

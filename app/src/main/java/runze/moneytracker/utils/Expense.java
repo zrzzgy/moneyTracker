@@ -10,11 +10,13 @@ public class Expense {
     private String mCategory;
     private Double mAmount;
     private Date mDate;
+    private String mDescription;
 
-    public Expense(String category, Double amount, Date date){
+    public Expense(String category, Double amount, Date date, String description){
         mCategory = category;
         mAmount = amount;
         mDate = date;
+        mDescription = description;
     }
 
     public String getCategory() {
@@ -29,7 +31,19 @@ public class Expense {
         return mAmount;
     }
 
+    public void setAmount(Double amount) {
+        mAmount = amount;
+    }
+
     public Date getDate() {
         return mDate;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        this.mDescription = description;
     }
 }
