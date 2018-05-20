@@ -12,7 +12,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@color/offWhite"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/new_item_fab"
@@ -25,9 +26,5 @@
         android:clickable="true"
         android:focusable="true"
         app:srcCompat="@drawable/ic_add_black_24dp" />
-
-    <!-- stats view-->
-
-    <!-- category view-->
 
 </RelativeLayout>

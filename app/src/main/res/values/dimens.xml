@@ -9,7 +9,7 @@
     <!-- spending list -->
     <dimen name="card_margin">1.5dp</dimen>
     <dimen name="card_elevation">3dp</dimen>
-    <dimen name="card_text_size">14sp</dimen>
+    <dimen name="card_text_size">20sp</dimen>
 
     <!-- spinner -->
     <dimen name="spinner_text_size">25sp</dimen>
