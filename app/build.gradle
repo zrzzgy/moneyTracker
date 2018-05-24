@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "runze.myapplication"
-        minSdkVersion 23
+        minSdkVersion 22
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -38,6 +38,7 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:2.11"
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    implementation 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
 }
 repositories {
     mavenCentral()

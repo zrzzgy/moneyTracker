@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://D:\git\moneyTracker\MyApplication.iml" filepath="D:\git\moneyTracker\MyApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyApplication.iml" filepath="$PROJECT_DIR$/MyApplication.iml" />
+      <module fileurl="file://D:/git/moneyTracker/MyApplication.iml" filepath="D:/git/moneyTracker/MyApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\git\moneyTracker\app\app.iml" filepath="D:\git\moneyTracker\app\app.iml" />
+      <module fileurl="file://D:/git/moneyTracker/app/app.iml" filepath="D:/git/moneyTracker/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/moneyTracker.iml" filepath="$PROJECT_DIR$/moneyTracker.iml" />
     </modules>
   </component>
