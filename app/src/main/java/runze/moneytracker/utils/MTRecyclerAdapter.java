@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 
@@ -25,20 +26,24 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public RelativeLayout viewBackground;
+        public LinearLayout viewForeground;
         private LinearLayout mView;
         private TextView mAmountTextView;
         private TextView mCategoryTextView;
         private TextView mDateTextView;
         private TextView mDescriptionTextView;
 
-        ViewHolder(LinearLayout v, ViewGroup viewGroup) {
+        public ViewHolder(LinearLayout v, ViewGroup viewGroup) {
             super(v);
             mView = v;
             mAmountTextView = mView.findViewById(R.id.list_amount);
             mCategoryTextView = mView.findViewById(R.id.list_category);
             mDateTextView = mView.findViewById(R.id.list_date);
             mDescriptionTextView = mView.findViewById(R.id.list_description);
+            viewBackground = mView.findViewById(R.id.view_background);
+            viewForeground = mView.findViewById(R.id.view_foreground);
         }
 
     }
@@ -82,5 +87,19 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
     @Override
     public int getItemCount() {
         return mDataSet.size();
+    }
+
+    public void removeItem(int position) {
+        mDataSet.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Expense item, int position) {
+        mDataSet.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
     }
 }

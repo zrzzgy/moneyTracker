@@ -18,6 +18,12 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -36,8 +42,10 @@ import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.fragments.StatsScreenFragment;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
+import runze.moneytracker.utils.MTRecyclerAdapter;
+import runze.moneytracker.utils.RecyclerItemTouchHelper;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
     private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES = "EXPENSES";
@@ -47,9 +55,13 @@ public class HomeActivity extends AppCompatActivity {
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
     public List<Integer> mColorList = new ArrayList<>();
+    private List<Expense> cartList;
 
+    private RelativeLayout home_layout;
     private BottomNavigationView mNavigation;
     private ViewPager mViewPager;
+    private RecyclerView recyclerView;
+    private MTRecyclerAdapter mRecyclerAdapter;
 
     @Inject InputScreenFragment mInputFragment;
     @Inject StatsScreenFragment mStatsFragment;
@@ -91,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
         }
         LeakCanary.install(getApplication());
 
+
         //fulfill injected objects
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         mAppComponent.inject(this);
@@ -100,6 +113,54 @@ public class HomeActivity extends AppCompatActivity {
 
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
+
+        home_layout = findViewById(R.id.home_relative_layout);
+        View view= this.getLayoutInflater().inflate((R.layout.input_view_layout), null);
+
+        recyclerView = view.findViewById(R.id.recycler_view);
+        cartList = new ArrayList<>();
+        mRecyclerAdapter = new MTRecyclerAdapter(cartList);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(mRecyclerAdapter);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
+
+    }
+
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof MTRecyclerAdapter.ViewHolder) {
+            // get the removed item name to display it in snack bar
+            String name = cartList.get(viewHolder.getAdapterPosition()).getCategory();
+
+            // backup of removed item for undo purpose
+            final Expense deletedItem = cartList.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            mRecyclerAdapter.removeItem(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(home_layout, name + " removed from cart!", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // undo is selected, restore the deleted item
+                    mRecyclerAdapter.restoreItem(deletedItem, deletedIndex);
+                }
+            });
+            snackbar.setActionTextColor(android.graphics.Color.YELLOW);
+            snackbar.show();
+        }
     }
 
     public void initComponents(){
