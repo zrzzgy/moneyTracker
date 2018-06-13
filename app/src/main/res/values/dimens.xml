@@ -24,4 +24,5 @@
     <dimen name="stats_text_size">25sp</dimen>
     <dimen name="stats_item_margin">3dp</dimen>
     <dimen name="space_between_charts">40dp</dimen>
+    <dimen name="graph_margin">20dp</dimen>
 </resources>

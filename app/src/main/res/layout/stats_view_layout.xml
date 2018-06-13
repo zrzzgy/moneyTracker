@@ -24,7 +24,8 @@
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChart"
                 android:layout_width="match_parent"
-                android:layout_height="500dp">
+                android:layout_height="300dp"
+                android:layout_margin="@dimen/graph_margin">
             </com.github.mikephil.charting.charts.BarChart>
 
             <TextView
@@ -37,7 +38,8 @@
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pieChart"
                 android:layout_width="match_parent"
-                android:layout_height="500dp">
+                android:layout_height="300dp"
+                android:layout_margin="@dimen/graph_margin">
             </com.github.mikephil.charting.charts.PieChart>
         </LinearLayout>
     </ScrollView>
