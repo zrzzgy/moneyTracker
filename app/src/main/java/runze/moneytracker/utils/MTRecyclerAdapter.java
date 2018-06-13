@@ -56,7 +56,7 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.stats_table_item, parent, false);
+                .inflate(R.layout.expense_block, parent, false);
         return new ViewHolder(linearLayout, parent);
     }
 

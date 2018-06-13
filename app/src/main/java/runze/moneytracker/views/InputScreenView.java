@@ -31,7 +31,7 @@ public class InputScreenView extends RelativeLayout implements IView{
 
     public InputScreenView(Context context){
         super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.input_view_layout, this);
+        View view = LayoutInflater.from(context).inflate(R.layout.home_base, this);
         init(view);
     }
 

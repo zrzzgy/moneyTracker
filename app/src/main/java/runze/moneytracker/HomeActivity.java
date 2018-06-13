@@ -108,14 +108,14 @@ public class HomeActivity extends AppCompatActivity implements RecyclerItemTouch
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         mAppComponent.inject(this);
 
-        setContentView(R.layout.home_activity);
+        setContentView(R.layout.bottom_nav);
         initComponents();
 
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
 
         home_layout = findViewById(R.id.home_relative_layout);
-        View view= this.getLayoutInflater().inflate((R.layout.input_view_layout), null);
+        View view= this.getLayoutInflater().inflate((R.layout.home_base), null);
 
         recyclerView = view.findViewById(R.id.recycler_view);
         cartList = new ArrayList<>();

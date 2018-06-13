@@ -53,11 +53,11 @@ public class StatsScreenView extends RelativeLayout implements IView {
     }
 
     public void displayBarChart(BarData barData, String[] dateList) {
-        mBarChart.setData(barData);
-        mBarChart.setAutoScaleMinMaxEnabled(true);
+        mBarChart.setAutoScaleMinMaxEnabled(false);
         mBarChart.getXAxis().setValueFormatter(new MyXAxisValueFormatter(dateList));
         mBarChart.getXAxis().setLabelRotationAngle(45);
         mBarChart.getXAxis().setDrawLabels(true);
+        mBarChart.setData(barData);
         mBarChart.invalidate();
     }
 
