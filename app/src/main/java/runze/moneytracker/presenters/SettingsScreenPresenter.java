@@ -22,7 +22,7 @@ import runze.moneytracker.views.IView;
 import runze.moneytracker.views.SettingsScreenView;
 
 import static runze.moneytracker.HomeActivity.CATEGORIES_KEY;
-import static runze.moneytracker.HomeActivity.EXPENSES;
+import static runze.moneytracker.HomeActivity.EXPENSES_KEY;
 
 
 public class SettingsScreenPresenter implements IPresenter{
@@ -121,7 +121,7 @@ public class SettingsScreenPresenter implements IPresenter{
                 expenseIterator.remove();
             }
         }
-        mParentActivity.mEditor.putString(EXPENSES, gson.toJson(expenses)).apply();
+        mParentActivity.mEditor.putString(EXPENSES_KEY, gson.toJson(expenses)).apply();
         updateView();
     }
 
@@ -129,7 +129,7 @@ public class SettingsScreenPresenter implements IPresenter{
         mCategories.clear();
         mCategories.addAll(backupCategories);
         mParentActivity.mEditor.putString(CATEGORIES_KEY, gson.toJson(mCategories)).apply();
-        mParentActivity.mEditor.putString(EXPENSES, gson.toJson(backupExpenses)).apply();
+        mParentActivity.mEditor.putString(EXPENSES_KEY, gson.toJson(backupExpenses)).apply();
         updateView();
     }
 
@@ -143,7 +143,7 @@ public class SettingsScreenPresenter implements IPresenter{
                 expense.setCategory(newCategory);
             }
         }
-        mParentActivity.mEditor.putString(EXPENSES, gson.toJson(expenses)).apply();
+        mParentActivity.mEditor.putString(EXPENSES_KEY, gson.toJson(expenses)).apply();
         updateView();
     }
 }

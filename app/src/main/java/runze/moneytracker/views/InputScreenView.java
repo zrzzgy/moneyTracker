@@ -11,6 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -146,20 +147,30 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
         if (viewHolder instanceof MTRecyclerAdapter.ViewHolder) {
 
             // backup of removed item for undo purpose
-            final Expense deletedItem = mAdapter.getDataSet().get(position);
+            final Expense itemToDelete = mAdapter.getDataSet().get(position);
 
-            // remove the item from recycler view
-            mAdapter.removeItem(viewHolder.getAdapterPosition());
+            // remove the item from both the recycler view and the sharedPreferences
+            if (mPresenter.removeExpenseFromPreferences(itemToDelete)){
+                mAdapter.removeItem(viewHolder.getAdapterPosition());
+                Log.v(TAG, "Item removed");
+            }else{
+                Log.e(TAG, "Error when removing item from preferences");
+            }
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
-                    .make(this, "Item Removed", Snackbar.LENGTH_SHORT);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
+                    .make(this, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_SHORT);
+            snackbar.setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     // undo is selected, restore the deleted item
-                    mAdapter.restoreItem(deletedItem, position);
+                    if (mPresenter.restoreDeletedItem()){
+                        mAdapter.restoreItem(itemToDelete, position);
+                        Log.v(TAG, "Item restored");
+                    }else{
+                        Log.e(TAG, "Error when restoring item to preferences");
+                    }
                 }
             });
             snackbar.setActionTextColor(android.graphics.Color.YELLOW);

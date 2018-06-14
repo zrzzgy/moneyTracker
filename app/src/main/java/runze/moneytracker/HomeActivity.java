@@ -2,7 +2,6 @@ package runze.moneytracker;
 
 
 import android.annotation.SuppressLint;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,12 +17,6 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -42,13 +35,11 @@ import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.fragments.StatsScreenFragment;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
-import runze.moneytracker.utils.MTRecyclerAdapter;
-import runze.moneytracker.utils.RecyclerItemTouchHelper;
 
 public class HomeActivity extends AppCompatActivity{
     private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
-    public static final String EXPENSES = "EXPENSES";
+    public static final String EXPENSES_KEY = "EXPENSES_KEY";
     private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
 
     private AppComponent mAppComponent;
@@ -227,7 +218,7 @@ public class HomeActivity extends AppCompatActivity{
         List<Expense> expenseList = new ArrayList<>();
 
         //read saved data from preferences
-        String savedExpenses = mSharedPreferences.getString(EXPENSES, "");
+        String savedExpenses = mSharedPreferences.getString(EXPENSES_KEY, "");
 
         //if there is saved data, put it in first
         if (!savedExpenses.equals("")){

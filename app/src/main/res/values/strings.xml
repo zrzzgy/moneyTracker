@@ -7,7 +7,7 @@
     <string name="title_context_menu">Options</string>
 
     <!--snack bar-->
-    <string name="snack_bar_message">Item deleted</string>
+    <string name="snack_bar_message">Item Deleted</string>
     <string name="snack_bar_undo">Undo</string>
 
     <!--input screen-->

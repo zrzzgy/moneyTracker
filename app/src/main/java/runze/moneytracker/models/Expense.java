@@ -46,4 +46,11 @@ public class Expense {
     public void setDescription(String description) {
         this.mDescription = description;
     }
+
+    public boolean isSameExpense(Expense expense){
+        return this.getAmount().equals(expense.getAmount()) &&
+                this.getCategory().equals(expense.getCategory()) &&
+                this.getDescription().equals(expense.getDescription()) &&
+                this.getDate().equals(expense.getDate());
+    }
 }
