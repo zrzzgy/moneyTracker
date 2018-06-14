@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,19 +17,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import runze.moneytracker.R;
+import runze.moneytracker.models.Expense;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.presenters.InputScreenPresenter;
 import runze.moneytracker.utils.MTRecyclerAdapter;
+import runze.moneytracker.utils.RecyclerItemTouchHelper;
 
-public class InputScreenView extends RelativeLayout implements IView{
+public class InputScreenView extends RelativeLayout implements IView, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
     private final String TAG = this.getClass().getSimpleName();
 
     private RecyclerView mRecyclerView;
+    private InputScreenPresenter mPresenter;
+
     private TextView mErrorMessage;
     private AlertDialog mAlertDialog;
     private  View mAlertLayout;
 
-    private InputScreenPresenter mPresenter;
+    private MTRecyclerAdapter mAdapter;
 
     public InputScreenView(Context context){
         super(context);
@@ -128,7 +134,36 @@ public class InputScreenView extends RelativeLayout implements IView{
     };
 
     private void updateRecyclerViewWithData(){
-        MTRecyclerAdapter mAdapter = new MTRecyclerAdapter(mPresenter.loadData());
+        mAdapter = new MTRecyclerAdapter(mPresenter.loadData());
         mRecyclerView.setAdapter(mAdapter);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, final int position) {
+        if (viewHolder instanceof MTRecyclerAdapter.ViewHolder) {
+
+            // backup of removed item for undo purpose
+            final Expense deletedItem = mAdapter.getDataSet().get(position);
+
+            // remove the item from recycler view
+            mAdapter.removeItem(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(this, "Item Removed", Snackbar.LENGTH_SHORT);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // undo is selected, restore the deleted item
+                    mAdapter.restoreItem(deletedItem, position);
+                }
+            });
+            snackbar.setActionTextColor(android.graphics.Color.YELLOW);
+            snackbar.show();
+        }
     }
 }

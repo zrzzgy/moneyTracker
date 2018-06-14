@@ -102,4 +102,8 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
         // notify item added by position
         notifyItemInserted(position);
     }
+
+    public List<Expense> getDataSet(){
+        return mDataSet;
+    }
 }

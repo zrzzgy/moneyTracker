@@ -115,8 +115,4 @@ public class StatsScreenPresenter implements IPresenter{
         }
         return sortedData.entrySet();
     }
-
-    public void undoRemoveExpense(){
-
-    }
 }

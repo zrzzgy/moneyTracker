@@ -45,7 +45,7 @@ import runze.moneytracker.utils.MTFragmentPagerAdapter;
 import runze.moneytracker.utils.MTRecyclerAdapter;
 import runze.moneytracker.utils.RecyclerItemTouchHelper;
 
-public class HomeActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
+public class HomeActivity extends AppCompatActivity{
     private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES = "EXPENSES";
@@ -55,13 +55,9 @@ public class HomeActivity extends AppCompatActivity implements RecyclerItemTouch
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
     public List<Integer> mColorList = new ArrayList<>();
-    private List<Expense> cartList;
 
-    private RelativeLayout home_layout;
     private BottomNavigationView mNavigation;
     private ViewPager mViewPager;
-    private RecyclerView recyclerView;
-    private MTRecyclerAdapter mRecyclerAdapter;
 
     @Inject InputScreenFragment mInputFragment;
     @Inject StatsScreenFragment mStatsFragment;
@@ -114,53 +110,7 @@ public class HomeActivity extends AppCompatActivity implements RecyclerItemTouch
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
 
-        home_layout = findViewById(R.id.home_relative_layout);
-        View view= this.getLayoutInflater().inflate((R.layout.home_base), null);
-
-        recyclerView = view.findViewById(R.id.recycler_view);
-        cartList = new ArrayList<>();
-        mRecyclerAdapter = new MTRecyclerAdapter(cartList);
-
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(mRecyclerAdapter);
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
-
-
-    }
-
-
-    @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof MTRecyclerAdapter.ViewHolder) {
-            // get the removed item name to display it in snack bar
-            String name = cartList.get(viewHolder.getAdapterPosition()).getCategory();
-
-            // backup of removed item for undo purpose
-            final Expense deletedItem = cartList.get(viewHolder.getAdapterPosition());
-            final int deletedIndex = viewHolder.getAdapterPosition();
-
-            // remove the item from recycler view
-            mRecyclerAdapter.removeItem(viewHolder.getAdapterPosition());
-
-            // showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
-                    .make(home_layout, name + " removed from cart!", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    // undo is selected, restore the deleted item
-                    mRecyclerAdapter.restoreItem(deletedItem, deletedIndex);
-                }
-            });
-            snackbar.setActionTextColor(android.graphics.Color.YELLOW);
-            snackbar.show();
-        }
+        this.getLayoutInflater().inflate((R.layout.home_base), null);
     }
 
     public void initComponents(){
@@ -290,28 +240,7 @@ public class HomeActivity extends AppCompatActivity implements RecyclerItemTouch
         ((SettingsScreenFragment) getCurrentFragment()).getPresenter().undoRemoveCategory();
     }
 
-    private void undoRemoveExpense(){
-        ((StatsScreenFragment) getCurrentFragment()).getPresenter().undoRemoveExpense();
-    }
-
     public AppComponent getAppComponent(){
         return mAppComponent;
-    }
-
-    private void navigateToFragment(android.app.Fragment destFragment) {
-        android.app.FragmentManager fm = getFragmentManager();
-        fm.executePendingTransactions();
-        FragmentTransaction ft = fm.beginTransaction();
-        String fragmentTag = destFragment.getClass().getSimpleName();
-        ft.replace(mViewPager.getId(), destFragment, fragmentTag);
-
-        if (fm.getBackStackEntryCount() > 0){
-            if (fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).toString().equals(fragmentTag)) {
-                fm.popBackStackImmediate();
-            }
-        }
-        ft.addToBackStack(fragmentTag);
-        ft.commit();
-        fm.executePendingTransactions();
     }
 }
