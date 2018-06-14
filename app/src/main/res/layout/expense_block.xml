@@ -1,96 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/border"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:elevation="@dimen/card_elevation"
-    android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
-    android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
-    android:layout_marginTop="@dimen/tight_activity_vertical_margin"
-    android:padding="@dimen/card_margin"
-    android:animateLayoutChanges="true"
-    android:orientation="horizontal"
-    android:onClick="showHideDetails">
-
+    android:layout_width="match_parent">
     <LinearLayout
         android:id="@+id/view_foreground"
+        android:background="@drawable/card_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_vertical"
-        >
+        android:elevation="@dimen/card_elevation"
+        android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
+        android:layout_marginTop="@dimen/tight_activity_vertical_margin"
+        android:layout_marginBottom="@dimen/tight_activity_vertical_margin"
+        android:padding="@dimen/card_margin"
+        android:animateLayoutChanges="true"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            >
 
-            <TextView
-                android:id="@+id/list_amount"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/card_text_size"
-                android:text="100.0"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/list_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/card_text_size"
+                    android:text="100.0"/>
+
+                <TextView
+                    android:id="@+id/list_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="viewEnd"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:textSize="@dimen/card_text_size"
+                    android:text="food"/>
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/list_category"
+                android:id="@+id/list_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="viewEnd"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:textSize="@dimen/card_text_size"
-                android:text="food"/>
+                android:layout_margin="@dimen/tight_activity_horizontal_margin"
+                android:ellipsize="end"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/list_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/tight_activity_horizontal_margin"
+                android:text="2012-12-12 12:12"/>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/list_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/tight_activity_horizontal_margin"
-            android:ellipsize="end"
-            android:maxLines="1" />
-
-        <TextView
-            android:id="@+id/list_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/tight_activity_horizontal_margin"
-            android:text="2012-12-12 12:12"/>
-
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/view_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_row_background">
+        android:background="@drawable/card_buttons_background"
+        android:orientation="horizontal"
+        android:layout_alignStart="@id/view_foreground"
+        android:layout_alignEnd="@id/view_foreground"
+        android:layout_alignTop="@id/view_foreground"
+        android:layout_alignBottom="@id/view_foreground">
 
         <ImageView
             android:id="@+id/delete_icon"
-            android:layout_width="@dimen/ic_delete"
-            android:layout_height="@dimen/ic_delete"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/padd_10"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
             android:src="@drawable/ic_delete_white_24dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/padd_10"
-            android:layout_toLeftOf="@id/delete_icon"
-            android:text="@string/delete"
-            android:textColor="#fff"
-            android:textSize="13dp" />
-
-    </RelativeLayout>
-
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

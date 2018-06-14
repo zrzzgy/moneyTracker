@@ -27,15 +27,15 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public RelativeLayout viewBackground;
+        public LinearLayout viewBackground;
         public LinearLayout viewForeground;
-        private LinearLayout mView;
+        private RelativeLayout mView;
         private TextView mAmountTextView;
         private TextView mCategoryTextView;
         private TextView mDateTextView;
         private TextView mDescriptionTextView;
 
-        public ViewHolder(LinearLayout v, ViewGroup viewGroup) {
+        public ViewHolder(RelativeLayout v, ViewGroup viewGroup) {
             super(v);
             mView = v;
             mAmountTextView = mView.findViewById(R.id.list_amount);
@@ -55,9 +55,9 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext())
+        RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.expense_block, parent, false);
-        return new ViewHolder(linearLayout, parent);
+        return new ViewHolder(relativeLayout, parent);
     }
 
     @SuppressLint("SetTextI18n")
@@ -73,7 +73,6 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
             @Override
             public void onClick(View view) {
                 // on list item click
-                //TODO add switch fragment
                 Log.v(TAG, "Clicked " + view.getId());
                 if (((TextView) view.findViewById(R.id.list_description)).getMaxLines() == 1){
                     ((TextView) view.findViewById(R.id.list_description)).setMaxLines(Integer.MAX_VALUE);

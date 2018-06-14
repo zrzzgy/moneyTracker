@@ -159,7 +159,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
-                    .make(this, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_SHORT);
+                    .make(this, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG);
             snackbar.setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
