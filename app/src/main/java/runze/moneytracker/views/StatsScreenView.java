@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.PieData;
 
@@ -27,16 +28,19 @@ public class StatsScreenView extends RelativeLayout implements IView {
     private BarChart mBarChart;
     private PieChart mPieChart;
     private ListView mStatsList;
-    private ArrayAdapter<String> mAdapter;
+
+    private Description mDescription;
 
     public StatsScreenView(Context context) {
         super(context);
-        View v = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.stats_view_layout, this);
-        init(v);
+        LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.stats_view_layout, this);
+        init();
         ((HomeActivity) getContext()).registerForContextMenu(mStatsList);
+        mDescription = new Description();
+        mDescription.setText("");
     }
 
-    private void init(View view) {
+    private void init() {
         mBarChart = findViewById(R.id.barChart);
         mPieChart = findViewById(R.id.pieChart);
         mStatsList = findViewById(R.id.statsList);
@@ -53,16 +57,27 @@ public class StatsScreenView extends RelativeLayout implements IView {
     }
 
     public void displayBarChart(BarData barData, String[] dateList) {
-        mBarChart.setAutoScaleMinMaxEnabled(false);
+        mBarChart.setDescription(mDescription);
+        mBarChart.setScaleEnabled(false);
+        mBarChart.setDrawGridBackground(false);
+        mBarChart.setNoDataText("No Data");
+        mBarChart.getLegend().setEnabled(false);
+
         mBarChart.getXAxis().setValueFormatter(new MyXAxisValueFormatter(dateList));
         mBarChart.getXAxis().setLabelRotationAngle(45);
         mBarChart.getXAxis().setDrawLabels(true);
+        mBarChart.getXAxis().setEnabled(false);
+
         mBarChart.setData(barData);
+        mBarChart.setVisibleXRangeMaximum(31);
         mBarChart.invalidate();
     }
 
     public void displayPieChart(PieData pieData) {
+        mPieChart.setDescription(mDescription);
         mPieChart.setData(pieData);
+        mPieChart.setElevation(10);
+        mPieChart.setNoDataText("No Data");
         mPieChart.invalidate();
     }
 }

@@ -61,18 +61,17 @@ public class StatsScreenPresenter implements IPresenter{
         for (Map.Entry<String, Double> entry: dataForBarChart) {
             barEntries.add(new BarEntry(xPosition++, entry.getValue().floatValue()));
             dateList[index++] = entry.getKey();
-            xPosition += 0.3;
         }
 
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Date");;
+        BarDataSet barDataSet = new BarDataSet(barEntries, mParentActivity.getResources().getString(R.string.bar_label));
         BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.2f);
+        barData.setBarWidth(1);
 
         //pie chart
         for (Map.Entry<String, Double> entry: dataForPieChart) {
             pieEntries.add(new PieEntry(entry.getValue().floatValue(), entry.getKey()));
         }
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Category");
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, mParentActivity.getResources().getString(R.string.pie_label));
         if (pieEntries.size() > mParentActivity.mColorList.size()) {
             Random rng = new Random();
             for (int i = mParentActivity.mColorList.size(); i < pieEntries.size(); i++) {
@@ -82,7 +81,6 @@ public class StatsScreenPresenter implements IPresenter{
         pieDataSet.setColors(mParentActivity.mColorList);
         pieDataSet.setValueTextSize(25);
         pieDataSet.setValueTextColor(Color.WHITE);
-        pieDataSet.setLabel(mParentActivity.getResources().getString(R.string.pie_label));
         PieData pieData = new PieData(pieDataSet);
 
         mView.displayBarChart(barData, dateList);
