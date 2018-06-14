@@ -21,6 +21,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="0dp"
         android:layout_marginStart="0dp"
-        android:background="?android:attr/windowBackground"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@drawable/bottom_nav_button_color"
+        app:itemTextColor="@drawable/bottom_nav_button_color"
         app:menu="@menu/navigation" />
 </RelativeLayout>
