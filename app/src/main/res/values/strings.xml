@@ -1,10 +1,9 @@
 <resources>
     <!--navigation titles-->
     <string name="app_name">Money Track</string>
-    <string name="title_input">Input</string>
+    <string name="title_input">Home</string>
     <string name="title_stats">Stats</string>
     <string name="title_settings">Settings</string>
-    <string name="title_context_menu">Options</string>
 
     <!--snack bar-->
     <string name="snack_bar_message">Item Deleted</string>
@@ -21,8 +20,8 @@
     <string name="save_failed">Save failed</string>
     <string name="value_smaller_than_zero">Amount must be greater than zero</string>
     <string name="amount_invalid">Invalid Amount Entered</string>
-    <string name="expenses_by_category">Expenses By Category</string>
-    <string name="expenses_by_date">Expenses By Date</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 
     <!--settings screen-->
     <string name="null_category_place_holder_text">No category, add a category to start.</string>
@@ -32,12 +31,10 @@
     <string name="category_already_exists">Category Already Exists</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-    <string name="cancel">Cancel</string>
-    <string name="ok">OK</string>
+
 
     <!--stats screen-->
-    <string name="stats_list_title">Date : Category : Total Expense</string>
-    <string name="pie_label">Sort by category</string>
-    <string name="bar_label">Sort by date</string>
+    <string name="expenses_by_category">Expenses By Category</string>
+    <string name="expenses_by_date">Expenses By Date</string>
 
 </resources>

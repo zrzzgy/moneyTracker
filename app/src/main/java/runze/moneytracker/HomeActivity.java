@@ -13,8 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -151,13 +149,6 @@ public class HomeActivity extends AppCompatActivity{
 
         mNavigation = findViewById(R.id.navigation);
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
-        menu.setHeaderTitle(R.string.title_context_menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
     }
 
     @Override

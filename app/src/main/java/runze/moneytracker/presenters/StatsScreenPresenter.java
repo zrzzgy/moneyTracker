@@ -63,7 +63,7 @@ public class StatsScreenPresenter implements IPresenter{
             dateList[index++] = entry.getKey();
         }
 
-        BarDataSet barDataSet = new BarDataSet(barEntries, mParentActivity.getResources().getString(R.string.bar_label));
+        BarDataSet barDataSet = new BarDataSet(barEntries, "");
         BarData barData = new BarData(barDataSet);
         barData.setBarWidth(1);
 
@@ -71,7 +71,7 @@ public class StatsScreenPresenter implements IPresenter{
         for (Map.Entry<String, Double> entry: dataForPieChart) {
             pieEntries.add(new PieEntry(entry.getValue().floatValue(), entry.getKey()));
         }
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, mParentActivity.getResources().getString(R.string.pie_label));
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
         if (pieEntries.size() > mParentActivity.mColorList.size()) {
             Random rng = new Random();
             for (int i = mParentActivity.mColorList.size(); i < pieEntries.size(); i++) {
