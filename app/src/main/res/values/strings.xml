@@ -1,0 +1,40 @@
+<resources>
+    <!--navigation titles-->
+    <string name="app_name">Money Track</string>
+    <string name="title_input">Home</string>
+    <string name="title_stats">Stats</string>
+    <string name="title_settings">Settings</string>
+
+    <!--snack bar-->
+    <string name="snack_bar_message">Item Deleted</string>
+    <string name="snack_bar_undo">Undo</string>
+
+    <!--input screen-->
+    <string name="input_dialog_title">Add New</string>
+    <string name="input_amount_hint">Amount</string>
+    <string name="input_category_hint">Category</string>
+    <string name="input_description_hint">Description</string>
+    <string name="category_text">Category: </string>
+    <string name="submit">Submit</string>
+    <string name="saved">Saved</string>
+    <string name="save_failed">Save failed</string>
+    <string name="value_smaller_than_zero">Amount must be greater than zero</string>
+    <string name="amount_invalid">Invalid Amount Entered</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+
+    <!--settings screen-->
+    <string name="null_category_place_holder_text">No category, add a category to start.</string>
+    <string name="add_category_button">Add</string>
+    <string name="drop_down_title">Choose a Category</string>
+    <string name="no_category_entered">No Category Entered</string>
+    <string name="category_already_exists">Category Already Exists</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+
+    <!--stats screen-->
+    <string name="expenses_by_category">Expenses By Category</string>
+    <string name="expenses_by_date">Expenses By Date</string>
+
+</resources>

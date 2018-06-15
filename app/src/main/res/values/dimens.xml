@@ -1,0 +1,26 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">10dp</dimen>
+    <dimen name="tight_activity_horizontal_margin">8dp</dimen>
+    <dimen name="tight_activity_vertical_margin">5dp</dimen>
+    <dimen name="elevation">20dp</dimen>
+
+    <!-- spending list -->
+    <dimen name="card_margin">1.5dp</dimen>
+    <dimen name="card_elevation">3dp</dimen>
+    <dimen name="card_text_size">20sp</dimen>
+
+    <!-- spinner -->
+    <dimen name="spinner_text_size">25sp</dimen>
+
+    <!-- category list -->
+    <dimen name="category_list_text_size">30sp</dimen>
+
+    <!-- stats list -->
+    <dimen name="stats_title_size">30sp</dimen>
+    <dimen name="stats_text_size">25sp</dimen>
+    <dimen name="stats_item_margin">3dp</dimen>
+    <dimen name="space_between_charts">40dp</dimen>
+    <dimen name="graph_margin">20dp</dimen>
+</resources>

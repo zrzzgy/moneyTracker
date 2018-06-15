@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "901952065208",
+    "firebase_url": "https://moneytracker-50f75.firebaseio.com",
+    "project_id": "moneytracker-50f75",
+    "storage_bucket": "moneytracker-50f75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901952065208:android:1ecf3be43fee26ba",
+        "android_client_info": {
+          "package_name": "runze.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901952065208-tablmk82gn5vvj69h3vo58imil5rbfqu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "runze.myapplication",
+            "certificate_hash": "854d36eabdc973b16b9f5f927fda89d665d04694"
+          }
+        },
+        {
+          "client_id": "901952065208-9u5691poc3o5q6sc4kcrvpfguc6b2lr9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfIAZnm-PpI5_S6LJTxEdUF3Syl1YFdSY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901952065208-9u5691poc3o5q6sc4kcrvpfguc6b2lr9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

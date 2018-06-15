@@ -1,0 +1,37 @@
+<resources>
+    <!--navigation titles-->
+    <string name="app_name">记账</string>
+    <string name="title_input">主页</string>
+    <string name="title_stats">统计</string>
+    <string name="title_settings">设置</string>
+
+    <!--snack bar-->
+    <string name="snack_bar_message">已删除</string>
+    <string name="snack_bar_undo">撤销</string>
+
+    <!--input screen-->
+    <string name="input_dialog_title">添加花销</string>
+    <string name="input_amount_hint">数额</string>
+    <string name="input_category_hint">类别</string>
+    <string name="input_description_hint">描述</string>
+    <string name="amount_invalid">金额无效</string>
+    <string name="category_text">类别:</string>
+    <string name="submit">保存</string>
+    <string name="saved">保存成功</string>
+    <string name="save_failed">保存失败</string>
+    <string name="value_smaller_than_zero">金额小于零</string>
+    <string name="no_amount_entered">没有输入金额</string>
+    <string name="cancel">取消</string>
+    <string name="ok">确认</string>
+
+    <!--settings screen-->
+    <string name="null_category_place_holder_text">没有类别，请添加一个类别</string>
+    <string name="add_category_button">保存类别</string>
+    <string name="drop_down_title">选择类别</string>
+    <string name="no_category_entered">没有输入类别</string>
+    <string name="category_already_exists">类别已存在</string>
+
+    <!--stats screen-->
+    <string name="expenses_by_category">按类别分类</string>
+    <string name="expenses_by_date">按日期分类</string>
+</resources>
