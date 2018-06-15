@@ -70,8 +70,12 @@ public class InputScreenPresenter implements IPresenter {
         }
     }
 
-    public List<Expense> loadData(){
+    public List<Expense> loadExpensesFromPref(){
         return mParentActivity.loadExpensesFromPref();
+    }
+
+    public HashSet<String> loadCategoriesFromPref(){
+        return mParentActivity.loadCategoriesFromPref();
     }
 
     public boolean removeExpenseFromPreferences(Expense itemToDelete){
