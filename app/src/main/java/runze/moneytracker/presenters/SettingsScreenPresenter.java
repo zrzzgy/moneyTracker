@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,26 +31,26 @@ public class SettingsScreenPresenter implements IPresenter{
 
     private HomeActivity mParentActivity;
     private SettingsScreenView mView;
-    private List<String> mCategories;
+    private HashSet<String> mCategories;
     private Gson gson = new Gson();
 
-    private List<String> backupCategories;
+    private HashSet<String> backupCategories;
     private List<Expense> backupExpenses;
 
 
     public SettingsScreenPresenter(HomeActivity activity){
         mParentActivity = activity;
-        String stringCategories = mParentActivity.mSharedPreferences.getString(CATEGORIES_KEY, "");
-        Gson gson = new Gson();
-        mCategories = gson.fromJson(stringCategories, new TypeToken<List<String>>(){}.getType());
+        mCategories = mParentActivity.loadCategoriesFromPref();
+
         if (mCategories == null){
-            mCategories = new ArrayList<>();
+            mCategories = new HashSet<>();
         }
-        backupCategories = new ArrayList<>();
+        backupCategories = new HashSet<>();
         backupExpenses = new ArrayList<>();
     }
 
     public void updateView(){
+        mCategories = mParentActivity.loadCategoriesFromPref();
         mView.populateListView(mCategories);
     }
 
@@ -80,11 +81,9 @@ public class SettingsScreenPresenter implements IPresenter{
         updateView();
     }
 
-    public void editCategory(MenuItem item){
+    public void editCategory(final MenuItem item){
         final EditText input = new EditText(mParentActivity);
-        int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
-        final String cate = mCategories.get(position);
-        input.setText(cate);
+        input.setText(item.getTitle().toString());
         AlertDialog alertDialog = new AlertDialog.Builder(mParentActivity).create();
         alertDialog.setTitle(R.string.edit);
         alertDialog.setView(input);
@@ -97,7 +96,7 @@ public class SettingsScreenPresenter implements IPresenter{
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, mParentActivity.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                replaceCategory(cate, input.getText().toString());
+                replaceCategory(item.getTitle().toString(), input.getText().toString());
                 dialogInterface.dismiss();
             }
         });
@@ -105,19 +104,18 @@ public class SettingsScreenPresenter implements IPresenter{
     }
 
     public void removeCategory(MenuItem item){
-        int position = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
-        String cate = mCategories.get(position);
         backupCategories.clear();
         backupCategories.addAll(mCategories);
-        mCategories.remove(position);
-        mParentActivity.mEditor.putString(CATEGORIES_KEY, gson.toJson(mCategories)).apply();
-        List<Expense> expenses = mParentActivity.loadData();
+        mCategories.remove(item.getTitle().toString());
+        mParentActivity.saveToPreferences(CATEGORIES_KEY, mCategories);
+
+        List<Expense> expenses = mParentActivity.loadExpensesFromPref();
         backupExpenses.clear();
         backupExpenses.addAll(expenses);
         Iterator<Expense> expenseIterator = expenses.iterator();
         while(expenseIterator.hasNext()){
             Expense expense = expenseIterator.next();
-            if (expense.getCategory().equals(cate)){
+            if (expense.getCategory().equals(item.getTitle().toString())){
                 expenseIterator.remove();
             }
         }
@@ -128,16 +126,17 @@ public class SettingsScreenPresenter implements IPresenter{
     public void undoRemoveCategory(){
         mCategories.clear();
         mCategories.addAll(backupCategories);
-        mParentActivity.mEditor.putString(CATEGORIES_KEY, gson.toJson(mCategories)).apply();
-        mParentActivity.mEditor.putString(EXPENSES_KEY, gson.toJson(backupExpenses)).apply();
+        mParentActivity.saveToPreferences(CATEGORIES_KEY, mCategories);
+        mParentActivity.saveToPreferences(EXPENSES_KEY, backupExpenses);
         updateView();
     }
 
     private void replaceCategory(String oldCategory, String newCategory){
-        mCategories.set(mCategories.indexOf(oldCategory), newCategory);
-        mParentActivity.mEditor.putString(CATEGORIES_KEY, gson.toJson(mCategories)).apply();
+        mCategories.remove(oldCategory);
+        mCategories.add(newCategory);
+        mParentActivity.saveToPreferences(CATEGORIES_KEY, mCategories);
 
-        List<Expense> expenses = mParentActivity.loadData();
+        List<Expense> expenses = mParentActivity.loadExpensesFromPref();
         for (Expense expense : expenses) {
             if (expense.getCategory().equals(oldCategory)) {
                 expense.setCategory(newCategory);

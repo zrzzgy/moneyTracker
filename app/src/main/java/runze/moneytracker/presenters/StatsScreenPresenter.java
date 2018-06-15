@@ -18,7 +18,6 @@ import java.util.Random;
 import java.util.Set;
 
 import runze.moneytracker.HomeActivity;
-import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.StatsScreenView;
@@ -47,7 +46,7 @@ public class StatsScreenPresenter implements IPresenter{
     }
 
     private void analyzeData(){
-        List<Expense> expenses = mParentActivity.loadData();
+        List<Expense> expenses = mParentActivity.loadExpensesFromPref();
         Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(expenses);
         Set<Map.Entry<String, Double>> dataForBarChart = dateAsKey(expenses);
 
