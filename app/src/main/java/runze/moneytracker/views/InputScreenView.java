@@ -13,14 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
@@ -89,11 +91,10 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
                     .setView(mAlertLayout)
                     .setTitle(getResources().getString(R.string.input_dialog_title))
                     .setNegativeButton(getResources().getString(R.string.cancel), mCancelListener)
-                    .setPositiveButton(getResources().getString(R.string.ok), null)
+                    .setPositiveButton(getResources().getString(R.string.ok), mInputDialogConfirmListener)
                     .create();
 
             mAlertDialog.setCanceledOnTouchOutside(false);
-            mAlertDialog.setOnShowListener(mOnShowListener);
             mAlertDialog.show();
 
             //setup auto-complete for categories
@@ -115,18 +116,10 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
         }
     };
 
-    private DialogInterface.OnShowListener mOnShowListener = new DialogInterface.OnShowListener() {
-        //Confirm dialog
-        @Override
-        public void onShow(DialogInterface dialogInterface) {
-            Button confirmButton = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            confirmButton.setOnClickListener(mInputDialogConfirmListener);
-        }
-    };
 
-    private OnClickListener mInputDialogConfirmListener = new OnClickListener() {
+    private DialogInterface.OnClickListener mInputDialogConfirmListener = new DialogInterface.OnClickListener() {
         @Override
-        public void onClick(View view) {
+        public void onClick(DialogInterface dialogInterface, int i) {
             Log.v(TAG, "confirming input dialog");
 
             Double amount = Double.parseDouble(((EditText) mAlertLayout.findViewById(R.id.inputAmount)).getText().toString());
@@ -136,7 +129,13 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
                 String selectedCategory = ((EditText) mAlertLayout.findViewById(R.id.inputCategory)).getText().toString();
                 String description = ((EditText) mAlertLayout.findViewById(R.id.inputDescription)).getText().toString();
                 if (!selectedCategory.isEmpty()) {
-                    mPresenter.saveData(selectedCategory, amount, description);
+                    int year = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getYear();
+                    int month = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getMonth();
+                    int day = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getDayOfMonth();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, day);
+                    Date date = calendar.getTime();
+                    mPresenter.saveData(selectedCategory, amount, description, date);
                     Log.v(TAG, "input validated, dismissing input dialog");
                     mAlertDialog.dismiss();
                     updateRecyclerViewWithData();
