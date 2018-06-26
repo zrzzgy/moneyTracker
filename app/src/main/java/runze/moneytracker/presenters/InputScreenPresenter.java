@@ -49,9 +49,9 @@ public class InputScreenPresenter implements IPresenter {
         mView = null;
     }
 
-    public void saveData(String category, double amount, String description){
+    public void saveData(String category, double amount, String description, Date date){
         //create new Expense object based on data given
-        Expense newExpense = new Expense(category, amount, new Date(), description);
+        Expense newExpense = new Expense(category, amount, date, description);
 
         //read saved data from preferences, and if there is saved data, put it in first
         List<Expense> expenseList = new ArrayList<>(mParentActivity.loadData());
