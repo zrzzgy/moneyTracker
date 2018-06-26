@@ -132,17 +132,17 @@ public class SettingsScreenPresenter implements IPresenter{
     }
 
     private void replaceCategory(String oldCategory, String newCategory){
-        mCategories.remove(oldCategory);
-        mCategories.add(newCategory);
-        mParentActivity.saveToPreferences(CATEGORIES_KEY, mCategories);
-
-        List<Expense> expenses = mParentActivity.loadExpensesFromPref();
-        for (Expense expense : expenses) {
-            if (expense.getCategory().equals(oldCategory)) {
-                expense.setCategory(newCategory);
-            }
-        }
-        mParentActivity.mEditor.putString(EXPENSES_KEY, gson.toJson(expenses)).apply();
-        updateView();
+//        mCategories.remove(oldCategory);
+//        mCategories.add(newCategory);
+//        mParentActivity.saveToPreferences(CATEGORIES_KEY, mCategories);
+//
+//        List<Expense> expenses = mParentActivity.loadExpensesFromPref();
+//        for (Expense expense : expenses) {
+//            if (expense.getCategory().equals(oldCategory)) {
+//                expense.setCategory(newCategory);
+//            }
+//        }
+//        mParentActivity.mEditor.putString(EXPENSES_KEY, gson.toJson(expenses)).apply();
+//        updateView();
     }
 }

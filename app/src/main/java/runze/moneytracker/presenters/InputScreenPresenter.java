@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -48,9 +49,11 @@ public class InputScreenPresenter implements IPresenter {
         mView = null;
     }
 
-    public void saveData(String category, double amount, String description, Date date){
+    public void saveData(String categoryString, double amount, String description, Date date){
+        HashSet<String> categories = new HashSet<>(Arrays.asList(categoryString.split(", ")));
+
         //create new Expense object based on data given
-        Expense newExpense = new Expense(category, amount, date, description);
+        Expense newExpense = new Expense(categories, amount, date, description);
 
         //read saved data from preferences, and if there is saved data, put it in first
         List<Expense> expenseList = new ArrayList<>(mParentActivity.loadExpensesFromPref());
@@ -59,7 +62,7 @@ public class InputScreenPresenter implements IPresenter {
         expenseList.add(newExpense);
 
         HashSet<String> categoryList = mParentActivity.loadCategoriesFromPref();
-        categoryList.add(category);
+        categoryList.addAll(categories);
 
         //save edited data
         if (mParentActivity.saveToPreferences(EXPENSES_KEY, expenseList) &&
