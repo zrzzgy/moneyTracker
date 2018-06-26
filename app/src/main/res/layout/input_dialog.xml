@@ -37,7 +37,7 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:focusableInTouchMode="true">
 
-            <EditText
+            <MultiAutoCompleteTextView
                 android:id="@+id/inputCategory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

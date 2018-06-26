@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import runze.moneytracker.HomeActivity;
@@ -59,7 +60,7 @@ public class SettingsScreenView extends LinearLayout implements IView{
         mPresenter = null;
     }
 
-    private void hideShowPlaceHolderText(List<String> cate){
+    private void hideShowPlaceHolderText(HashSet<String> cate){
         if (!cate.isEmpty()){
             mPlaceHolderText.setVisibility(GONE);
         }else{
@@ -67,7 +68,7 @@ public class SettingsScreenView extends LinearLayout implements IView{
         }
     }
 
-    public void populateListView(List<String> cate){
+    public void populateListView(HashSet<String> cate){
         hideShowPlaceHolderText(cate);
         if (mAdapter == null) {
             mAdapter = new ArrayAdapter<>(getContext(), R.layout.settings_category_item, new ArrayList<>(cate));

@@ -11,12 +11,16 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -81,6 +85,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
             Log.v(TAG, "creating new item dialog");
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             assert inflater != null;
+
             mAlertLayout = inflater.inflate(R.layout.input_dialog, null);
             mAlertDialog  = new AlertDialog.Builder(getContext())
                     .setView(mAlertLayout)
@@ -91,6 +96,13 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
 
             mAlertDialog.setCanceledOnTouchOutside(false);
             mAlertDialog.show();
+
+            //setup auto-complete for categories
+            List<String> categories = new ArrayList<>(mPresenter.loadCategoriesFromPref());
+            ArrayAdapter<String> categoryAutoCompleteAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_menu, categories);
+            MultiAutoCompleteTextView categoryTextView = mAlertLayout.findViewById(R.id.inputCategory);
+            categoryTextView.setAdapter(categoryAutoCompleteAdapter);
+            categoryTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
             mErrorMessage = mAlertLayout.findViewById(R.id.error_message);
         }
@@ -135,7 +147,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
     };
 
     private void updateRecyclerViewWithData(){
-        mAdapter = new MTRecyclerAdapter(mPresenter.loadData());
+        mAdapter = new MTRecyclerAdapter(mPresenter.loadExpensesFromPref());
         mRecyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);

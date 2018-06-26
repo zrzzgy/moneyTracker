@@ -21,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,6 +52,8 @@ public class HomeActivity extends AppCompatActivity{
     @Inject InputScreenFragment mInputFragment;
     @Inject StatsScreenFragment mStatsFragment;
     @Inject SettingsScreenFragment mSettingsFragment;
+
+    private Gson gson = new Gson();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -204,18 +207,35 @@ public class HomeActivity extends AppCompatActivity{
         return fragment;
     }
 
-    public List<Expense> loadData(){
-        Gson gson = new Gson();
+    public List<Expense> loadExpensesFromPref(){
         List<Expense> expenseList = new ArrayList<>();
 
         //read saved data from preferences
         String savedExpenses = mSharedPreferences.getString(EXPENSES_KEY, "");
 
-        //if there is saved data, put it in first
+        //if there is saved data, parse it from gson to list
         if (!savedExpenses.equals("")){
             expenseList = gson.fromJson(savedExpenses, new TypeToken<List<Expense>>(){}.getType());
         }
         return  expenseList;
+    }
+
+    public HashSet<String> loadCategoriesFromPref(){
+        HashSet<String> categoryList = new HashSet<>();
+
+        //read categories from preferences
+        String savedCategories = mSharedPreferences.getString(CATEGORIES_KEY, "");
+
+        //if it's not empty, parse into list
+        if (!savedCategories.equals("")){
+            categoryList = gson.fromJson(savedCategories, new TypeToken<HashSet<String>>(){}.getType());
+        }
+
+        return categoryList;
+    }
+
+    public boolean saveToPreferences(String key, Object data){
+       return mEditor.putString(key, gson.toJson(data)).commit();
     }
 
     private void undoRemoveCategory(){

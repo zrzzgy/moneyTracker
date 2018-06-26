@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -54,26 +53,34 @@ public class InputScreenPresenter implements IPresenter {
         Expense newExpense = new Expense(category, amount, date, description);
 
         //read saved data from preferences, and if there is saved data, put it in first
-        List<Expense> expenseList = new ArrayList<>(mParentActivity.loadData());
+        List<Expense> expenseList = new ArrayList<>(mParentActivity.loadExpensesFromPref());
 
         //put in new data
         expenseList.add(newExpense);
 
+        HashSet<String> categoryList = mParentActivity.loadCategoriesFromPref();
+        categoryList.add(category);
+
         //save edited data
-        if (mParentActivity.mEditor.putString(EXPENSES_KEY, gson.toJson(expenseList)).commit()) {
+        if (mParentActivity.saveToPreferences(EXPENSES_KEY, expenseList) &&
+                mParentActivity.saveToPreferences(CATEGORIES_KEY, categoryList)) {
             Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.save_failed), Toast.LENGTH_SHORT).show();
         }
     }
 
-    public List<Expense> loadData(){
-        return mParentActivity.loadData();
+    public List<Expense> loadExpensesFromPref(){
+        return mParentActivity.loadExpensesFromPref();
+    }
+
+    public HashSet<String> loadCategoriesFromPref(){
+        return mParentActivity.loadCategoriesFromPref();
     }
 
     public boolean removeExpenseFromPreferences(Expense itemToDelete){
         boolean result = false;
-        List<Expense> expenses = mParentActivity.loadData();
+        List<Expense> expenses = mParentActivity.loadExpensesFromPref();
         mBackupExpenses.clear();
         mBackupExpenses.addAll(expenses);
 
