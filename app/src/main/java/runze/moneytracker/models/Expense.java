@@ -1,30 +1,31 @@
 package runze.moneytracker.models;
 
 import java.util.Date;
+import java.util.HashSet;
 
 /**
  * Object that saves info about a spending
  */
 
 public class Expense {
-    private String mCategory;
+    private HashSet<String> mCategories;
     private Double mAmount;
     private Date mDate;
     private String mDescription;
 
-    public Expense(String category, Double amount, Date date, String description){
-        mCategory = category;
+    public Expense(HashSet<String> category, Double amount, Date date, String description){
+        mCategories = category;
         mAmount = amount;
         mDate = date;
         mDescription = description;
     }
 
-    public String getCategory() {
-        return mCategory;
+    public HashSet<String> getCategory() {
+        return mCategories;
     }
 
-    public void setCategory(String newCategory){
-        mCategory = newCategory;
+    public void setCategory(HashSet<String> newCategory){
+        mCategories = newCategory;
     }
 
     public Double getAmount() {

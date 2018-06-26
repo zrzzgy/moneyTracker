@@ -12,17 +12,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
@@ -126,16 +125,16 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
             if (amount <= 0){
                 mErrorMessage.setText(getResources().getString(R.string.amount_invalid));
             }else {
-                String selectedCategory = ((EditText) mAlertLayout.findViewById(R.id.inputCategory)).getText().toString();
+                String categories = ((EditText) mAlertLayout.findViewById(R.id.inputCategory)).getText().toString();
                 String description = ((EditText) mAlertLayout.findViewById(R.id.inputDescription)).getText().toString();
-                if (!selectedCategory.isEmpty()) {
+                if (!categories.isEmpty()) {
                     int year = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getYear();
                     int month = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getMonth();
                     int day = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getDayOfMonth();
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, day);
                     Date date = calendar.getTime();
-                    mPresenter.saveData(selectedCategory, amount, description, date);
+                    mPresenter.saveData(categories, amount, description, date);
                     Log.v(TAG, "input validated, dismissing input dialog");
                     mAlertDialog.dismiss();
                     updateRecyclerViewWithData();

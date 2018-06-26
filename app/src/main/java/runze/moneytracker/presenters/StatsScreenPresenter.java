@@ -105,11 +105,13 @@ public class StatsScreenPresenter implements IPresenter{
         HashMap<String, Double> sortedData = new HashMap<>();
         for (int i = 0; i < expenses.size(); i++) {
             Expense expense = expenses.get(i);
-            if (sortedData.containsKey(expense.getCategory())){
-                double sum = sortedData.get(expense.getCategory()) + expense.getAmount();
-                sortedData.put(expense.getCategory(), sum);
-            }else{
-                sortedData.put(expense.getCategory(), expense.getAmount());
+            for (String category: expense.getCategory()) {
+                if (sortedData.containsKey(category)){
+                    double sum = sortedData.get(category) + expense.getAmount();
+                    sortedData.put(category, sum);
+                }else{
+                    sortedData.put(category, expense.getAmount());
+                }
             }
         }
         return sortedData.entrySet();

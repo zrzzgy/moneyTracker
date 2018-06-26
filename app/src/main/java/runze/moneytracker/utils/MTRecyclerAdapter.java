@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.RelativeLayout;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,9 +69,10 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Expense singleExpense = mDataSet.get(position);
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+        String categoriesList = Arrays.toString(singleExpense.getCategory().toArray());
 
         holder.mAmountTextView.setText(singleExpense.getAmount().toString());
-        holder.mCategoryTextView.setText(singleExpense.getCategory());
+        holder.mCategoryTextView.setText(categoriesList.substring(1, categoriesList.length()-1));
         holder.mDateTextView.setText(df.format(singleExpense.getDate()));
         holder.mDescriptionTextView.setText(singleExpense.getDescription());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
