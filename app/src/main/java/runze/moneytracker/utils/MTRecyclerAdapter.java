@@ -11,7 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.RelativeLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
@@ -64,10 +66,11 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Expense singleExpense = mDataSet.get(position);
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
 
         holder.mAmountTextView.setText(singleExpense.getAmount().toString());
         holder.mCategoryTextView.setText(singleExpense.getCategory());
-        holder.mDateTextView.setText(singleExpense.getDate().toString());
+        holder.mDateTextView.setText(df.format(singleExpense.getDate()));
         holder.mDescriptionTextView.setText(singleExpense.getDescription());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
