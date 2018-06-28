@@ -22,6 +22,7 @@
     <string name="amount_invalid">Invalid Amount Entered</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="total_title">Total: %1$s</string>
 
     <!--settings screen-->
     <string name="null_category_place_holder_text">No category, add a category to start.</string>

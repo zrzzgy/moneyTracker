@@ -9,11 +9,20 @@
     android:animateLayoutChanges="true"
     tools:context="runze.moneytracker.HomeActivity">
 
+    <TextView
+        android:id="@+id/total_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/BigBlackText"
+        />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/offWhite"/>
+        android:background="@color/offWhite"
+        android:layout_below="@id/total_text_view"
+        />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/new_item_fab"

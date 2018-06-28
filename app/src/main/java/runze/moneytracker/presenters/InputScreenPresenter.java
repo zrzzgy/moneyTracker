@@ -101,4 +101,13 @@ public class InputScreenPresenter implements IPresenter {
     public boolean restoreDeletedItem(){
         return mParentActivity.mEditor.putString(EXPENSES_KEY, gson.toJson(mBackupExpenses)).commit();
     }
+
+    public long calculateTotal() {
+        long total = 0;
+        List<Expense> list = loadExpensesFromPref();
+        for (Expense expense:list) {
+            total += expense.getAmount();
+        }
+        return total;
+    }
 }
