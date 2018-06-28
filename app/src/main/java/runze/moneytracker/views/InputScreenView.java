@@ -34,6 +34,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
     private final String TAG = this.getClass().getSimpleName();
 
     private RecyclerView mRecyclerView;
+    private TextView mTotalView;
     private InputScreenPresenter mPresenter;
 
     private TextView mErrorMessage;
@@ -54,6 +55,8 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
 
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
+
+        mTotalView = view.findViewById(R.id.total_text_view);
 
         // use a linear layout manager
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -151,6 +154,9 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
+
+        long total = mPresenter.calculateTotal();
+        mTotalView.setText(String.format(getResources().getString(R.string.total_title), String.valueOf(total)));
     }
 
     @Override
