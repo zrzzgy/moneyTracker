@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/daily_item"
+    android:background="@drawable/card_background"
+    android:layout_width="30dp"
+    android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/bar_chart_day_total"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="20"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/bar_chart_color_block"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/bar_background"/>
+
+    <TextView
+        android:id="@+id/bar_chart_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="09"
+        android:textAlignment="center" />
+
+</LinearLayout>
+

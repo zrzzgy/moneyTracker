@@ -28,7 +28,7 @@ public class InputScreenPresenter implements IPresenter {
     private InputScreenView mView;
     private Set<String> mCategories;
     private List<Expense> mBackupExpenses = new ArrayList<>();
-   private Gson gson = new Gson();
+    private Gson gson = new Gson();
 
     public InputScreenPresenter(HomeActivity activity){
             mParentActivity = activity;
