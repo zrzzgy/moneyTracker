@@ -22,13 +22,13 @@
                 android:textSize="@dimen/stats_title_size"/>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerViewBarChart"
+                android:id="@+id/bar_chart_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="300dp">
             </android.support.v7.widget.RecyclerView>
 
             <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/barChart"
+                android:id="@+id/bar_chart"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_margin="@dimen/graph_margin">
@@ -43,7 +43,7 @@
                 android:textSize="@dimen/stats_title_size"/>
 
             <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pieChart"
+                android:id="@+id/pie_chart"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_margin="@dimen/graph_margin">
@@ -51,7 +51,7 @@
         </LinearLayout>
     </ScrollView>
     <ListView
-        android:id="@+id/statsList"
+        android:id="@+id/stats_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

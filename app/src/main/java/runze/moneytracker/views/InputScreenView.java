@@ -102,7 +102,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
             //setup auto-complete for categories
             List<String> categories = new ArrayList<>(mPresenter.loadCategoriesFromPref());
             ArrayAdapter<String> categoryAutoCompleteAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_menu, categories);
-            MultiAutoCompleteTextView categoryTextView = mAlertLayout.findViewById(R.id.inputCategory);
+            MultiAutoCompleteTextView categoryTextView = mAlertLayout.findViewById(R.id.input_category);
             categoryTextView.setAdapter(categoryAutoCompleteAdapter);
             categoryTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
@@ -124,16 +124,16 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
         public void onClick(DialogInterface dialogInterface, int i) {
             Log.v(TAG, "confirming input dialog");
 
-            Double amount = Double.parseDouble(((EditText) mAlertLayout.findViewById(R.id.inputAmount)).getText().toString());
+            Double amount = Double.parseDouble(((EditText) mAlertLayout.findViewById(R.id.input_amount)).getText().toString());
             if (amount <= 0){
                 mErrorMessage.setText(getResources().getString(R.string.amount_invalid));
             }else {
-                String categories = ((EditText) mAlertLayout.findViewById(R.id.inputCategory)).getText().toString();
-                String description = ((EditText) mAlertLayout.findViewById(R.id.inputDescription)).getText().toString();
+                String categories = ((EditText) mAlertLayout.findViewById(R.id.input_category)).getText().toString();
+                String description = ((EditText) mAlertLayout.findViewById(R.id.input_description)).getText().toString();
                 if (!categories.isEmpty()) {
-                    int year = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getYear();
-                    int month = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getMonth();
-                    int day = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getDayOfMonth();
+                    int year = ((DatePicker) mAlertLayout.findViewById(R.id.date_picker)).getYear();
+                    int month = ((DatePicker) mAlertLayout.findViewById(R.id.date_picker)).getMonth();
+                    int day = ((DatePicker) mAlertLayout.findViewById(R.id.date_picker)).getDayOfMonth();
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, day);
                     Date date = calendar.getTime();
