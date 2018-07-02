@@ -60,7 +60,7 @@ public class StatsScreenView extends RelativeLayout implements IView {
         mPieChart = findViewById(R.id.pieChart);
         mStatsList = findViewById(R.id.statsList);
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
@@ -96,7 +96,6 @@ public class StatsScreenView extends RelativeLayout implements IView {
         mBarChart.invalidate();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void displayPieChart(PieData pieData) {
         mPieChart.setDescription(mDescription);
         mPieChart.setData(pieData);
