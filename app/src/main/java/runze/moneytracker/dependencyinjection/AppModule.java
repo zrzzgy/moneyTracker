@@ -7,7 +7,6 @@ import dagger.Provides;
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.fragments.SpendingDetailFragment;
 import runze.moneytracker.fragments.StatsScreenFragment;
 import runze.moneytracker.presenters.InputScreenPresenter;
 import runze.moneytracker.presenters.SettingsScreenPresenter;
@@ -47,11 +46,6 @@ public class AppModule {
         return new SettingsScreenFragment();
     }
 
-    @Provides
-    @Singleton
-    SpendingDetailFragment provideSpendingDetailFragment(){
-        return new SpendingDetailFragment();
-    }
 
     @Provides
     @Singleton

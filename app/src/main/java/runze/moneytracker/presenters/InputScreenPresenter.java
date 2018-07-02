@@ -1,7 +1,5 @@
 package runze.moneytracker.presenters;
 
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -13,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import runze.moneytracker.HomeActivity;
-import runze.moneytracker.R;
+import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.InputScreenView;
@@ -56,34 +54,26 @@ public class InputScreenPresenter implements IPresenter {
         Expense newExpense = new Expense(categories, amount, date, description);
 
         //read saved data from preferences, and if there is saved data, put it in first
-        List<Expense> expenseList = new ArrayList<>(mParentActivity.loadExpensesFromPref());
+        List<Expense> expenseList = new ArrayList<>(HomeActivity.mDataModel.getExpenseList());
 
         //put in new data
         expenseList.add(newExpense);
 
-        HashSet<String> categoryList = mParentActivity.loadCategoriesFromPref();
+        HashSet<String> categoryList = HomeActivity.mDataModel.getCategoryList();
         categoryList.addAll(categories);
-
-        //save edited data
-        if (mParentActivity.saveToPreferences(EXPENSES_KEY, expenseList) &&
-                mParentActivity.saveToPreferences(CATEGORIES_KEY, categoryList)) {
-            Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(mParentActivity.getApplicationContext(), mParentActivity.getResources().getString(R.string.save_failed), Toast.LENGTH_SHORT).show();
-        }
     }
 
-    public List<Expense> loadExpensesFromPref(){
-        return mParentActivity.loadExpensesFromPref();
+    public List<Expense> loadExpensesFromDataModel(){
+        return HomeActivity.mDataModel.getExpenseList();
     }
 
-    public HashSet<String> loadCategoriesFromPref(){
-        return mParentActivity.loadCategoriesFromPref();
+    public HashSet<String> loadCategoriesFromDataModel(){
+        return HomeActivity.mDataModel.getCategoryList();
     }
 
     public boolean removeExpenseFromPreferences(Expense itemToDelete){
         boolean result = false;
-        List<Expense> expenses = mParentActivity.loadExpensesFromPref();
+        List<Expense> expenses = HomeActivity.mDataModel.getExpenseList();
         mBackupExpenses.clear();
         mBackupExpenses.addAll(expenses);
 
@@ -104,7 +94,7 @@ public class InputScreenPresenter implements IPresenter {
 
     public long calculateTotal() {
         long total = 0;
-        List<Expense> list = loadExpensesFromPref();
+        List<Expense> list = loadExpensesFromDataModel();
         for (Expense expense:list) {
             total += expense.getAmount();
         }

@@ -18,7 +18,7 @@ import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.presenters.StatsScreenPresenter;
-import runze.moneytracker.utils.BRRecyclerAdapter;
+import runze.moneytracker.utils.DaySummaryBarChartRecyclerAdapter;
 import runze.moneytracker.utils.MyXAxisValueFormatter;
 
 
@@ -27,13 +27,12 @@ public class StatsScreenView extends RelativeLayout implements IView {
     private RecyclerView mRecyclerView;
 
     private StatsScreenPresenter mPresenter;
-    private BarChart mBarChart;
     private PieChart mPieChart;
     private ListView mStatsList;
 
     private Description mDescription;
 
-    private BRRecyclerAdapter mAdapter;
+    private DaySummaryBarChartRecyclerAdapter mAdapter;
 
     public StatsScreenView(Context context) {
         super(context);
@@ -48,7 +47,6 @@ public class StatsScreenView extends RelativeLayout implements IView {
         mRecyclerView = view.findViewById(R.id.bar_chart_recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
-        mBarChart = findViewById(R.id.bar_chart);
         mPieChart = findViewById(R.id.pie_chart);
         mStatsList = findViewById(R.id.stats_list);
 
@@ -71,23 +69,6 @@ public class StatsScreenView extends RelativeLayout implements IView {
         mPresenter = null;
     }
 
-    public void displayBarChart(BarData barData, String[] dateList) {
-        mBarChart.setDescription(mDescription);
-        mBarChart.setScaleEnabled(false);
-        mBarChart.setDrawGridBackground(false);
-        mBarChart.setNoDataText("No Data");
-        mBarChart.getLegend().setEnabled(false);
-
-        mBarChart.getXAxis().setValueFormatter(new MyXAxisValueFormatter(dateList));
-        mBarChart.getXAxis().setLabelRotationAngle(45);
-        mBarChart.getXAxis().setDrawLabels(true);
-        mBarChart.getXAxis().setEnabled(false);
-
-        mBarChart.setData(barData);
-        mBarChart.setVisibleXRangeMaximum(31);
-        mBarChart.invalidate();
-    }
-
     public void displayPieChart(PieData pieData) {
         mPieChart.setDescription(mDescription);
         mPieChart.setData(pieData);
@@ -96,7 +77,7 @@ public class StatsScreenView extends RelativeLayout implements IView {
     }
 
     private void updateRecyclerViewWithData(){
-        mAdapter = new BRRecyclerAdapter(mPresenter.loadDailyTotalExpensesFromPref());
+        mAdapter = new DaySummaryBarChartRecyclerAdapter(mPresenter.loadDailyTotalExpensesFromDataModel());
         mRecyclerView.setAdapter(mAdapter);
 
     }

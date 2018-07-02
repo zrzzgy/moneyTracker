@@ -12,6 +12,8 @@ import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -19,6 +21,7 @@ import java.util.Set;
 
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.models.DailyExpenseTotal;
+import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.StatsScreenView;
@@ -27,6 +30,7 @@ public class StatsScreenPresenter implements IPresenter{
     private final String TAG = this.getClass().getSimpleName();
     private StatsScreenView mView;
     private HomeActivity mParentActivity;
+
 
     public StatsScreenPresenter(HomeActivity activity){
         mParentActivity = activity;
@@ -47,25 +51,8 @@ public class StatsScreenPresenter implements IPresenter{
     }
 
     private void analyzeData(){
-        List<Expense> expenses = mParentActivity.loadExpensesFromPref();
-        Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(expenses);
-        Set<Map.Entry<String, Double>> dataForBarChart = dateAsKey(expenses);
-
-        List<BarEntry> barEntries = new ArrayList<>();
+        Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(HomeActivity.mDataModel.getExpenseList());
         List<PieEntry> pieEntries = new ArrayList<>();
-
-        //bar chart
-        float xPosition = 0;
-        int index = 0;
-        String[] dateList = new String[dataForBarChart.size()];
-        for (Map.Entry<String, Double> entry: dataForBarChart) {
-            barEntries.add(new BarEntry(xPosition++, entry.getValue().floatValue()));
-            dateList[index++] = entry.getKey();
-        }
-
-        BarDataSet barDataSet = new BarDataSet(barEntries, "");
-        BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(1);
 
         //pie chart
         for (Map.Entry<String, Double> entry: dataForPieChart) {
@@ -83,23 +70,31 @@ public class StatsScreenPresenter implements IPresenter{
         pieDataSet.setValueTextColor(Color.WHITE);
         PieData pieData = new PieData(pieDataSet);
 
-        mView.displayBarChart(barData, dateList);
         mView.displayPieChart(pieData);
     }
 
-    private Set<Map.Entry<String, Double>> dateAsKey(List<Expense> expenses){
-        HashMap<String, Double> sortedData = new HashMap<>();
+    private List<DailyExpenseTotal> dateAsKey(List<Expense> expenses){
+        boolean done = false;
+        List<DailyExpenseTotal> listOfDailyExpenseTotal = new ArrayList<>();
+
         for (int i = 0; i < expenses.size(); i++) {
             Expense expense = expenses.get(i);
-           String dateForCurrentExpense = DateUtils.formatDateTime(mParentActivity.getApplicationContext(), expense.getDate().getTime(), DateUtils.FORMAT_SHOW_DATE);
-            if (sortedData.containsKey(dateForCurrentExpense)){
-                double sum = sortedData.get(dateForCurrentExpense) + expense.getAmount();
-                sortedData.put(dateForCurrentExpense, sum);
-            }else{
-                sortedData.put(dateForCurrentExpense, expense.getAmount());
-            }
+
+            Iterator<DailyExpenseTotal> iterator = listOfDailyExpenseTotal.iterator();
+            while (iterator.hasNext()){
+                for (DailyExpenseTotal dailyExpenseTotal : listOfDailyExpenseTotal) {
+                    if (dailyExpenseTotal.getDate().equals(expense.getDate())){
+                        double sum = dailyExpenseTotal.getTotalAmount() + expense.getAmount();
+                        listOfDailyExpenseTotal.add(new DailyExpenseTotal(sum, expense.getDate()));
+                        done = true;
+                        }
+                    }
+                }
+                if (!done){
+                    listOfDailyExpenseTotal.add(new DailyExpenseTotal(expense.getAmount(), expense.getDate()));
+                }
         }
-       return sortedData.entrySet();
+       return listOfDailyExpenseTotal;
     }
 
     private Set<Map.Entry<String, Double>> categoryAsKey(List<Expense> expenses){
@@ -118,7 +113,8 @@ public class StatsScreenPresenter implements IPresenter{
         return sortedData.entrySet();
     }
 
-    public List<DailyExpenseTotal> loadDailyTotalExpensesFromPref(){
-        return mParentActivity.loadDailyTotalExpensesFromPref();
+    public List<DailyExpenseTotal> loadDailyTotalExpensesFromDataModel(){
+        return dateAsKey(HomeActivity.mDataModel.getExpenseList());
     }
+
 }

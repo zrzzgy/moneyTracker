@@ -33,6 +33,7 @@ import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.fragments.StatsScreenFragment;
 import runze.moneytracker.models.DailyExpenseTotal;
+import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
 
@@ -54,6 +55,8 @@ public class HomeActivity extends AppCompatActivity{
     @Inject InputScreenFragment mInputFragment;
     @Inject StatsScreenFragment mStatsFragment;
     @Inject SettingsScreenFragment mSettingsFragment;
+
+    public static DataModel mDataModel;
 
     private Gson gson = new Gson();
 
@@ -98,13 +101,28 @@ public class HomeActivity extends AppCompatActivity{
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         mAppComponent.inject(this);
 
-        setContentView(R.layout.bottom_nav);
-        initComponents();
-
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
 
+        //setup dataModel
+        loadDataModel();
+
+        setContentView(R.layout.bottom_nav);
+        initComponents();
+
         this.getLayoutInflater().inflate((R.layout.home_base), null);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        saveDataModel();
     }
 
     public void initComponents(){
@@ -209,54 +227,27 @@ public class HomeActivity extends AppCompatActivity{
         return fragment;
     }
 
-    public List<Expense> loadExpensesFromPref(){
-        List<Expense> expenseList = new ArrayList<>();
-
-        //read saved data from preferences
-        String savedExpenses = mSharedPreferences.getString(EXPENSES_KEY, "");
-
-        //if there is saved data, parse it from gson to list
-        if (!savedExpenses.equals("")){
-            expenseList = gson.fromJson(savedExpenses, new TypeToken<List<Expense>>(){}.getType());
-        }
-        return  expenseList;
-    }
-
-    public List<DailyExpenseTotal> loadDailyTotalExpensesFromPref() {
-        List<DailyExpenseTotal> dailyExpenseTotalList = new ArrayList<>();
-
-        //read saved data from preferences
-        String savedDailyTotalExpenses = mSharedPreferences.getString(Daily_Total_KEY, "");
-
-        if (!savedDailyTotalExpenses.equals("")){
-            dailyExpenseTotalList = gson.fromJson(savedDailyTotalExpenses, new TypeToken<List<Expense>>(){}.getType());
-        }
-        return  dailyExpenseTotalList;
-    }
-
-    public HashSet<String> loadCategoriesFromPref(){
-        HashSet<String> categoryList = new HashSet<>();
-
-        //read categories from preferences
-        String savedCategories = mSharedPreferences.getString(CATEGORIES_KEY, "");
-
-        //if it's not empty, parse into list
-        if (!savedCategories.equals("")){
-            categoryList = gson.fromJson(savedCategories, new TypeToken<HashSet<String>>(){}.getType());
-        }
-
-        return categoryList;
-    }
-
-    public boolean saveToPreferences(String key, Object data){
-       return mEditor.putString(key, gson.toJson(data)).commit();
-    }
-
     private void undoRemoveCategory(){
         ((SettingsScreenFragment) getCurrentFragment()).getPresenter().undoRemoveCategory();
     }
 
     public AppComponent getAppComponent(){
         return mAppComponent;
+    }
+
+    private void saveDataModel(){
+        mEditor.putString("DataModel", gson.toJson(mDataModel));
+    }
+
+    private void loadDataModel(){
+        mDataModel = new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(), new HashSet<String>());
+
+        //read saved data from preferences
+        String dataModel = mSharedPreferences.getString("DataModel", "");
+
+        //if there is saved data, parse it from gson to list
+        if (!dataModel.equals("")){
+            mDataModel = gson.fromJson(dataModel, new TypeToken<DataModel>(){}.getType());
+        }
     }
 }
