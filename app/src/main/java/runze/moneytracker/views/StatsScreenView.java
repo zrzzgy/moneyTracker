@@ -45,7 +45,7 @@ public class StatsScreenView extends RelativeLayout implements IView {
     }
 
     private void init(View view) {
-        mRecyclerView = view.findViewById(R.id.);
+        mRecyclerView = view.findViewById(R.id.bar_chart_recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
         mBarChart = findViewById(R.id.bar_chart);
@@ -91,7 +91,6 @@ public class StatsScreenView extends RelativeLayout implements IView {
     public void displayPieChart(PieData pieData) {
         mPieChart.setDescription(mDescription);
         mPieChart.setData(pieData);
-        mPieChart.setElevation(10);
         mPieChart.setNoDataText("No Data");
         mPieChart.invalidate();
     }
