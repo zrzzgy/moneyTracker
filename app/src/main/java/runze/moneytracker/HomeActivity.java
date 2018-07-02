@@ -32,6 +32,7 @@ import runze.moneytracker.dependencyinjection.DaggerAppComponent;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.fragments.StatsScreenFragment;
+import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
 
@@ -39,6 +40,7 @@ public class HomeActivity extends AppCompatActivity{
     private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES_KEY = "EXPENSES_KEY";
+    public static final String Daily_Total_KEY = "Daily_Total_KEY";
     private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
 
     private AppComponent mAppComponent;
@@ -218,6 +220,18 @@ public class HomeActivity extends AppCompatActivity{
             expenseList = gson.fromJson(savedExpenses, new TypeToken<List<Expense>>(){}.getType());
         }
         return  expenseList;
+    }
+
+    public List<DailyExpenseTotal> loadDailyTotalExpensesFromPref() {
+        List<DailyExpenseTotal> dailyExpenseTotalList = new ArrayList<>();
+
+        //read saved data from preferences
+        String savedDailyTotalExpenses = mSharedPreferences.getString(Daily_Total_KEY, "");
+
+        if (!savedDailyTotalExpenses.equals("")){
+            dailyExpenseTotalList = gson.fromJson(savedDailyTotalExpenses, new TypeToken<List<Expense>>(){}.getType());
+        }
+        return  dailyExpenseTotalList;
     }
 
     public HashSet<String> loadCategoriesFromPref(){

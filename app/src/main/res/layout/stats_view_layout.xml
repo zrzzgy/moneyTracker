@@ -21,12 +21,19 @@
                 android:textAlignment="center"
                 android:textSize="@dimen/stats_title_size"/>
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewBarChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+            </android.support.v7.widget.RecyclerView>
+
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChart"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_margin="@dimen/graph_margin">
             </com.github.mikephil.charting.charts.BarChart>
+
 
             <TextView
                 android:layout_width="match_parent"

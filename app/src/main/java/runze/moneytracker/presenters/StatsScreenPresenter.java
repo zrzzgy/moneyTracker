@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.Set;
 
 import runze.moneytracker.HomeActivity;
+import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.StatsScreenView;
@@ -115,5 +116,9 @@ public class StatsScreenPresenter implements IPresenter{
             }
         }
         return sortedData.entrySet();
+    }
+
+    public List<DailyExpenseTotal> loadDailyTotalExpensesFromPref(){
+        return mParentActivity.loadDailyTotalExpensesFromPref();
     }
 }
