@@ -131,9 +131,10 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
                 String categories = ((EditText) mAlertLayout.findViewById(R.id.input_category)).getText().toString();
                 String description = ((EditText) mAlertLayout.findViewById(R.id.input_description)).getText().toString();
                 if (!categories.isEmpty()) {
-                    int year = ((DatePicker) mAlertLayout.findViewById(R.id.date_picker)).getYear();
-                    int month = ((DatePicker) mAlertLayout.findViewById(R.id.date_picker)).getMonth();
-                    int day = ((DatePicker) mAlertLayout.findViewById(R.id.date_picker)).getDayOfMonth();
+                    DatePicker datePicker = mAlertLayout.findViewById(R.id.date_picker);
+                    int year = datePicker.getYear();
+                    int month = datePicker.getMonth();
+                    int day = datePicker.getDayOfMonth();
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, day);
                     Date date = calendar.getTime();

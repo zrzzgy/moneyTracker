@@ -58,9 +58,12 @@ public class InputScreenPresenter implements IPresenter {
 
         //put in new data
         expenseList.add(newExpense);
+        HomeActivity.mDataModel.setExpenseList(expenseList);
 
         HashSet<String> categoryList = HomeActivity.mDataModel.getCategoryList();
         categoryList.addAll(categories);
+        HomeActivity.mDataModel.setCategoryList(categoryList);
+
     }
 
     public List<Expense> loadExpensesFromDataModel(){
