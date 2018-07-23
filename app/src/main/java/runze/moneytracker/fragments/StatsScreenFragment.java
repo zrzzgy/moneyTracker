@@ -25,16 +25,10 @@ public class StatsScreenFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ((HomeActivity) getActivity()).getAppComponent().inject(this);
 
-        // Construct the view if it does not yet exist
-        if (mView == null) {
-            mView = new StatsScreenView(getActivity());
-        }
-        mPresenter = new StatsScreenPresenter((HomeActivity) getActivity());
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
         mView.updateViewWithData();
