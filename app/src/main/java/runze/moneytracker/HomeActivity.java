@@ -41,7 +41,9 @@ public class HomeActivity extends AppCompatActivity{
     private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES_KEY = "EXPENSES_KEY";
-    public static final String Daily_Total_KEY = "Daily_Total_KEY";
+    public static final String DAILY_TOTAL_KEY = "DAILY_TOTAL_KEY";
+    public static final String DATA_MODEL_KEY = "DATA_MODEL_KEY";
+    public static final String EMPTY_DATA_MODEL = "EMPTY_DATA_MODEL";
     private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
 
     private AppComponent mAppComponent;
@@ -114,15 +116,15 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     @Override
-    protected void onResume(){
-        super.onResume();
+    protected void onPause() {
+        super.onPause();
+        saveDataModel();
+
     }
 
     @Override
-    protected void onDestroy(){
-        super.onDestroy();
-
-        saveDataModel();
+    protected void onResume(){
+        super.onResume();
     }
 
     public void initComponents(){
@@ -236,17 +238,19 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private void saveDataModel(){
-        mEditor.putString("DataModel", gson.toJson(mDataModel));
+        mEditor.putString(DATA_MODEL_KEY, gson.toJson(mDataModel)).apply();
+        String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
+        Log.v(TAG, dataModel);
     }
 
     private void loadDataModel(){
         mDataModel = new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(), new HashSet<String>());
 
         //read saved data from preferences
-        String dataModel = mSharedPreferences.getString("DataModel", "");
+        String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
 
         //if there is saved data, parse it from gson to list
-        if (!dataModel.equals("")){
+        if (!dataModel.equals(EMPTY_DATA_MODEL)){
             mDataModel = gson.fromJson(dataModel, new TypeToken<DataModel>(){}.getType());
         }
     }
