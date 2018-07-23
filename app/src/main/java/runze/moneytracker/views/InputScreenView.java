@@ -168,9 +168,8 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
             final Expense itemToDelete = mAdapter.getDataSet().get(position);
 
             // remove the item from both the recycler view and the sharedPreferences
-            if (mPresenter.removeExpenseFromPreferences(itemToDelete)){
-                mAdapter.removeItem(viewHolder.getAdapterPosition());
-                Log.v(TAG, "Item removed");
+            if (mPresenter.removeExpenseFromDataModel(itemToDelete)){
+                Log.v(TAG, "Item removed: " + "\n" + itemToDelete.toString());
             }else{
                 Log.e(TAG, "Error when removing item from preferences");
             }

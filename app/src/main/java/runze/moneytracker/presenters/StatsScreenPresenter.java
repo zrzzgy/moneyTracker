@@ -80,16 +80,13 @@ public class StatsScreenPresenter implements IPresenter{
         for (int i = 0; i < expenses.size(); i++) {
             Expense expense = expenses.get(i);
 
-            Iterator<DailyExpenseTotal> iterator = listOfDailyExpenseTotal.iterator();
-            while (iterator.hasNext()){
-                for (DailyExpenseTotal dailyExpenseTotal : listOfDailyExpenseTotal) {
-                    if (dailyExpenseTotal.getDate().equals(expense.getDate())){
-                        double sum = dailyExpenseTotal.getTotalAmount() + expense.getAmount();
-                        listOfDailyExpenseTotal.add(new DailyExpenseTotal(sum, expense.getDate()));
-                        done = true;
-                        }
-                    }
+            for (DailyExpenseTotal dailyExpenseTotal : listOfDailyExpenseTotal) {
+                if (dailyExpenseTotal.getDate().equals(expense.getDate())) {
+                    double sum = dailyExpenseTotal.getTotalAmount() + expense.getAmount();
+                    listOfDailyExpenseTotal.add(new DailyExpenseTotal(sum, expense.getDate()));
+                    done = true;
                 }
+            }
                 if (!done){
                     listOfDailyExpenseTotal.add(new DailyExpenseTotal(expense.getAmount(), expense.getDate()));
                 }

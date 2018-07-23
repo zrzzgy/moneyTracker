@@ -74,7 +74,7 @@ public class InputScreenPresenter implements IPresenter {
         return HomeActivity.mDataModel.getCategoryList();
     }
 
-    public boolean removeExpenseFromPreferences(Expense itemToDelete){
+    public boolean removeExpenseFromDataModel(Expense itemToDelete){
         boolean result = false;
         List<Expense> expenses = HomeActivity.mDataModel.getExpenseList();
         mBackupExpenses.clear();
@@ -84,7 +84,8 @@ public class InputScreenPresenter implements IPresenter {
             Expense expense = expenses.get(i);
             if (expense.isSameExpense(itemToDelete)) {
                 expenses.remove(i);
-                result =  mParentActivity.mEditor.putString(EXPENSES_KEY, gson.toJson(expenses)).commit();
+                HomeActivity.mDataModel.setExpenseList(expenses);
+                result = true;
             }
         }
 
