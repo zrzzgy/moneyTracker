@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,7 +22,7 @@ import runze.moneytracker.models.Expense;
 /**
  *  Class used by the spending list recycler view
  */
-public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.ViewHolder> {
+public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<MainScreenRecyclerAdapter.ViewHolder> {
     private final String TAG = this.getClass().getSimpleName();
     private List<Expense> mDataSet;
 
@@ -52,7 +51,7 @@ public class MTRecyclerAdapter extends RecyclerView.Adapter<MTRecyclerAdapter.Vi
 
     }
 
-    public MTRecyclerAdapter(List<Expense> dataSet) {
+    public MainScreenRecyclerAdapter(List<Expense> dataSet) {
         mDataSet = dataSet;
     }
 

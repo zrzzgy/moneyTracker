@@ -11,22 +11,24 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import runze.moneytracker.R;
 import runze.moneytracker.models.DailyExpenseTotal;
 
 
-public class BRRecyclerAdapter extends RecyclerView.Adapter<BRRecyclerAdapter.ViewHolder> {
+public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DaySummaryBarChartRecyclerAdapter.ViewHolder> {
     private final String TAG = this.getClass().getSimpleName();
     private List<DailyExpenseTotal> mDataSet;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout mView;
         private TextView mBarDayTotal;
         private TextView mBarColorBlock;
         private TextView mBarDate;
 
-        public ViewHolder(LinearLayout v, ViewGroup viewGroup) {
+        ViewHolder(LinearLayout v, ViewGroup viewGroup) {
             super(v);
             mView = v;
             mBarDayTotal = mView.findViewById(R.id.bar_chart_day_total);
@@ -36,26 +38,27 @@ public class BRRecyclerAdapter extends RecyclerView.Adapter<BRRecyclerAdapter.Vi
 
     }
 
-    public BRRecyclerAdapter(List<DailyExpenseTotal> dataSet) {
+    public DaySummaryBarChartRecyclerAdapter(List<DailyExpenseTotal> dataSet) {
         mDataSet = dataSet;
     }
 
     @NonNull
     @Override
-    public BRRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DaySummaryBarChartRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.daily_total_block, parent, false);
-        return new BRRecyclerAdapter.ViewHolder(linearLayout, parent);
+        return new DaySummaryBarChartRecyclerAdapter.ViewHolder(linearLayout, parent);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull final BRRecyclerAdapter.ViewHolder holder, int position) {
-        DailyExpenseTotal singleExpense = mDataSet.get(position);
+    public void onBindViewHolder(@NonNull final DaySummaryBarChartRecyclerAdapter.ViewHolder holder, int position) {
+        DailyExpenseTotal singleExpense = (DailyExpenseTotal) mDataSet.toArray()[position];
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
 
         holder.mBarDayTotal.setText(singleExpense.getTotalAmount().toString());
         holder.mBarDate.setText(df.format(singleExpense.getDate()));
+        holder.mBarColorBlock.setHeight((int) (150 * singleExpense.getTotalAmount() / getMaxDailyTotal(mDataSet)));
     }
 
     @Override
@@ -63,14 +66,14 @@ public class BRRecyclerAdapter extends RecyclerView.Adapter<BRRecyclerAdapter.Vi
         return mDataSet.size();
     }
 
-    public void loadItem(DailyExpenseTotal item, int position) {
-        mDataSet.add(position, item);
-        // notify item added by position
-        notifyItemInserted(position);
-    }
+    public double getMaxDailyTotal(List<DailyExpenseTotal> data) {
+        double max = 0;
 
-    public List<DailyExpenseTotal> getDataSet(){
-        return mDataSet;
+        for (DailyExpenseTotal daily: data) {
+            if (max < daily.getTotalAmount()){
+                max = daily.getTotalAmount();
+            }
+        }
+        return max;
     }
-
 }

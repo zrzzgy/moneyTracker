@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
@@ -35,9 +34,9 @@ public class SettingsScreenView extends LinearLayout implements IView{
     }
 
     private void init(View view){
-        mListView = view.findViewById(R.id.categoryList);
+        mListView = view.findViewById(R.id.category_list);
         ((HomeActivity) getContext()).registerForContextMenu(mListView);
-        mPlaceHolderText = view.findViewById(R.id.nullCategoryPlaceHolder);
+        mPlaceHolderText = view.findViewById(R.id.null_category_place_holder);
         mNewCategoryText = view.findViewById(R.id.category_edit_text);
         mAddButton = view.findViewById(R.id.add_button);
         mAddButton.setOnClickListener(new OnClickListener() {

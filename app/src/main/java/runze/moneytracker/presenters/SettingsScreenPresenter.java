@@ -18,6 +18,7 @@ import java.util.List;
 
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
+import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.SettingsScreenView;
@@ -40,7 +41,7 @@ public class SettingsScreenPresenter implements IPresenter{
 
     public SettingsScreenPresenter(HomeActivity activity){
         mParentActivity = activity;
-        mCategories = mParentActivity.loadCategoriesFromPref();
+        mCategories = HomeActivity.mDataModel.getCategoryList();
 
         if (mCategories == null){
             mCategories = new HashSet<>();
@@ -50,7 +51,7 @@ public class SettingsScreenPresenter implements IPresenter{
     }
 
     public void updateView(){
-        mCategories = mParentActivity.loadCategoriesFromPref();
+        mCategories = HomeActivity.mDataModel.getCategoryList();
         mView.populateListView(mCategories);
     }
 
@@ -107,9 +108,9 @@ public class SettingsScreenPresenter implements IPresenter{
         backupCategories.clear();
         backupCategories.addAll(mCategories);
         mCategories.remove(item.getTitle().toString());
-        mParentActivity.saveToPreferences(CATEGORIES_KEY, mCategories);
+        HomeActivity.mDataModel.setCategoryList(mCategories);
 
-        List<Expense> expenses = mParentActivity.loadExpensesFromPref();
+        List<Expense> expenses = HomeActivity.mDataModel.getExpenseList();
         backupExpenses.clear();
         backupExpenses.addAll(expenses);
         Iterator<Expense> expenseIterator = expenses.iterator();
@@ -126,8 +127,8 @@ public class SettingsScreenPresenter implements IPresenter{
     public void undoRemoveCategory(){
         mCategories.clear();
         mCategories.addAll(backupCategories);
-        mParentActivity.saveToPreferences(CATEGORIES_KEY, mCategories);
-        mParentActivity.saveToPreferences(EXPENSES_KEY, backupExpenses);
+        HomeActivity.mDataModel.setCategoryList(mCategories);
+        HomeActivity.mDataModel.setExpenseList(backupExpenses);
         updateView();
     }
 
@@ -136,7 +137,7 @@ public class SettingsScreenPresenter implements IPresenter{
 //        mCategories.add(newCategory);
 //        mParentActivity.saveToPreferences(CATEGORIES_KEY, mCategories);
 //
-//        List<Expense> expenses = mParentActivity.loadExpensesFromPref();
+//        List<Expense> expenses = mParentActivity.loadExpensesFroHomeActivity.mDataModel();
 //        for (Expense expense : expenses) {
 //            if (expense.getCategory().equals(oldCategory)) {
 //                expense.setCategory(newCategory);

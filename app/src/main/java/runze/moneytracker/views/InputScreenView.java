@@ -27,7 +27,7 @@ import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.presenters.InputScreenPresenter;
-import runze.moneytracker.utils.MTRecyclerAdapter;
+import runze.moneytracker.utils.MainScreenRecyclerAdapter;
 import runze.moneytracker.utils.RecyclerItemTouchHelper;
 
 public class InputScreenView extends RelativeLayout implements IView, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
@@ -41,7 +41,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
     private AlertDialog mAlertDialog;
     private  View mAlertLayout;
 
-    private MTRecyclerAdapter mAdapter;
+    private MainScreenRecyclerAdapter mAdapter;
 
     public InputScreenView(Context context){
         super(context);
@@ -100,9 +100,9 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
             mAlertDialog.show();
 
             //setup auto-complete for categories
-            List<String> categories = new ArrayList<>(mPresenter.loadCategoriesFromPref());
+            List<String> categories = new ArrayList<>(mPresenter.loadCategoriesFromDataModel());
             ArrayAdapter<String> categoryAutoCompleteAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_menu, categories);
-            MultiAutoCompleteTextView categoryTextView = mAlertLayout.findViewById(R.id.inputCategory);
+            MultiAutoCompleteTextView categoryTextView = mAlertLayout.findViewById(R.id.input_category);
             categoryTextView.setAdapter(categoryAutoCompleteAdapter);
             categoryTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
@@ -124,16 +124,17 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
         public void onClick(DialogInterface dialogInterface, int i) {
             Log.v(TAG, "confirming input dialog");
 
-            Double amount = Double.parseDouble(((EditText) mAlertLayout.findViewById(R.id.inputAmount)).getText().toString());
+            Double amount = Double.parseDouble(((EditText) mAlertLayout.findViewById(R.id.input_amount)).getText().toString());
             if (amount <= 0){
                 mErrorMessage.setText(getResources().getString(R.string.amount_invalid));
             }else {
-                String categories = ((EditText) mAlertLayout.findViewById(R.id.inputCategory)).getText().toString();
-                String description = ((EditText) mAlertLayout.findViewById(R.id.inputDescription)).getText().toString();
+                String categories = ((EditText) mAlertLayout.findViewById(R.id.input_category)).getText().toString();
+                String description = ((EditText) mAlertLayout.findViewById(R.id.input_description)).getText().toString();
                 if (!categories.isEmpty()) {
-                    int year = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getYear();
-                    int month = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getMonth();
-                    int day = ((DatePicker) mAlertLayout.findViewById(R.id.datePicker)).getDayOfMonth();
+                    DatePicker datePicker = mAlertLayout.findViewById(R.id.date_picker);
+                    int year = datePicker.getYear();
+                    int month = datePicker.getMonth();
+                    int day = datePicker.getDayOfMonth();
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, day);
                     Date date = calendar.getTime();
@@ -149,7 +150,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
     };
 
     private void updateRecyclerViewWithData(){
-        mAdapter = new MTRecyclerAdapter(mPresenter.loadExpensesFromPref());
+        mAdapter = new MainScreenRecyclerAdapter(mPresenter.loadExpensesFromDataModel());
         mRecyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
@@ -161,7 +162,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, final int position) {
-        if (viewHolder instanceof MTRecyclerAdapter.ViewHolder) {
+        if (viewHolder instanceof MainScreenRecyclerAdapter.ViewHolder) {
 
             // backup of removed item for undo purpose
             final Expense itemToDelete = mAdapter.getDataSet().get(position);

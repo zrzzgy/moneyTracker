@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import runze.moneytracker.HomeActivity;
+import runze.moneytracker.models.DataModel;
 import runze.moneytracker.presenters.StatsScreenPresenter;
 import runze.moneytracker.views.StatsScreenView;
 
@@ -36,6 +37,7 @@ public class StatsScreenFragment extends BaseFragment {
         mPresenter = new StatsScreenPresenter((HomeActivity) getActivity());
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
+        mView.updateViewWithData();
 
         return mView;
     }

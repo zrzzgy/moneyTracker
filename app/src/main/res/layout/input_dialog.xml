@@ -21,7 +21,7 @@
             android:focusableInTouchMode="true">
 
             <EditText
-                android:id="@+id/inputAmount"
+                android:id="@+id/input_amount"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/input_amount_hint"
@@ -38,7 +38,7 @@
             android:focusableInTouchMode="true">
 
             <MultiAutoCompleteTextView
-                android:id="@+id/inputCategory"
+                android:id="@+id/input_category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/input_category_hint"
@@ -64,7 +64,7 @@
             android:focusableInTouchMode="true">
 
             <EditText
-                android:id="@+id/inputDescription"
+                android:id="@+id/input_description"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:hint="@string/input_description_hint"
@@ -75,7 +75,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <DatePicker
-            android:id="@+id/datePicker"
+            android:id="@+id/date_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
