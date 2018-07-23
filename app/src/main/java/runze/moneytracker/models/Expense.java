@@ -54,4 +54,11 @@ public class Expense {
                 this.getDescription().equals(expense.getDescription()) &&
                 this.getDate().equals(expense.getDate());
     }
+
+    @Override
+    public String toString() {
+        return "Amount: " + mAmount.toString() + "\n" +
+                "Category: " + mCategories.toString() + "\n" +
+                "Date: " + getDate().toString();
+    }
 }
