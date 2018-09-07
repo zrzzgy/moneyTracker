@@ -54,7 +54,7 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
     @Override
     public void onBindViewHolder(@NonNull final DaySummaryBarChartRecyclerAdapter.ViewHolder holder, int position) {
         DailyExpenseTotal singleExpense = (DailyExpenseTotal) mDataSet.toArray()[position];
-        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+        SimpleDateFormat df = new SimpleDateFormat("dd", Locale.getDefault());
 
         holder.mBarDayTotal.setText(singleExpense.getTotalAmount().toString());
         holder.mBarDate.setText(df.format(singleExpense.getDate()));

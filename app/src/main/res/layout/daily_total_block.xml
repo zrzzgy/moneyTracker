@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/daily_item"
-    android:background="@drawable/card_background"
+    android:background="@color/offWhite"
+    android:gravity="bottom"
     android:layout_width="30dp"
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
@@ -19,7 +20,7 @@
     <TextView
         android:id="@+id/bar_chart_color_block"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/bar_background"/>
 
     <TextView
