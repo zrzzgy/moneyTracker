@@ -91,9 +91,9 @@ public class StatsScreenView extends RelativeLayout implements IView {
                        Iterator<String> iterator = keyValuePair.keySet().iterator();
                        String firstMonth = iterator.next();
                        String secondMonth = iterator.next();
-                       int firstMonthOccurence = keyValuePair.get(firstMonth);
-                       int secondMonthOccurence = keyValuePair.get(secondMonth);
-                       largerMonth = firstMonthOccurence >= secondMonthOccurence ? firstMonth : secondMonth;
+                       int firstMonthOccurrence = keyValuePair.get(firstMonth);
+                       int secondMonthOccurrence = keyValuePair.get(secondMonth);
+                       largerMonth = firstMonthOccurrence >= secondMonthOccurrence ? firstMonth : secondMonth;
                    }else{
                        largerMonth = keyValuePair.keySet().iterator().next();
                    }
