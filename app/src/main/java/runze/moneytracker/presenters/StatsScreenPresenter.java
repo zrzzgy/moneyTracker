@@ -124,7 +124,6 @@ public class StatsScreenPresenter implements IPresenter {
                 }
             }
         }
-        result.add(data.get(data.size()));
 
         //add place holder dates
         for (int i = 1; i < n; i++) {
@@ -138,6 +137,8 @@ public class StatsScreenPresenter implements IPresenter {
                 result.add(placeHolder);
             }
         }
+
+        result.add(data.get(data.size()-1));
 
         return result;
     }
