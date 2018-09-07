@@ -1,6 +1,7 @@
 package runze.moneytracker.views;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,10 +9,14 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.github.mikephil.charting.charts.BarChart;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.PieData;
 
 import runze.moneytracker.HomeActivity;
@@ -19,7 +24,6 @@ import runze.moneytracker.R;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.presenters.StatsScreenPresenter;
 import runze.moneytracker.utils.DaySummaryBarChartRecyclerAdapter;
-import runze.moneytracker.utils.MyXAxisValueFormatter;
 
 
 public class StatsScreenView extends RelativeLayout implements IView {
@@ -52,6 +56,20 @@ public class StatsScreenView extends RelativeLayout implements IView {
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mRecyclerView.setOnScrollChangeListener(new OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                   int firstItemPosition =  ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                   int lastItemPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                   for (int i = firstItemPosition; i <= lastItemPosition; i++) {
+                       Date itemDate = ((DaySummaryBarChartRecyclerAdapter)mRecyclerView.getAdapter()).getItem(i).getDate();
+                       SimpleDateFormat df = new SimpleDateFormat("MM", Locale.getDefault());
+                       String month = df.format(itemDate);
+                   }
+                }
+            });
+        }
     }
 
     public void updateViewWithData(){

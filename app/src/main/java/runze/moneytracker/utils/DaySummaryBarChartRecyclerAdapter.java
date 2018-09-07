@@ -56,7 +56,9 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
         DailyExpenseTotal singleExpense = (DailyExpenseTotal) mDataSet.toArray()[position];
         SimpleDateFormat df = new SimpleDateFormat("dd", Locale.getDefault());
 
-        holder.mBarDayTotal.setText(singleExpense.getTotalAmount().toString());
+        if (singleExpense.getTotalAmount() != 0) {
+            holder.mBarDayTotal.setText(singleExpense.getTotalAmount().toString());
+        }
         holder.mBarDate.setText(df.format(singleExpense.getDate()));
         holder.mBarColorBlock.setHeight((int) (150 * singleExpense.getTotalAmount() / getMaxDailyTotal(mDataSet)));
     }
@@ -64,6 +66,10 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
     @Override
     public int getItemCount() {
         return mDataSet.size();
+    }
+
+    public DailyExpenseTotal getItem(int index) {
+        return mDataSet.get(index);
     }
 
     public double getMaxDailyTotal(List<DailyExpenseTotal> data) {
