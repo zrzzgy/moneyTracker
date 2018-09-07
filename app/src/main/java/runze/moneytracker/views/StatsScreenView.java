@@ -8,12 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -33,6 +39,7 @@ public class StatsScreenView extends RelativeLayout implements IView {
     private StatsScreenPresenter mPresenter;
     private PieChart mPieChart;
     private ListView mStatsList;
+    private TextView mDailyExpenseTitle;
 
     private Description mDescription;
 
@@ -53,6 +60,7 @@ public class StatsScreenView extends RelativeLayout implements IView {
 
         mPieChart = findViewById(R.id.pie_chart);
         mStatsList = findViewById(R.id.stats_list);
+        mDailyExpenseTitle = findViewById(R.id.daily_expense_graph_title);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -62,11 +70,35 @@ public class StatsScreenView extends RelativeLayout implements IView {
                 public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                    int firstItemPosition =  ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
                    int lastItemPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+
+                    Map<String, Integer> keyValuePair = new HashMap<>();
+
                    for (int i = firstItemPosition; i <= lastItemPosition; i++) {
                        Date itemDate = ((DaySummaryBarChartRecyclerAdapter)mRecyclerView.getAdapter()).getItem(i).getDate();
                        SimpleDateFormat df = new SimpleDateFormat("MM", Locale.getDefault());
                        String month = df.format(itemDate);
+
+                       if (keyValuePair.containsKey(month)){
+                           int occurrence = keyValuePair.get(month);
+                           keyValuePair.put(month, occurrence+1);
+                       }else{
+                           keyValuePair.put(month, 1);
+                       }
                    }
+
+                   String largerMonth;
+                   if (keyValuePair.keySet().size() > 1){
+                       Iterator<String> iterator = keyValuePair.keySet().iterator();
+                       String firstMonth = iterator.next();
+                       String secondMonth = iterator.next();
+                       int firstMonthOccurence = keyValuePair.get(firstMonth);
+                       int secondMonthOccurence = keyValuePair.get(secondMonth);
+                       largerMonth = firstMonthOccurence >= secondMonthOccurence ? firstMonth : secondMonth;
+                   }else{
+                       largerMonth = keyValuePair.keySet().iterator().next();
+                   }
+
+                    mDailyExpenseTitle.setText(largerMonth);
                 }
             });
         }
