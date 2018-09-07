@@ -116,7 +116,7 @@ public class StatsScreenPresenter implements IPresenter {
         //ascending sort data
         for (int i = 0; i < n; i++) {
             for (int j = 1; j < n - i; j++) {
-                if (data.get(j - 1).getDate().getTime() > data.get(j).getDate().getTime()) {
+                if (data.get(j - 1).getDate().getTime() < data.get(j).getDate().getTime()) {
                     // swap data[j] and data[j+1]
                     DailyExpenseTotal temp = data.get(j - 1);
                     data.set(j - 1, data.get(j));
@@ -127,11 +127,11 @@ public class StatsScreenPresenter implements IPresenter {
 
         //add place holder dates
         for (int i = 1; i < n; i++) {
-            long timeInBetween = data.get(i).getDate().getTime() - data.get(i - 1).getDate().getTime();
+            long timeInBetween = data.get(i - 1).getDate().getTime() - data.get(i).getDate().getTime();
             long daysInBetween = timeInBetween / (1000 * 60 * 60 * 24);
             result.add(data.get(i - 1));
-            for (int j = 0; j < daysInBetween; j++) {
-                long nextTime = result.get(result.size() - 1).getDate().getTime() + 1000 * 60 * 60 * 24;
+            for (int j = 0; j < daysInBetween - 1; j++) {
+                long nextTime = result.get(result.size() - 1).getDate().getTime() - 1000 * 60 * 60 * 24;
                 Date nextDate = new Date(nextTime);
                 DailyExpenseTotal placeHolder = new DailyExpenseTotal((double) 0, nextDate);
                 result.add(placeHolder);
