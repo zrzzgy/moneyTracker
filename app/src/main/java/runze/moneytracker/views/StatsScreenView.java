@@ -10,10 +10,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,6 +24,7 @@ import com.github.mikephil.charting.data.PieData;
 
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
+import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.presenters.StatsScreenPresenter;
 import runze.moneytracker.utils.DaySummaryBarChartRecyclerAdapter;
@@ -104,11 +102,6 @@ public class StatsScreenView extends RelativeLayout implements IView {
         }
     }
 
-    public void updateViewWithData(){
-        // populate the view with data
-        updateRecyclerViewWithData();
-    }
-
     @Override
     public void attachPresenter(IPresenter presenter) {
         mPresenter = (StatsScreenPresenter) presenter;
@@ -119,15 +112,15 @@ public class StatsScreenView extends RelativeLayout implements IView {
         mPresenter = null;
     }
 
-    public void displayPieChart(PieData pieData) {
+    public void updatePieChart(PieData pieData) {
         mPieChart.setDescription(mDescription);
         mPieChart.setData(pieData);
         mPieChart.setNoDataText("No Data");
         mPieChart.invalidate();
     }
 
-    private void updateRecyclerViewWithData(){
-        mAdapter = new DaySummaryBarChartRecyclerAdapter(mPresenter.loadDailyTotalExpensesFromDataModel());
+    public void updateBarChart(List<DailyExpenseTotal> expenseTotals){
+        mAdapter = new DaySummaryBarChartRecyclerAdapter(expenseTotals);
         mRecyclerView.setAdapter(mAdapter);
 
     }
