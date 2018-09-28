@@ -2,6 +2,9 @@ package runze.moneytracker.models;
 
 import java.util.Date;
 
+/**
+ * Class that records date and the total amount of money spent on that date
+ */
 public class DailyExpenseTotal {
     private Double mTotalAmount;
     private Date mDate;

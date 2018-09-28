@@ -3,6 +3,9 @@ package runze.moneytracker.models;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Model class that is saved to the Shared Preferences. Containing all data used in the app
+ */
 public class DataModel {
     private List<DailyExpenseTotal> mDailyTotalList;
     private List<Expense> mExpenseList;

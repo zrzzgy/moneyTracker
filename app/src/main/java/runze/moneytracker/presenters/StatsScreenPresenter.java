@@ -21,6 +21,9 @@ import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.StatsScreenView;
 
+/**
+ * Stats Screen Presenter
+ */
 public class StatsScreenPresenter implements IPresenter {
     private final String TAG = this.getClass().getSimpleName();
     private StatsScreenView mView;
@@ -71,6 +74,11 @@ public class StatsScreenPresenter implements IPresenter {
         return new PieData(pieDataSet);
     }
 
+    /**
+     * Sort the data into a list according to different date, merge expenses from the same date
+     * @param expenses a list of individual expenses
+     * @return a list of daily expense total with expenses from the same date merged
+     */
     private List<DailyExpenseTotal> dateAsKey(List<Expense> expenses) {
         boolean done = false;
         List<DailyExpenseTotal> listOfDailyExpenseTotal = new ArrayList<>();
@@ -92,6 +100,11 @@ public class StatsScreenPresenter implements IPresenter {
         return orderAndAddPlaceHolderDates(listOfDailyExpenseTotal);
     }
 
+    /**
+     * Sort the data according to different categories. Expenses of the same category are merged
+     * @param expenses a list of individual expenses
+     * @return A hash map of <category, amount>
+     */
     private Set<Map.Entry<String, Double>> categoryAsKey(List<Expense> expenses) {
         HashMap<String, Double> sortedData = new HashMap<>();
         for (int i = 0; i < expenses.size(); i++) {
@@ -108,6 +121,12 @@ public class StatsScreenPresenter implements IPresenter {
         return sortedData.entrySet();
     }
 
+    /**
+     * Sort the date-oriented data by placing earlier dates in the front,
+     * and add dates with 0 expense so that dates are consecutive.
+     * @param data list of expenses sorted and merged by date
+     * @return list of consecutive expenses sorted and merged by date
+     */
     private List<DailyExpenseTotal> orderAndAddPlaceHolderDates(List<DailyExpenseTotal> data) {
         List<DailyExpenseTotal> result = new LinkedList<>();
         int n = data.size();
