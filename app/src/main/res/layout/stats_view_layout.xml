@@ -15,6 +15,7 @@
             android:layout_marginEnd="@dimen/tight_activity_horizontal_margin">
 
             <TextView
+                android:id="@+id/daily_expense_graph_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/expenses_by_date"
