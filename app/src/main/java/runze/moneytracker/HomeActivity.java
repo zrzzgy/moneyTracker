@@ -10,11 +10,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -35,7 +35,6 @@ import runze.moneytracker.fragments.StatsScreenFragment;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
-import runze.moneytracker.utils.MTFragmentPagerAdapter;
 
 public class HomeActivity extends AppCompatActivity{
     private final String TAG = this.getClass().getSimpleName();
@@ -51,8 +50,8 @@ public class HomeActivity extends AppCompatActivity{
     public SharedPreferences.Editor mEditor;
     public List<Integer> mColorList = new ArrayList<>();
 
+    private FrameLayout mContainer;
     private BottomNavigationView mNavigation;
-    private ViewPager mViewPager;
 
     @Inject InputScreenFragment mInputFragment;
     @Inject StatsScreenFragment mStatsFragment;
@@ -69,15 +68,12 @@ public class HomeActivity extends AppCompatActivity{
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_input:
-                    mViewPager.setCurrentItem(0);  // display page 0
                     mInputFragment.onResume();
                     return true;
                 case R.id.navigation_stats:
-                    mViewPager.setCurrentItem(1);   // display page 1
                     mStatsFragment.onResume();
                     return true;
                 case R.id.navigation_settings:
-                   mViewPager.setCurrentItem(2);    // display page 2
                    mSettingsFragment.onResume();
                    return true;
             }
@@ -116,6 +112,11 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     @Override
+    public void onAttachFragment(android.app.Fragment fragment) {
+        super.onAttachFragment(fragment);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         saveDataModel();
@@ -128,50 +129,8 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     public void initComponents(){
-        MTFragmentPagerAdapter mFragmentPagerAdapter = new MTFragmentPagerAdapter(getSupportFragmentManager());
-        mFragmentPagerAdapter.addFragment(mInputFragment);
-        mFragmentPagerAdapter.addFragment(mStatsFragment);
-        mFragmentPagerAdapter.addFragment(mSettingsFragment);
-
-        mViewPager = findViewById(R.id.home_view_pager);
-        mViewPager.setAdapter(mFragmentPagerAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Log.v(TAG, "Page " + position + " selected");
-                for (int i = 0; i < 3; i++) {
-                    if (i == position) {
-                        mNavigation.getMenu().getItem(position).setChecked(true);
-                    }else {
-                        mNavigation.getMenu().getItem(position).setChecked(false);
-                    }
-                }
-
-                switch (position) {
-                    case 0:
-                        mInputFragment.onResume();
-                        break;
-                    case 1:
-                        mStatsFragment.onResume();
-                        break;
-                    case 2:
-                        mSettingsFragment.onResume();
-                        break;
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        mViewPager.setCurrentItem(0);
-
+        mContainer = findViewById(R.id.container);
+        
         mNavigation = findViewById(R.id.navigation);
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -186,7 +145,7 @@ public class HomeActivity extends AppCompatActivity{
                     return true;
                 case R.id.option_menu_delete:
                     ((SettingsScreenFragment) currentFragment).getPresenter().removeCategory(item);
-                    Snackbar.make(mViewPager, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
+                    Snackbar.make(mContainer, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
                             .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -200,7 +159,7 @@ public class HomeActivity extends AppCompatActivity{
                 case R.id.option_menu_edit:
                     return true;
                 case R.id.option_menu_delete:
-                    Snackbar.make(mViewPager, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
+                    Snackbar.make(mContainer, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
                             .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {

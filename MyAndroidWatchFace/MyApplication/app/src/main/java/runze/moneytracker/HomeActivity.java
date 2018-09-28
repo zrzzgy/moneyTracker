@@ -35,7 +35,6 @@ import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.fragments.StatsScreenFragment;
 import runze.moneytracker.utils.Expense;
-import runze.moneytracker.utils.MTFragmentPagerAdapter;
 
 public class HomeActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
