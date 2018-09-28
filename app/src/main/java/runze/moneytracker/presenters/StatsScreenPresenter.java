@@ -46,6 +46,11 @@ public class StatsScreenPresenter implements IPresenter {
     }
 
     private void analyzeData() {
+        mView.updateBarChart(dateAsKey(HomeActivity.mDataModel.getExpenseList()));
+        mView.updatePieChart(analyzeDataForPieChart());
+    }
+
+    private PieData analyzeDataForPieChart() {
         Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(HomeActivity.mDataModel.getExpenseList());
         List<PieEntry> pieEntries = new ArrayList<>();
 
@@ -63,9 +68,7 @@ public class StatsScreenPresenter implements IPresenter {
         pieDataSet.setColors(mParentActivity.mColorList);
         pieDataSet.setValueTextSize(25);
         pieDataSet.setValueTextColor(Color.WHITE);
-        PieData pieData = new PieData(pieDataSet);
-
-        mView.displayPieChart(pieData);
+        return new PieData(pieDataSet);
     }
 
     private List<DailyExpenseTotal> dateAsKey(List<Expense> expenses) {
@@ -105,40 +108,38 @@ public class StatsScreenPresenter implements IPresenter {
         return sortedData.entrySet();
     }
 
-    public List<DailyExpenseTotal> loadDailyTotalExpensesFromDataModel() {
-        return dateAsKey(HomeActivity.mDataModel.getExpenseList());
-    }
-
     private List<DailyExpenseTotal> orderAndAddPlaceHolderDates(List<DailyExpenseTotal> data) {
         List<DailyExpenseTotal> result = new LinkedList<>();
         int n = data.size();
 
-        //ascending sort data
-        for (int i = 0; i < n; i++) {
-            for (int j = 1; j < n - i; j++) {
-                if (data.get(j - 1).getDate().getTime() < data.get(j).getDate().getTime()) {
-                    // swap data[j] and data[j+1]
-                    DailyExpenseTotal temp = data.get(j - 1);
-                    data.set(j - 1, data.get(j));
-                    data.set(j, temp);
+        if (n > 0) {
+            //ascending sort data
+            for (int i = 0; i < n; i++) {
+                for (int j = 1; j < n - i; j++) {
+                    if (data.get(j - 1).getDate().getTime() < data.get(j).getDate().getTime()) {
+                        // swap data[j] and data[j+1]
+                        DailyExpenseTotal temp = data.get(j - 1);
+                        data.set(j - 1, data.get(j));
+                        data.set(j, temp);
+                    }
                 }
             }
-        }
 
-        //add place holder dates
-        for (int i = 1; i < n; i++) {
-            long timeInBetween = data.get(i - 1).getDate().getTime() - data.get(i).getDate().getTime();
-            long daysInBetween = timeInBetween / (1000 * 60 * 60 * 24);
-            result.add(data.get(i - 1));
-            for (int j = 0; j < daysInBetween - 1; j++) {
-                long nextTime = result.get(result.size() - 1).getDate().getTime() - 1000 * 60 * 60 * 24;
-                Date nextDate = new Date(nextTime);
-                DailyExpenseTotal placeHolder = new DailyExpenseTotal((double) 0, nextDate);
-                result.add(placeHolder);
+            //add place holder dates
+            for (int i = 1; i < n; i++) {
+                long timeInBetween = data.get(i - 1).getDate().getTime() - data.get(i).getDate().getTime();
+                long daysInBetween = timeInBetween / (1000 * 60 * 60 * 24);
+                result.add(data.get(i - 1));
+                for (int j = 0; j < daysInBetween - 1; j++) {
+                    long nextTime = result.get(result.size() - 1).getDate().getTime() - 1000 * 60 * 60 * 24;
+                    Date nextDate = new Date(nextTime);
+                    DailyExpenseTotal placeHolder = new DailyExpenseTotal((double) 0, nextDate);
+                    result.add(placeHolder);
+                }
             }
-        }
 
-        result.add(data.get(data.size()-1));
+            result.add(data.get(n - 1));
+        }
 
         return result;
     }
