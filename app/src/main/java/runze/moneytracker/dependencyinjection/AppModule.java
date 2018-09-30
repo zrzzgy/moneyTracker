@@ -61,12 +61,6 @@ public class AppModule {
 
     @Provides
     @Singleton
-    StatsScreenView provideStatsScreenView(){
-        return new StatsScreenView(homeActivity);
-    }
-
-    @Provides
-    @Singleton
     SpendingDetailView provideSpendingDetailView(){
         return new SpendingDetailView(homeActivity);
     }

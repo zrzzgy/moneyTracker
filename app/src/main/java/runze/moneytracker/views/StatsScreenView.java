@@ -5,8 +5,10 @@ import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,9 +49,11 @@ public class StatsScreenView extends RelativeLayout implements IView {
 
     private DaySummaryBarChartRecyclerAdapter mAdapter;
 
-    public StatsScreenView(Context context) {
+    public StatsScreenView(LayoutInflater inflater, ViewGroup container, Context context) {
         super(context);
-        View view = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.stats_view_layout, this);
+        final Context contextThemeWrapper = new ContextThemeWrapper(getContext(), R.style.TabAppTheme);
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+        View view =  localInflater.inflate(R.layout.stats_view_layout, container, false);
         init(view);
         //todo check when we use context view
         //((HomeActivity) getContext()).registerForContextMenu(mStatsList);

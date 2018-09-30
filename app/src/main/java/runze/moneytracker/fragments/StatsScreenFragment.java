@@ -1,5 +1,6 @@
 package runze.moneytracker.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,13 +10,12 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import runze.moneytracker.HomeActivity;
-import runze.moneytracker.models.DataModel;
 import runze.moneytracker.presenters.StatsScreenPresenter;
 import runze.moneytracker.views.StatsScreenView;
 
 
 public class StatsScreenFragment extends BaseFragment {
-    @Inject StatsScreenView mView;
+    private StatsScreenView mView;
     @Inject StatsScreenPresenter mPresenter;
 
     @Override
@@ -32,7 +32,7 @@ public class StatsScreenFragment extends BaseFragment {
 
         // Construct the view if it does not yet exist
         if (mView == null) {
-            mView = new StatsScreenView(getActivity());
+            mView = new StatsScreenView(inflater, container, getActivity());
         }
         mPresenter = new StatsScreenPresenter((HomeActivity) getActivity());
         mPresenter.attachView(mView);
