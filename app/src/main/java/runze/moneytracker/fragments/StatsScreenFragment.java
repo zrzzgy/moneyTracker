@@ -37,7 +37,6 @@ public class StatsScreenFragment extends BaseFragment {
         mPresenter = new StatsScreenPresenter((HomeActivity) getActivity());
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
-        mView.updateViewWithData();
 
         return mView;
     }

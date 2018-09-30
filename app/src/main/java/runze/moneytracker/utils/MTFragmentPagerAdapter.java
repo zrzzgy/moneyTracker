@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class used for swiping to switch between screens
+ */
 public class MTFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private List<Fragment> mFragmentList = new ArrayList<>();
 

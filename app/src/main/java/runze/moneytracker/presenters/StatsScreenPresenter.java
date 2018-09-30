@@ -21,6 +21,9 @@ import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.StatsScreenView;
 
+/**
+ * Stats Screen Presenter
+ */
 public class StatsScreenPresenter implements IPresenter {
     private final String TAG = this.getClass().getSimpleName();
     private StatsScreenView mView;
@@ -46,6 +49,11 @@ public class StatsScreenPresenter implements IPresenter {
     }
 
     private void analyzeData() {
+        mView.updateBarChart(dateAsKey(HomeActivity.mDataModel.getExpenseList()));
+        mView.updatePieChart(analyzeDataForPieChart());
+    }
+
+    private PieData analyzeDataForPieChart() {
         Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(HomeActivity.mDataModel.getExpenseList());
         List<PieEntry> pieEntries = new ArrayList<>();
 
@@ -63,11 +71,14 @@ public class StatsScreenPresenter implements IPresenter {
         pieDataSet.setColors(mParentActivity.mColorList);
         pieDataSet.setValueTextSize(25);
         pieDataSet.setValueTextColor(Color.WHITE);
-        PieData pieData = new PieData(pieDataSet);
-
-        mView.displayPieChart(pieData);
+        return new PieData(pieDataSet);
     }
 
+    /**
+     * Sort the data into a list according to different date, merge expenses from the same date
+     * @param expenses a list of individual expenses
+     * @return a list of daily expense total with expenses from the same date merged
+     */
     private List<DailyExpenseTotal> dateAsKey(List<Expense> expenses) {
         boolean done = false;
         List<DailyExpenseTotal> listOfDailyExpenseTotal = new ArrayList<>();
@@ -89,6 +100,11 @@ public class StatsScreenPresenter implements IPresenter {
         return orderAndAddPlaceHolderDates(listOfDailyExpenseTotal);
     }
 
+    /**
+     * Sort the data according to different categories. Expenses of the same category are merged
+     * @param expenses a list of individual expenses
+     * @return A hash map of <category, amount>
+     */
     private Set<Map.Entry<String, Double>> categoryAsKey(List<Expense> expenses) {
         HashMap<String, Double> sortedData = new HashMap<>();
         for (int i = 0; i < expenses.size(); i++) {
@@ -105,37 +121,43 @@ public class StatsScreenPresenter implements IPresenter {
         return sortedData.entrySet();
     }
 
-    public List<DailyExpenseTotal> loadDailyTotalExpensesFromDataModel() {
-        return dateAsKey(HomeActivity.mDataModel.getExpenseList());
-    }
-
+    /**
+     * Sort the date-oriented data by placing earlier dates in the front,
+     * and add dates with 0 expense so that dates are consecutive.
+     * @param data list of expenses sorted and merged by date
+     * @return list of consecutive expenses sorted and merged by date
+     */
     private List<DailyExpenseTotal> orderAndAddPlaceHolderDates(List<DailyExpenseTotal> data) {
         List<DailyExpenseTotal> result = new LinkedList<>();
         int n = data.size();
 
-        //ascending sort data
-        for (int i = 0; i < n; i++) {
-            for (int j = 1; j < n - i; j++) {
-                if (data.get(j - 1).getDate().getTime() > data.get(j).getDate().getTime()) {
-                    // swap data[j] and data[j+1]
-                    DailyExpenseTotal temp = data.get(j - 1);
-                    data.set(j - 1, data.get(j));
-                    data.set(j, temp);
+        if (n > 0) {
+            //ascending sort data
+            for (int i = 0; i < n; i++) {
+                for (int j = 1; j < n - i; j++) {
+                    if (data.get(j - 1).getDate().getTime() < data.get(j).getDate().getTime()) {
+                        // swap data[j] and data[j+1]
+                        DailyExpenseTotal temp = data.get(j - 1);
+                        data.set(j - 1, data.get(j));
+                        data.set(j, temp);
+                    }
                 }
             }
-        }
 
-        //add place holder dates
-        for (int i = 1; i < n; i++) {
-            long timeInBetween = data.get(i).getDate().getTime() - data.get(i - 1).getDate().getTime();
-            long daysInBetween = timeInBetween / (1000 * 60 * 60 * 24);
-            result.add(data.get(i - 1));
-            for (int j = 0; j < daysInBetween; j++) {
-                long nextTime = result.get(result.size() - 1).getDate().getTime() + 1000 * 60 * 60 * 24;
-                Date nextDate = new Date(nextTime);
-                DailyExpenseTotal placeHolder = new DailyExpenseTotal((double) 0, nextDate);
-                result.add(placeHolder);
+            //add place holder dates
+            for (int i = 1; i < n; i++) {
+                long timeInBetween = data.get(i - 1).getDate().getTime() - data.get(i).getDate().getTime();
+                long daysInBetween = timeInBetween / (1000 * 60 * 60 * 24);
+                result.add(data.get(i - 1));
+                for (int j = 0; j < daysInBetween - 1; j++) {
+                    long nextTime = result.get(result.size() - 1).getDate().getTime() - 1000 * 60 * 60 * 24;
+                    Date nextDate = new Date(nextTime);
+                    DailyExpenseTotal placeHolder = new DailyExpenseTotal((double) 0, nextDate);
+                    result.add(placeHolder);
+                }
             }
+
+            result.add(data.get(n - 1));
         }
 
         return result;

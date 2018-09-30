@@ -4,9 +4,8 @@ import java.util.Date;
 import java.util.HashSet;
 
 /**
- * Object that saves info about a spending
+ * Object that saves categories, amount, date, and description of a spending
  */
-
 public class Expense {
     private HashSet<String> mCategories;
     private Double mAmount;
