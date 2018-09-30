@@ -101,15 +101,15 @@ public class HomeActivity extends AppCompatActivity{
 
         //fulfill injected objects
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
-        mAppComponent.inject(this);
+        mAppComponent.inject(this);   // used to initialize dependencies
 
-        mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);  // BaseActivity.getSharedPreferences()
         mEditor = mSharedPreferences.edit();
 
         //setup dataModel
         loadDataModel();
 
-        setContentView(R.layout.bottom_nav);
+        setContentView(R.layout.bottom_nav);  // setContentView() to display a view
         initComponents();
 
         this.getLayoutInflater().inflate((R.layout.home_base), null);
@@ -214,8 +214,8 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     @Override
-    public void onBackPressed(){
-           finish();
+    public void onBackPressed(){   // for the return key
+           finish(); // end this activity
     }
 
     protected Fragment getCurrentFragment() {

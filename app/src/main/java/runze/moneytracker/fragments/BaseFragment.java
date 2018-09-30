@@ -13,10 +13,16 @@ import runze.moneytracker.presenters.IPresenter;
 public abstract class BaseFragment<V extends View, P extends IPresenter> extends Fragment {
     protected String TAG;
 
+    // Bundles are generally used for passing data between various Android activities.
+    // It depends on you what type of values you want to pass.
+    // But bundles can hold all types of values and pass them to the new activity.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         TAG = this.getClass().getSimpleName() + " " + hashCode();
         super.onCreate(savedInstanceState);
+
+        //control whether a fragment instance is retained across Activity re-creation
+        //such as from a configuration change
         setRetainInstance(true);
     }
 
@@ -63,6 +69,8 @@ public abstract class BaseFragment<V extends View, P extends IPresenter> extends
             Intent intent = new Intent(getActivity(), navigateTo);
 
             if (extraString != null) {
+
+                //Add extended data to the intent.
                 intent.putExtra(extraString, extra);
             }
 

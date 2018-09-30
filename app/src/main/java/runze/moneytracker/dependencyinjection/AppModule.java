@@ -29,7 +29,7 @@ public class AppModule {
     }
 
     @Provides
-    @Singleton
+    @Singleton   // static
     InputScreenFragment provideInputScreenFragment(){
         return new InputScreenFragment();
     }

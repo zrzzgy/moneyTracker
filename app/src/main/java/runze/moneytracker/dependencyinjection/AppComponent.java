@@ -14,6 +14,7 @@ import runze.moneytracker.presenters.StatsScreenPresenter;
 /**
  *  App component for dependency injection
  */
+
 @Component(modules = {AppModule.class})
 @Singleton
 public interface AppComponent {
