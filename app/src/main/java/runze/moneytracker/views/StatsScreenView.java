@@ -2,6 +2,7 @@ package runze.moneytracker.views;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,6 +39,9 @@ public class StatsScreenView extends RelativeLayout implements IView {
     private PieChart mPieChart;
     private ListView mStatsList;
     private TextView mDailyExpenseTitle;
+    private TabLayout mTabLayout;
+    private TabLayout.Tab mTabDaily;
+    private TabLayout.Tab mTabCategory;
 
     private Description mDescription;
 
@@ -47,18 +51,24 @@ public class StatsScreenView extends RelativeLayout implements IView {
         super(context);
         View view = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.stats_view_layout, this);
         init(view);
-        ((HomeActivity) getContext()).registerForContextMenu(mStatsList);
+        //todo check when we use context view
+        //((HomeActivity) getContext()).registerForContextMenu(mStatsList);
         mDescription = new Description();
         mDescription.setText("");
     }
 
     private void init(View view) {
-        mRecyclerView = view.findViewById(R.id.bar_chart_recycler_view);
+        mRecyclerView = view.findViewById(R.id.daily_expense_detail_graph);
         mRecyclerView.setHasFixedSize(true);
 
-        mPieChart = findViewById(R.id.pie_chart);
-        mStatsList = findViewById(R.id.stats_list);
-        mDailyExpenseTitle = findViewById(R.id.daily_expense_graph_title);
+        mPieChart = findViewById(R.id.category_expense_detail_graph);
+        //mStatsList = findViewById(R.id.stats_list);
+        mDailyExpenseTitle = findViewById(R.id.daily_expense_month);
+        mTabLayout = findViewById(R.id.upper_tab_layout);
+        mTabDaily = mTabLayout.getTabAt(0);
+        mTabCategory = mTabLayout.getTabAt(1);
+        mTabDaily.setCustomView(R.layout.daily_expense_view);
+        mTabCategory.setCustomView(R.layout.category_expense_view);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mRecyclerView.setLayoutManager(mLayoutManager);
