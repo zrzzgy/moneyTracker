@@ -17,7 +17,9 @@ import java.util.Set;
 import runze.moneytracker.R;
 import runze.moneytracker.models.DailyExpenseTotal;
 
-
+/**
+ * Class used in the recycler view that shows daily spending bar chart
+ */
 public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DaySummaryBarChartRecyclerAdapter.ViewHolder> {
     private final String TAG = this.getClass().getSimpleName();
     private List<DailyExpenseTotal> mDataSet;

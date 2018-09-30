@@ -37,6 +37,9 @@ import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
 
+/**
+ * Home Activity
+ */
 public class HomeActivity extends AppCompatActivity{
     private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
