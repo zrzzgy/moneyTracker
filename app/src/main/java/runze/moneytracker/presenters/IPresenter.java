@@ -21,4 +21,9 @@ public interface IPresenter {
      * Called if the view is destroyed. Should generally be called from Fragment.onDestroyView()
      */
     void detachView();
+
+    /**
+     * Called if the view is updated.
+     */
+    void updateView();
 }

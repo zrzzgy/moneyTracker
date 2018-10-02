@@ -10,13 +10,15 @@ public class DataModel {
     private List<DailyExpenseTotal> mDailyTotalList;
     private List<Expense> mExpenseList;
     private HashSet<String> mCategoryList;
+    private List<Integer> mColorList;
 
     public DataModel(List<Expense> expenseList,
                      List<DailyExpenseTotal> dailyTotalList,
-                     HashSet<String> categoryList){
+                     HashSet<String> categoryList, List<Integer> colorList){
         mExpenseList = expenseList;
         mDailyTotalList = dailyTotalList;
         mCategoryList = categoryList;
+        mColorList = colorList;
     }
 
 
@@ -43,4 +45,13 @@ public class DataModel {
     public void setCategoryList(HashSet<String> categoryList) {
         this.mCategoryList = categoryList;
     }
+
+    public List<Integer> getColorList() {
+        return mColorList;
+    }
+
+    public void setColorList(List<Integer> mColorList) {
+        this.mColorList = mColorList;
+    }
+
 }

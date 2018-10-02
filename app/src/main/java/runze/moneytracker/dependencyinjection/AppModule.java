@@ -7,15 +7,14 @@ import dagger.Provides;
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.fragments.StatsScreenFragment;
+import runze.moneytracker.fragments.StatsScreenBaseFragment;
 import runze.moneytracker.presenters.InputScreenPresenter;
 import runze.moneytracker.presenters.SettingsScreenPresenter;
 import runze.moneytracker.presenters.SpendingDetailPresenter;
-import runze.moneytracker.presenters.StatsScreenPresenter;
+import runze.moneytracker.presenters.StatsScreenBasePresenter;
 import runze.moneytracker.views.InputScreenView;
 import runze.moneytracker.views.SettingsScreenView;
 import runze.moneytracker.views.SpendingDetailView;
-import runze.moneytracker.views.StatsScreenView;
 
 /**
  * App Module for dependency injection n
@@ -36,8 +35,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    StatsScreenFragment provideStatsScreenFragment(){
-        return new StatsScreenFragment();
+    StatsScreenBaseFragment provideStatsScreenFragment(){
+        return new StatsScreenBaseFragment();
     }
 
     @Provides
@@ -73,8 +72,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    StatsScreenPresenter provideStatsScreenPresenter(){
-        return new StatsScreenPresenter(homeActivity);
+    StatsScreenBasePresenter provideStatsScreenPresenter(){
+        return new StatsScreenBasePresenter(homeActivity);
     }
 
     @Provides

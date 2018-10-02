@@ -31,7 +31,7 @@ import runze.moneytracker.dependencyinjection.AppModule;
 import runze.moneytracker.dependencyinjection.DaggerAppComponent;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.fragments.StatsScreenFragment;
+import runze.moneytracker.fragments.StatsScreenBaseFragment;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
@@ -52,13 +52,13 @@ public class HomeActivity extends AppCompatActivity{
     private AppComponent mAppComponent;
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
-    public List<Integer> mColorList = new ArrayList<>();
 
     private BottomNavigationView mNavigation;
     private ViewPager mViewPager;
 
     @Inject InputScreenFragment mInputFragment;
-    @Inject StatsScreenFragment mStatsFragment;
+    @Inject
+    StatsScreenBaseFragment mStatsFragment;
     @Inject SettingsScreenFragment mSettingsFragment;
 
     public static DataModel mDataModel;
@@ -198,7 +198,7 @@ public class HomeActivity extends AppCompatActivity{
                             }).show();
                     return true;
             }
-        }else if (currentFragment instanceof StatsScreenFragment){
+        }else if (currentFragment instanceof StatsScreenBaseFragment){
             switch (item.getItemId()){
                 case R.id.option_menu_edit:
                     return true;
@@ -247,7 +247,7 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private void loadDataModel(){
-        mDataModel = new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(), new HashSet<String>());
+        mDataModel = new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(), new HashSet<String>(), new ArrayList<Integer>());
 
         //read saved data from preferences
         String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);

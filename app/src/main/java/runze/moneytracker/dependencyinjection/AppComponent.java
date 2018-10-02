@@ -6,10 +6,10 @@ import dagger.Component;
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.fragments.StatsScreenFragment;
+import runze.moneytracker.fragments.StatsScreenBaseFragment;
 import runze.moneytracker.presenters.InputScreenPresenter;
 import runze.moneytracker.presenters.SettingsScreenPresenter;
-import runze.moneytracker.presenters.StatsScreenPresenter;
+import runze.moneytracker.presenters.StatsScreenBasePresenter;
 
 /**
  *  App component for dependency injection
@@ -21,10 +21,10 @@ public interface AppComponent {
     void inject(HomeActivity homeActivity);
 
     void inject(InputScreenFragment inputScreenFragment);
-    void inject(StatsScreenFragment statsScreenFragment);
+    void inject(StatsScreenBaseFragment statsScreenBaseFragment);
     void inject(SettingsScreenFragment settingsScreenFragment);
 
     void inject(InputScreenPresenter inputScreenPresenter);
-    void inject(StatsScreenPresenter statsScreenPresenter);
+    void inject(StatsScreenBasePresenter statsScreenBasePresenter);
     void inject(SettingsScreenPresenter settingsScreenPresenter);
 }
