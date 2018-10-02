@@ -13,6 +13,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -31,7 +33,7 @@ import runze.moneytracker.dependencyinjection.AppModule;
 import runze.moneytracker.dependencyinjection.DaggerAppComponent;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.fragments.StatsScreenFragment;
+import runze.moneytracker.fragments.StatsScreenBaseFragment;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
@@ -52,13 +54,13 @@ public class HomeActivity extends AppCompatActivity{
     private AppComponent mAppComponent;
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
-    public List<Integer> mColorList = new ArrayList<>();
 
     private BottomNavigationView mNavigation;
     private ViewPager mViewPager;
 
     @Inject InputScreenFragment mInputFragment;
-    @Inject StatsScreenFragment mStatsFragment;
+    @Inject
+    StatsScreenBaseFragment mStatsFragment;
     @Inject SettingsScreenFragment mSettingsFragment;
 
     public static DataModel mDataModel;
@@ -104,15 +106,15 @@ public class HomeActivity extends AppCompatActivity{
 
         //fulfill injected objects
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
-        mAppComponent.inject(this);
+        mAppComponent.inject(this);   // used to initialize dependencies
 
-        mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);  // BaseActivity.getSharedPreferences()
         mEditor = mSharedPreferences.edit();
 
         //setup dataModel
         loadDataModel();
 
-        setContentView(R.layout.bottom_nav);
+        setContentView(R.layout.bottom_nav);  // setContentView() to display a view
         initComponents();
 
         this.getLayoutInflater().inflate((R.layout.home_base), null);
@@ -180,6 +182,13 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
     public boolean onContextItemSelected(MenuItem item){
         Fragment currentFragment = getCurrentFragment();
         if (currentFragment instanceof SettingsScreenFragment){
@@ -198,7 +207,7 @@ public class HomeActivity extends AppCompatActivity{
                             }).show();
                     return true;
             }
-        }else if (currentFragment instanceof StatsScreenFragment){
+        }else if (currentFragment instanceof StatsScreenBaseFragment){
             switch (item.getItemId()){
                 case R.id.option_menu_edit:
                     return true;
@@ -217,8 +226,8 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     @Override
-    public void onBackPressed(){
-           finish();
+    public void onBackPressed(){   // for the return key
+           finish(); // end this activity
     }
 
     protected Fragment getCurrentFragment() {
@@ -227,7 +236,7 @@ public class HomeActivity extends AppCompatActivity{
         if (fm != null && fm.getBackStackEntryCount() > 0) {
             FragmentManager.BackStackEntry backEntry = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1);
             String fragmentTag = backEntry.getName();
-            fragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
+            fragment = fm.findFragmentByTag(fragmentTag);
         }
         return fragment;
     }
@@ -247,7 +256,7 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private void loadDataModel(){
-        mDataModel = new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(), new HashSet<String>());
+        mDataModel = new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(), new HashSet<String>(), new ArrayList<Integer>());
 
         //read saved data from preferences
         String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);

@@ -1,47 +1,33 @@
 package runze.moneytracker.presenters;
 
-import android.graphics.Color;
-
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.Expense;
+import runze.moneytracker.views.DailyExpenseAnalysisView;
 import runze.moneytracker.views.IView;
-import runze.moneytracker.views.StatsScreenView;
 
-/**
- * Stats Screen Presenter
- */
-public class StatsScreenPresenter implements IPresenter {
-    private final String TAG = this.getClass().getSimpleName();
-    private StatsScreenView mView;
-    private HomeActivity mParentActivity;
+public class DailyExpenseAnalysisPresenter extends StatsScreenBasePresenter {
+    private DailyExpenseAnalysisView mDailyExpenseAnalysisView;
 
-
-    public StatsScreenPresenter(HomeActivity activity) {
-        mParentActivity = activity;
+    public DailyExpenseAnalysisPresenter(Context context) {
+        super(context);
     }
 
     @Override
     public void attachView(IView view) {
-        mView = (StatsScreenView) view;
+        mDailyExpenseAnalysisView = (DailyExpenseAnalysisView) view;
     }
 
     @Override
     public void detachView() {
-        mView = null;
+        mDailyExpenseAnalysisView = null;
     }
 
     public void updateView() {
@@ -49,29 +35,7 @@ public class StatsScreenPresenter implements IPresenter {
     }
 
     private void analyzeData() {
-        mView.updateBarChart(dateAsKey(HomeActivity.mDataModel.getExpenseList()));
-        mView.updatePieChart(analyzeDataForPieChart());
-    }
-
-    private PieData analyzeDataForPieChart() {
-        Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(HomeActivity.mDataModel.getExpenseList());
-        List<PieEntry> pieEntries = new ArrayList<>();
-
-        //pie chart
-        for (Map.Entry<String, Double> entry : dataForPieChart) {
-            pieEntries.add(new PieEntry(entry.getValue().floatValue(), entry.getKey()));
-        }
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
-        if (pieEntries.size() > mParentActivity.mColorList.size()) {
-            Random rng = new Random();
-            for (int i = mParentActivity.mColorList.size(); i < pieEntries.size(); i++) {
-                mParentActivity.mColorList.add(Color.rgb(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)));
-            }
-        }
-        pieDataSet.setColors(mParentActivity.mColorList);
-        pieDataSet.setValueTextSize(25);
-        pieDataSet.setValueTextColor(Color.WHITE);
-        return new PieData(pieDataSet);
+        mDailyExpenseAnalysisView.updateBarChart(dateAsKey(HomeActivity.mDataModel.getExpenseList()));
     }
 
     /**
@@ -100,26 +64,6 @@ public class StatsScreenPresenter implements IPresenter {
         return orderAndAddPlaceHolderDates(listOfDailyExpenseTotal);
     }
 
-    /**
-     * Sort the data according to different categories. Expenses of the same category are merged
-     * @param expenses a list of individual expenses
-     * @return A hash map of <category, amount>
-     */
-    private Set<Map.Entry<String, Double>> categoryAsKey(List<Expense> expenses) {
-        HashMap<String, Double> sortedData = new HashMap<>();
-        for (int i = 0; i < expenses.size(); i++) {
-            Expense expense = expenses.get(i);
-            for (String category : expense.getCategory()) {
-                if (sortedData.containsKey(category)) {
-                    double sum = sortedData.get(category) + expense.getAmount();
-                    sortedData.put(category, sum);
-                } else {
-                    sortedData.put(category, expense.getAmount());
-                }
-            }
-        }
-        return sortedData.entrySet();
-    }
 
     /**
      * Sort the date-oriented data by placing earlier dates in the front,
@@ -162,5 +106,4 @@ public class StatsScreenPresenter implements IPresenter {
 
         return result;
     }
-
 }

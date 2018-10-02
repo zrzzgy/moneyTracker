@@ -14,20 +14,18 @@
         android:id="@+id/bar_chart_day_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="20"
         android:textAlignment="center"/>
 
     <TextView
         android:id="@+id/bar_chart_color_block"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bar_background"/>
+        android:background="@drawable/gradient_background"/>
 
     <TextView
         android:id="@+id/bar_chart_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="09"
         android:textAlignment="center" />
 
 </LinearLayout>

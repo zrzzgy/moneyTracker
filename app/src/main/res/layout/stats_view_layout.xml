@@ -1,51 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/upper_tab_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:animateLayoutChanges="true">
-    <ScrollView
+    android:animateLayoutChanges="true"
+    android:layout_gravity="top">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/upper_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/colorSecondary">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/category_expense_detail_tab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/tight_activity_horizontal_margin">
+            android:text="@string/tab_tile_daily" />
 
-            <TextView
-                android:id="@+id/daily_expense_graph_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/expenses_by_date"
-                android:textAlignment="center"
-                android:textSize="@dimen/stats_title_size"/>
+        <android.support.design.widget.TabItem
+            android:id="@+id/daily_expense_detail_tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_title_category" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/bar_chart_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="300dp">
-            </android.support.v7.widget.RecyclerView>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/expenses_by_category"
-                android:textAlignment="center"
-                android:textSize="@dimen/stats_title_size"/>
-
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pie_chart"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_margin="@dimen/graph_margin">
-            </com.github.mikephil.charting.charts.PieChart>
-        </LinearLayout>
-    </ScrollView>
-    <ListView
-        android:id="@+id/stats_list"
+    </android.support.design.widget.TabLayout>
+    <FrameLayout
+        android:id="@+id/graph"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 </LinearLayout>

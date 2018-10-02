@@ -37,5 +37,7 @@
     <!--stats screen-->
     <string name="expenses_by_category">Expenses By Category</string>
     <string name="expenses_by_date">Expenses By Date</string>
+    <string name="tab_tile_daily">By Date</string>
+    <string name="tab_title_category">By Category</string>
 
 </resources>
