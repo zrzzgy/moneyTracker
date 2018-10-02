@@ -31,8 +31,6 @@ public class StatsScreenBaseView extends RelativeLayout implements IView {
         super(context);
         View view = LayoutInflater.from(context).inflate(R.layout.stats_view_layout, this);
         init(view);
-        //todo check when we use context view
-        //((HomeActivity) getContext()).registerForContextMenu(mStatsList);
     }
 
     private void init(View view) {

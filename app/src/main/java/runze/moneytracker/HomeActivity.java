@@ -13,6 +13,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -180,6 +182,13 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
     public boolean onContextItemSelected(MenuItem item){
         Fragment currentFragment = getCurrentFragment();
         if (currentFragment instanceof SettingsScreenFragment){
@@ -227,7 +236,7 @@ public class HomeActivity extends AppCompatActivity{
         if (fm != null && fm.getBackStackEntryCount() > 0) {
             FragmentManager.BackStackEntry backEntry = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1);
             String fragmentTag = backEntry.getName();
-            fragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
+            fragment = fm.findFragmentByTag(fragmentTag);
         }
         return fragment;
     }

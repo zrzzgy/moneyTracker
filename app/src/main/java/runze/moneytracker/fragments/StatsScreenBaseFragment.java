@@ -33,9 +33,13 @@ public class StatsScreenBaseFragment extends BaseFragment {
 
         // Construct the view if it does not yet exist
         if (mBaseView == null) {
-            mBaseView = new StatsScreenBaseView(getActivity());
+            mBaseView = new StatsScreenBaseView(getContext());
+        }
+        if (mBasePresenter == null){
+            mBasePresenter = new StatsScreenBasePresenter(getContext());
         }
         mBaseView.attachPresenter(mBasePresenter);
+        mBasePresenter.attachView(mBaseView);
 
         return mBaseView;
     }
