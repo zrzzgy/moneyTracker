@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import runze.moneytracker.R;
@@ -21,24 +23,23 @@ public class StatsScreenBaseView extends RelativeLayout implements IView {
     private TabLayout mTabLayout;
     private TabLayout.Tab mTabDaily;
     private TabLayout.Tab mTabCategory;
+    private FrameLayout mGraph;
     private final int DAILY_TAB = 0;
     private final int CATEGORY_TAB = 1;
 
-    public StatsScreenBaseView(LayoutInflater inflater, ViewGroup container, Context context) {
+    public StatsScreenBaseView(Context context) {
         super(context);
-        final Context contextThemeWrapper = new ContextThemeWrapper(getContext(), R.style.TabAppTheme);
-        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
-        localInflater.inflate(R.layout.stats_view_layout, container, false);
-        init();
+        View view = LayoutInflater.from(context).inflate(R.layout.stats_view_layout, this);
+        init(view);
         //todo check when we use context view
         //((HomeActivity) getContext()).registerForContextMenu(mStatsList);
     }
 
-    private void init() {
-        mTabLayout = findViewById(R.id.upper_tab_layout);
+    private void init(View view) {
+        mGraph = view.findViewById(R.id.graph);
+        mTabLayout = view.findViewById(R.id.upper_tab_layout);
         mTabDaily = mTabLayout.getTabAt(0);
         mTabCategory = mTabLayout.getTabAt(1);
-        mTabDaily.select();
 
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -49,14 +50,16 @@ public class StatsScreenBaseView extends RelativeLayout implements IView {
                         DailyExpenseAnalysisView view1 = new DailyExpenseAnalysisView(getContext());
                         presenter1.attachView(view1);
                         presenter1.updateView();
-                        mTabDaily.setCustomView(view1);
+                        mGraph.removeAllViews();
+                        mGraph.addView(view1);
                         break;
                     case CATEGORY_TAB:
                         CategoryExpenseAnalysisPresenter presenter2 = new CategoryExpenseAnalysisPresenter(getContext());
                         CategoryExpenseAnalysisView view2 = new CategoryExpenseAnalysisView(getContext());
                         presenter2.attachView(view2);
                         presenter2.updateView();
-                        mTabCategory.setCustomView(view2);
+                        mGraph.removeAllViews();
+                        mGraph.addView(view2);
                         break;
 
                 }
@@ -72,6 +75,8 @@ public class StatsScreenBaseView extends RelativeLayout implements IView {
 
             }
         });
+
+        mTabDaily.select();
     }
 
 

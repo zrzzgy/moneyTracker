@@ -21,4 +21,9 @@ public class SpendingDetailPresenter implements IPresenter {
     public void detachView() {
         mView = null;
     }
+
+    @Override
+    public void updateView() {
+
+    }
 }

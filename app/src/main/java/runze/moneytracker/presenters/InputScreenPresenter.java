@@ -47,6 +47,11 @@ public class InputScreenPresenter implements IPresenter {
         mView = null;
     }
 
+    @Override
+    public void updateView() {
+
+    }
+
     public void saveData(String categoryString, double amount, String description, Date date){
         HashSet<String> categories = new HashSet<>(Arrays.asList(categoryString.split(", ")));
 

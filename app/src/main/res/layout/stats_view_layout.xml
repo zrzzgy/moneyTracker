@@ -27,4 +27,8 @@
             android:text="@string/tab_title_category" />
 
     </android.support.design.widget.TabLayout>
+    <FrameLayout
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
