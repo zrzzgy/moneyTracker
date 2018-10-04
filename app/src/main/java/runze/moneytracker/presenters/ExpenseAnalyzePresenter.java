@@ -1,41 +1,49 @@
 package runze.moneytracker.presenters;
 
-import android.content.Context;
+import android.graphics.Color;
+
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
-import runze.moneytracker.HomeActivity;
 import runze.moneytracker.models.DailyExpenseTotal;
+import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
-import runze.moneytracker.views.DailyExpenseAnalysisView;
+import runze.moneytracker.views.CategoryAnalyzeView;
+import runze.moneytracker.views.DayAnalyzeView;
 import runze.moneytracker.views.IView;
 
-public class DailyExpenseAnalysisPresenter extends StatsScreenBasePresenter {
-    private DailyExpenseAnalysisView mDailyExpenseAnalysisView;
+public class ExpenseAnalyzePresenter implements IPresenter {
+    private IView mView;
+    private List<Expense> mExpenses;
+    private HashSet<String> mCategories;
+    private List<Integer> mColorList;
 
-    public DailyExpenseAnalysisPresenter(Context context) {
-        super(context);
+    public ExpenseAnalyzePresenter(DataModel dataModel) {
+        super();
+        mExpenses = dataModel.getExpenses();
+        mCategories = dataModel.getCategories();
+        mColorList = dataModel.getColorList();
     }
 
     @Override
     public void attachView(IView view) {
-        mDailyExpenseAnalysisView = (DailyExpenseAnalysisView) view;
+        mView = view;
     }
 
     @Override
     public void detachView() {
-        mDailyExpenseAnalysisView = null;
-    }
-
-    public void updateView() {
-        analyzeData();
-    }
-
-    private void analyzeData() {
-        mDailyExpenseAnalysisView.updateBarChart(dateAsKey(HomeActivity.mDataModel.getExpenseList()));
+        mView = null;
     }
 
     /**
@@ -105,5 +113,59 @@ public class DailyExpenseAnalysisPresenter extends StatsScreenBasePresenter {
         }
 
         return result;
+    }
+
+    public void updateView() {
+        analyzeData();
+    }
+
+    private void analyzeData() {
+        if (mView instanceof DayAnalyzeView) {
+            ((DayAnalyzeView) mView).updateBarChart(dateAsKey(mExpenses));
+        }else if (mView instanceof CategoryAnalyzeView)
+            ((CategoryAnalyzeView) mView).updatePieChart(analyzeDataForPieChart());
+    }
+
+    private PieData analyzeDataForPieChart() {
+        Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(mExpenses);
+        List<PieEntry> pieEntries = new ArrayList<>();
+
+        //pie chart
+        for (Map.Entry<String, Double> entry : dataForPieChart) {
+            pieEntries.add(new PieEntry(entry.getValue().floatValue(), entry.getKey()));
+        }
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+        if (pieEntries.size() > mColorList.size()) {
+            Random rng = new Random();
+            for (int i = mColorList.size(); i < pieEntries.size(); i++) {
+                mColorList.add(Color.rgb(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)));
+            }
+        }
+        pieDataSet.setColors(mColorList);
+        pieDataSet.setValueTextSize(25);
+        pieDataSet.setValueTextColor(Color.WHITE);
+        return new PieData(pieDataSet);
+    }
+
+
+    /**
+     * Sort the data according to different categories. Expenses of the same category are merged
+     * @param expenses a list of individual expenses
+     * @return A hash map of <category, amount>
+     */
+    private Set<Map.Entry<String, Double>> categoryAsKey(List<Expense> expenses) {
+        HashMap<String, Double> sortedData = new HashMap<>();
+        for (int i = 0; i < expenses.size(); i++) {
+            Expense expense = expenses.get(i);
+            for (String category : expense.getCategory()) {
+                if (sortedData.containsKey(category)) {
+                    double sum = sortedData.get(category) + expense.getAmount();
+                    sortedData.put(category, sum);
+                } else {
+                    sortedData.put(category, expense.getAmount());
+                }
+            }
+        }
+        return sortedData.entrySet();
     }
 }

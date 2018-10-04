@@ -33,7 +33,7 @@ import runze.moneytracker.utils.RecyclerItemTouchHelper;
 public class InputScreenView extends RelativeLayout implements IView, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
     private final String TAG = this.getClass().getSimpleName();
 
-    private RecyclerView mRecyclerView;
+    private RecyclerView mExpenseList;
     private TextView mTotalView;
     private InputScreenPresenter mPresenter;
 
@@ -53,20 +53,26 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
         FloatingActionButton fab = view.findViewById(R.id.new_item_fab);
         fab.setOnClickListener(mFabListener);
 
-        mRecyclerView = view.findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
+        mExpenseList = view.findViewById(R.id.expense_list);
+        mExpenseList.setHasFixedSize(true);
 
         mTotalView = view.findViewById(R.id.total_text_view);
 
         // use a linear layout manager
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mExpenseList.setLayoutManager(mLayoutManager);
     }
 
-    public void updateViewWithData(){
+    public void updateView(){
         // populate the view with data
-        updateRecyclerViewWithData();
-    }
+        mAdapter = new MainScreenRecyclerAdapter(mPresenter.getExpenses());
+        mExpenseList.setAdapter(mAdapter);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mExpenseList);
+
+        long total = mPresenter.calculateTotal();
+        mTotalView.setText(String.format(getResources().getString(R.string.total_title), String.valueOf(total)));    }
 
     @Override
     public void attachPresenter(IPresenter presenter){
@@ -100,7 +106,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
             mAlertDialog.show();
 
             //setup auto-complete for categories
-            List<String> categories = new ArrayList<>(mPresenter.loadCategoriesFromDataModel());
+            List<String> categories = new ArrayList<>(mPresenter.getCategories());
             ArrayAdapter<String> categoryAutoCompleteAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_menu, categories);
             MultiAutoCompleteTextView categoryTextView = mAlertLayout.findViewById(R.id.input_category);
             categoryTextView.setAdapter(categoryAutoCompleteAdapter);
@@ -141,7 +147,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
                     mPresenter.saveData(categories, amount, description, date);
                     Log.v(TAG, "input validated, dismissing input dialog");
                     mAlertDialog.dismiss();
-                    updateRecyclerViewWithData();
+                    updateView();
                 } else {
                     mErrorMessage.setText(getResources().getString(R.string.no_category_entered));
                 }
@@ -149,16 +155,6 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
         }
     };
 
-    private void updateRecyclerViewWithData(){
-        mAdapter = new MainScreenRecyclerAdapter(mPresenter.loadExpensesFromDataModel());
-        mRecyclerView.setAdapter(mAdapter);
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
-
-        long total = mPresenter.calculateTotal();
-        mTotalView.setText(String.format(getResources().getString(R.string.total_title), String.valueOf(total)));
-    }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, final int position) {
@@ -168,8 +164,10 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
             final Expense itemToDelete = mAdapter.getDataSet().get(position);
 
             // remove the item from both the recycler view and the sharedPreferences
-            if (mPresenter.removeExpenseFromDataModel(itemToDelete)){
+            if (mPresenter.removeExpense(itemToDelete)){
                 Log.v(TAG, "Item removed: " + "\n" + itemToDelete.toString());
+                mAdapter.removeItem(position);
+                updateView();
             }else{
                 Log.e(TAG, "Error when removing item from preferences");
             }
@@ -182,12 +180,10 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
                 public void onClick(View view) {
 
                     // undo is selected, restore the deleted item
-                    if (mPresenter.restoreDeletedItem()){
-                        mAdapter.restoreItem(itemToDelete, position);
-                        Log.v(TAG, "Item restored");
-                    }else{
-                        Log.e(TAG, "Error when restoring item to preferences");
-                    }
+                    mPresenter.restoreDeletedItem();
+                    mAdapter.restoreItem(itemToDelete, position);
+                    Log.v(TAG, "Item restored");
+                    updateView();
                 }
             });
             snackbar.setActionTextColor(android.graphics.Color.YELLOW);

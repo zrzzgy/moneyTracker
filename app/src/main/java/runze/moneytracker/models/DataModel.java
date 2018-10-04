@@ -1,5 +1,7 @@
 package runze.moneytracker.models;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashSet;
 import java.util.List;
 
@@ -12,42 +14,42 @@ public class DataModel {
     private HashSet<String> mCategoryList;
     private List<Integer> mColorList;
 
-    public DataModel(List<Expense> expenseList,
-                     List<DailyExpenseTotal> dailyTotalList,
-                     HashSet<String> categoryList, List<Integer> colorList){
+    public DataModel(@NonNull List<Expense> expenseList,
+                     @NonNull List<DailyExpenseTotal> dailyTotalList,
+                     @NonNull HashSet<String> categoryList,
+                     @NonNull List<Integer> colorList){
         mExpenseList = expenseList;
         mDailyTotalList = dailyTotalList;
         mCategoryList = categoryList;
         mColorList = colorList;
     }
 
-
-    public List<DailyExpenseTotal> getDailyTotalList() {
+    public List<DailyExpenseTotal> getDailyTotals() {
         return mDailyTotalList;
     }
 
-    public void setDailyTotalList(List<DailyExpenseTotal> dailyTotalList) {
-        this.mDailyTotalList = dailyTotalList;
-    }
-
-    public List<Expense> getExpenseList() {
+    public List<Expense> getExpenses() {
         return mExpenseList;
     }
 
-    public void setExpenseList(List<Expense> expenseList) {
-        this.mExpenseList = expenseList;
-    }
-
-    public HashSet<String> getCategoryList() {
+    public HashSet<String> getCategories() {
         return mCategoryList;
-    }
-
-    public void setCategoryList(HashSet<String> categoryList) {
-        this.mCategoryList = categoryList;
     }
 
     public List<Integer> getColorList() {
         return mColorList;
+    }
+
+    public void setDailyTotalList(List<DailyExpenseTotal> mDailyTotalList) {
+        this.mDailyTotalList = mDailyTotalList;
+    }
+
+    public void setExpenseList(List<Expense> mExpenseList) {
+        this.mExpenseList = mExpenseList;
+    }
+
+    public void setCategoryList(HashSet<String> mCategoryList) {
+        this.mCategoryList = mCategoryList;
     }
 
     public void setColorList(List<Integer> mColorList) {
