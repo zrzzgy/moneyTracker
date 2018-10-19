@@ -10,25 +10,25 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.PieData;
 
 import runze.moneytracker.R;
-import runze.moneytracker.presenters.CategoryExpenseAnalysisPresenter;
+import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.IPresenter;
 
-public class CategoryExpenseAnalysisView extends LinearLayout implements IView {
+public class CategoryAnalyzeView extends LinearLayout implements IView {
 
     private PieChart mPieChart;
     private Description mDescription;
     private RecyclerView mRecyclerView;
-    private CategoryExpenseAnalysisPresenter mPresenter;
+    private ExpenseAnalyzePresenter mPresenter;
 
-    public CategoryExpenseAnalysisView(Context context) {
+    public CategoryAnalyzeView(Context context) {
         super(context);
-        LayoutInflater.from(context).inflate(R.layout.category_expense_view, this);
+        LayoutInflater.from(context).inflate(R.layout.category_analyze_view, this);
         init();
     }
 
     @Override
     public void attachPresenter(IPresenter presenter) {
-        mPresenter = (CategoryExpenseAnalysisPresenter) presenter;
+        mPresenter = (ExpenseAnalyzePresenter) presenter;
     }
 
     @Override

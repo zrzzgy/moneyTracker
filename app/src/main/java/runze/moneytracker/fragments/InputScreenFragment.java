@@ -9,12 +9,11 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import runze.moneytracker.HomeActivity;
-import runze.moneytracker.models.DataModel;
 import runze.moneytracker.presenters.InputScreenPresenter;
 import runze.moneytracker.views.InputScreenView;
 
 public class InputScreenFragment extends BaseFragment<InputScreenView, InputScreenPresenter> {
-    @Inject InputScreenView mView;
+    private InputScreenView mView;
     @Inject InputScreenPresenter mPresenter;
 
     @Override
@@ -27,10 +26,12 @@ public class InputScreenFragment extends BaseFragment<InputScreenView, InputScre
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        mView = new InputScreenView(getContext());
         ((HomeActivity) getActivity()).getAppComponent().inject(this);
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
-        mView.updateViewWithData();
+        mView.updateView();
         return mView;
     }
 

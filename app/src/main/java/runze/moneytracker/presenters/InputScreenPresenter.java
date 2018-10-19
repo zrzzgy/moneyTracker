@@ -1,49 +1,39 @@
 package runze.moneytracker.presenters;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import runze.moneytracker.HomeActivity;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.InputScreenView;
 
-import static runze.moneytracker.HomeActivity.CATEGORIES_KEY;
-import static runze.moneytracker.HomeActivity.EXPENSES_KEY;
-
 public class InputScreenPresenter implements IPresenter {
     private final String TAG = this.getClass().getSimpleName();
 
-    private HomeActivity mParentActivity;
     private InputScreenView mView;
-    private Set<String> mCategories;
+    private DataModel mDataModel;
+    private HashSet<String> mCategories;
+    private List<Expense> mExpenses;
     private List<Expense> mBackupExpenses = new ArrayList<>();
-    private Gson gson = new Gson();
 
-    public InputScreenPresenter(HomeActivity activity){
-            mParentActivity = activity;
-            String stringCategories = mParentActivity.mSharedPreferences.getString(CATEGORIES_KEY, "");
-            mCategories = gson.fromJson(stringCategories, new TypeToken<Set<String>>(){}.getType());
-            if (mCategories == null){
-                mCategories = new HashSet<>();
-            }
+    public InputScreenPresenter(DataModel dataModel) {
+        mDataModel = dataModel;
+        mCategories = dataModel.getCategories();
+        mExpenses = dataModel.getExpenses();
     }
 
     @Override
-    public void attachView(IView view){
+    public void attachView(IView view) {
         mView = (InputScreenView) view;
     }
 
     @Override
-    public void detachView(){
+    public void detachView() {
         mView = null;
     }
 
@@ -52,61 +42,61 @@ public class InputScreenPresenter implements IPresenter {
 
     }
 
-    public void saveData(String categoryString, double amount, String description, Date date){
+    public void saveData(String categoryString, double amount, String description, Date date) {
         HashSet<String> categories = new HashSet<>(Arrays.asList(categoryString.split(", ")));
 
         //create new Expense object based on data given
         Expense newExpense = new Expense(categories, amount, date, description);
 
-        //read saved data from preferences, and if there is saved data, put it in first
-        List<Expense> expenseList = new ArrayList<>(HomeActivity.mDataModel.getExpenseList());
-
         //put in new data
-        expenseList.add(newExpense);
-        HomeActivity.mDataModel.setExpenseList(expenseList);
+        mExpenses.add(newExpense);
+        mCategories.addAll(categories);
 
-        HashSet<String> categoryList = HomeActivity.mDataModel.getCategoryList();
-        categoryList.addAll(categories);
-        HomeActivity.mDataModel.setCategoryList(categoryList);
-
+        updateModel();
     }
 
-    public List<Expense> loadExpensesFromDataModel(){
-        return HomeActivity.mDataModel.getExpenseList();
-    }
-
-    public HashSet<String> loadCategoriesFromDataModel(){
-        return HomeActivity.mDataModel.getCategoryList();
-    }
-
-    public boolean removeExpenseFromDataModel(Expense itemToDelete){
+    public boolean removeExpense(Expense itemToDelete) {
         boolean result = false;
-        List<Expense> expenses = HomeActivity.mDataModel.getExpenseList();
         mBackupExpenses.clear();
-        mBackupExpenses.addAll(expenses);
+        mBackupExpenses.addAll(mExpenses);
 
-        for (int i = 0; i < expenses.size(); i++) {
-            Expense expense = expenses.get(i);
+        Iterator<Expense> iterator = mExpenses.iterator();
+        while (iterator.hasNext()) {
+            Expense expense = iterator.next();
             if (expense.isSameExpense(itemToDelete)) {
-                expenses.remove(i);
-                HomeActivity.mDataModel.setExpenseList(expenses);
+                mExpenses.remove(expense);
                 result = true;
+                break;
             }
         }
 
+        updateModel();
         return result;
     }
 
-    public boolean restoreDeletedItem(){
-        return mParentActivity.mEditor.putString(EXPENSES_KEY, gson.toJson(mBackupExpenses)).commit();
+    public void restoreDeletedItem() {
+        mExpenses = mBackupExpenses;
+        updateModel();
     }
 
     public long calculateTotal() {
         long total = 0;
-        List<Expense> list = loadExpensesFromDataModel();
-        for (Expense expense:list) {
+        for (Expense expense : mExpenses) {
             total += expense.getAmount();
         }
         return total;
+    }
+
+    public HashSet<String> getCategories() {
+        return mCategories;
+    }
+
+    public List<Expense> getExpenses() {
+        return mExpenses;
+    }
+
+    private void updateModel(){
+        mDataModel.setExpenseList(mExpenses);
+        mDataModel.setCategoryList(mCategories);
     }
 }

@@ -30,7 +30,7 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<MainScreenRe
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout viewBackground;
+        LinearLayout viewBackground;
         public LinearLayout viewForeground;
         private RelativeLayout mView;
         private TextView mAmountTextView;
@@ -38,7 +38,7 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<MainScreenRe
         private TextView mDateTextView;
         private TextView mDescriptionTextView;
 
-        public ViewHolder(RelativeLayout v, ViewGroup viewGroup) {
+        ViewHolder(RelativeLayout v, ViewGroup viewGroup) {
             super(v);
             mView = v;
             mAmountTextView = mView.findViewById(R.id.list_amount);

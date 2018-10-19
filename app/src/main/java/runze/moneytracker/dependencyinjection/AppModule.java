@@ -1,32 +1,27 @@
 package runze.moneytracker.dependencyinjection;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import runze.moneytracker.HomeActivity;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.fragments.StatsScreenBaseFragment;
+import runze.moneytracker.fragments.AnalyzeScreenFragment;
+import runze.moneytracker.models.DailyExpenseTotal;
+import runze.moneytracker.models.DataModel;
+import runze.moneytracker.models.Expense;
+import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.InputScreenPresenter;
 import runze.moneytracker.presenters.SettingsScreenPresenter;
-import runze.moneytracker.presenters.SpendingDetailPresenter;
-import runze.moneytracker.presenters.StatsScreenBasePresenter;
-import runze.moneytracker.views.InputScreenView;
-import runze.moneytracker.views.SettingsScreenView;
-import runze.moneytracker.views.SpendingDetailView;
 
 /**
  * App Module for dependency injection n
  */
 @Module
 public class AppModule {
-    private HomeActivity homeActivity;
-
-    public AppModule(HomeActivity activity){
-        homeActivity = activity;
-    }
-
     @Provides
     @Singleton   // static
     InputScreenFragment provideInputScreenFragment(){
@@ -35,8 +30,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    StatsScreenBaseFragment provideStatsScreenFragment(){
-        return new StatsScreenBaseFragment();
+    AnalyzeScreenFragment provideStatsScreenFragment(){
+        return new AnalyzeScreenFragment();
     }
 
     @Provides
@@ -45,46 +40,26 @@ public class AppModule {
         return new SettingsScreenFragment();
     }
 
+    @Provides
+    InputScreenPresenter provideInputScreenPresenter(DataModel dataModel){
+        return new InputScreenPresenter(dataModel);
+    }
 
     @Provides
-    @Singleton
-    InputScreenView provideInputScreenView(){
-        return new InputScreenView(homeActivity);
+    SettingsScreenPresenter provideSettingsScreenPresenter(DataModel dataModel){
+        return new SettingsScreenPresenter(dataModel);
+    }
+
+    @Provides
+    ExpenseAnalyzePresenter provideExpenseAnalyzePresenter(DataModel dataModel){
+        return new ExpenseAnalyzePresenter(dataModel);
     }
 
     @Provides
     @Singleton
-    SettingsScreenView provideSettingsScreenView(){
-        return new SettingsScreenView(homeActivity);
-    }
-
-    @Provides
-    @Singleton
-    SpendingDetailView provideSpendingDetailView(){
-        return new SpendingDetailView(homeActivity);
-    }
-
-    @Provides
-    @Singleton
-    InputScreenPresenter provideInputScreenPresenter(){
-        return new InputScreenPresenter(homeActivity);
-    }
-
-    @Provides
-    @Singleton
-    StatsScreenBasePresenter provideStatsScreenPresenter(){
-        return new StatsScreenBasePresenter(homeActivity);
-    }
-
-    @Provides
-    @Singleton
-    SettingsScreenPresenter provideSettingsScreenPresenter(){
-        return new SettingsScreenPresenter(homeActivity);
-    }
-
-    @Provides
-    @Singleton
-    SpendingDetailPresenter provideSpendingDetailPresenter(){
-        return new SpendingDetailPresenter(homeActivity);
+    DataModel provideDataModel(){
+        return new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(),
+                new HashSet<String>(),
+                new ArrayList<Integer>());
     }
 }

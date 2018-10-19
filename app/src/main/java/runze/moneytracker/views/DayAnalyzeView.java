@@ -19,22 +19,22 @@ import java.util.Map;
 
 import runze.moneytracker.R;
 import runze.moneytracker.models.DailyExpenseTotal;
-import runze.moneytracker.presenters.DailyExpenseAnalysisPresenter;
+import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.utils.DaySummaryBarChartRecyclerAdapter;
 
-public class DailyExpenseAnalysisView extends LinearLayout implements IView {
+public class DayAnalyzeView extends LinearLayout implements IView {
 
     private TextView mDailyExpenseMonth;
     private RecyclerView mDailyExpenseDetailGraph;
     private RecyclerView mDailyExpenseDetailList;
     private DaySummaryBarChartRecyclerAdapter mAdapter;
-    private DailyExpenseAnalysisPresenter mDailyExpenseAnalysisPresenter;
+    private ExpenseAnalyzePresenter mPresenter;
 
 
-    public DailyExpenseAnalysisView(Context context) {
+    public DayAnalyzeView(Context context) {
         super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.daily_expense_view, this);
+        View view = LayoutInflater.from(context).inflate(R.layout.day_analyze_view, this);
         init(view);
     }
 
@@ -42,8 +42,10 @@ public class DailyExpenseAnalysisView extends LinearLayout implements IView {
         mDailyExpenseMonth = view.findViewById(R.id.daily_expense_month);
         mDailyExpenseDetailGraph = view.findViewById(R.id.daily_expense_detail_graph);
         mDailyExpenseDetailList = view.findViewById(R.id.daily_expense_detail_list);
+
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mDailyExpenseDetailGraph.setLayoutManager(mDailyExpenseDetailGraphLayoutManager);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mDailyExpenseDetailGraph.setOnScrollChangeListener(new OnScrollChangeListener() {
                 @Override
@@ -87,18 +89,17 @@ public class DailyExpenseAnalysisView extends LinearLayout implements IView {
 
     @Override
     public void attachPresenter(IPresenter presenter) {
-        mDailyExpenseAnalysisPresenter = (DailyExpenseAnalysisPresenter) presenter;
+        mPresenter = (ExpenseAnalyzePresenter) presenter;
     }
 
     @Override
     public void detachPresenter() {
-        mDailyExpenseAnalysisPresenter = null;
+        mPresenter = null;
     }
 
     public void updateBarChart(List<DailyExpenseTotal> expenseTotals){
         mAdapter = new DaySummaryBarChartRecyclerAdapter(expenseTotals);
         mDailyExpenseDetailGraph.setAdapter(mAdapter);
-
     }
 
 }

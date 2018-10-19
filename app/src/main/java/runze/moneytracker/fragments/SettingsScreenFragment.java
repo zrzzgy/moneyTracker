@@ -16,19 +16,16 @@ import runze.moneytracker.views.SettingsScreenView;
 
 
 public class SettingsScreenFragment extends BaseFragment {
-    @Inject SettingsScreenView mView;
+    private SettingsScreenView mView;
     @Inject SettingsScreenPresenter mPresenter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        mView = new SettingsScreenView(getContext());
         ((HomeActivity) getActivity()).getAppComponent().inject(this);
 
         mPresenter.attachView(mView);
@@ -62,4 +59,9 @@ public class SettingsScreenFragment extends BaseFragment {
         mPresenter.updateView();
     }
 
+    @Nullable
+    @Override
+    public View getView() {
+        return mView;
+    }
 }

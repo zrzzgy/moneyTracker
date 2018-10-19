@@ -20,11 +20,9 @@ import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -33,11 +31,12 @@ import runze.moneytracker.dependencyinjection.AppModule;
 import runze.moneytracker.dependencyinjection.DaggerAppComponent;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.fragments.StatsScreenBaseFragment;
+import runze.moneytracker.fragments.AnalyzeScreenFragment;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
+import runze.moneytracker.views.SettingsScreenView;
 
 /**
  * Home Activity
@@ -46,7 +45,6 @@ public class HomeActivity extends AppCompatActivity{
     private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES_KEY = "EXPENSES_KEY";
-    public static final String DAILY_TOTAL_KEY = "DAILY_TOTAL_KEY";
     public static final String DATA_MODEL_KEY = "DATA_MODEL_KEY";
     public static final String EMPTY_DATA_MODEL = "EMPTY_DATA_MODEL";
     private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
@@ -60,10 +58,9 @@ public class HomeActivity extends AppCompatActivity{
 
     @Inject InputScreenFragment mInputFragment;
     @Inject
-    StatsScreenBaseFragment mStatsFragment;
+    AnalyzeScreenFragment mStatsFragment;
     @Inject SettingsScreenFragment mSettingsFragment;
-
-    public static DataModel mDataModel;
+    @Inject DataModel mDataModel;
 
     private Gson gson = new Gson();
 
@@ -96,16 +93,8 @@ public class HomeActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {  //  create LeakCanary to check memory leak
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(getApplication());
-
-
         //fulfill injected objects
-        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule()).build();
         mAppComponent.inject(this);   // used to initialize dependencies
 
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);  // BaseActivity.getSharedPreferences()
@@ -124,7 +113,6 @@ public class HomeActivity extends AppCompatActivity{
     protected void onPause() {
         super.onPause();
         saveDataModel();
-
     }
 
     @Override
@@ -194,7 +182,7 @@ public class HomeActivity extends AppCompatActivity{
         if (currentFragment instanceof SettingsScreenFragment){
             switch (item.getItemId()){
                 case R.id.option_menu_edit:
-                    ((SettingsScreenFragment) currentFragment).getPresenter().editCategory(item);
+                    ((SettingsScreenView) currentFragment.getView()).showEditDialog(item);
                     return true;
                 case R.id.option_menu_delete:
                     ((SettingsScreenFragment) currentFragment).getPresenter().removeCategory(item);
@@ -207,7 +195,7 @@ public class HomeActivity extends AppCompatActivity{
                             }).show();
                     return true;
             }
-        }else if (currentFragment instanceof StatsScreenBaseFragment){
+        }else if (currentFragment instanceof AnalyzeScreenFragment){
             switch (item.getItemId()){
                 case R.id.option_menu_edit:
                     return true;
