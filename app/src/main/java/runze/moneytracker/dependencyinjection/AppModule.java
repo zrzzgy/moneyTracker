@@ -21,7 +21,17 @@ import runze.moneytracker.presenters.SettingsScreenPresenter;
  * App Module for dependency injection n
  */
 @Module
+@Singleton
 public class AppModule {
+
+    private AppComponent mAppComponent;
+
+
+    public void setAppComponent(AppComponent appComponent) {
+        this.mAppComponent = appComponent;
+    }
+
+
     @Provides
     @Singleton   // static
     InputScreenFragment provideInputScreenFragment(){
@@ -41,8 +51,8 @@ public class AppModule {
     }
 
     @Provides
-    InputScreenPresenter provideInputScreenPresenter(DataModel dataModel){
-        return new InputScreenPresenter(dataModel);
+    InputScreenPresenter provideInputScreenPresenter(){
+        return new InputScreenPresenter(mAppComponent);
     }
 
     @Provides

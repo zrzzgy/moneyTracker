@@ -57,8 +57,7 @@ public class HomeActivity extends AppCompatActivity{
     private ViewPager mViewPager;
 
     @Inject InputScreenFragment mInputFragment;
-    @Inject
-    AnalyzeScreenFragment mStatsFragment;
+    @Inject AnalyzeScreenFragment mStatsFragment;
     @Inject SettingsScreenFragment mSettingsFragment;
     @Inject DataModel mDataModel;
 
@@ -92,10 +91,12 @@ public class HomeActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppModule appModule = new AppModule();
 
         //fulfill injected objects
-        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule()).build();
+        mAppComponent = DaggerAppComponent.builder().appModule(appModule).build();
         mAppComponent.inject(this);   // used to initialize dependencies
+        appModule.setAppComponent(mAppComponent);
 
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);  // BaseActivity.getSharedPreferences()
         mEditor = mSharedPreferences.edit();
@@ -244,8 +245,6 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private void loadDataModel(){
-        mDataModel = new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(), new HashSet<String>(), new ArrayList<Integer>());
-
         //read saved data from preferences
         String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
 

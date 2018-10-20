@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import runze.moneytracker.dependencyinjection.AppComponent;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
@@ -16,15 +19,15 @@ public class InputScreenPresenter implements IPresenter {
     private final String TAG = this.getClass().getSimpleName();
 
     private InputScreenView mView;
-    private DataModel mDataModel;
+    @Inject DataModel mDataModel;
     private HashSet<String> mCategories;
     private List<Expense> mExpenses;
     private List<Expense> mBackupExpenses = new ArrayList<>();
 
-    public InputScreenPresenter(DataModel dataModel) {
-        mDataModel = dataModel;
-        mCategories = dataModel.getCategories();
-        mExpenses = dataModel.getExpenses();
+    public InputScreenPresenter(AppComponent appComponent) {
+        appComponent.inject(this);
+        mCategories = mDataModel.getCategories();
+        mExpenses = mDataModel.getExpenses();
     }
 
     @Override
