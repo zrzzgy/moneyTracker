@@ -74,7 +74,7 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
         return mDataSet.get(index);
     }
 
-    public double getMaxDailyTotal(List<DailyExpenseTotal> data) {
+    private double getMaxDailyTotal(List<DailyExpenseTotal> data) {
         double max = 0;
 
         for (DailyExpenseTotal daily: data) {
