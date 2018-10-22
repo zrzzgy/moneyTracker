@@ -40,20 +40,20 @@ public class DataModel {
         return mColorList;
     }
 
-    public void setDailyTotalList(List<DailyExpenseTotal> mDailyTotalList) {
-        this.mDailyTotalList = mDailyTotalList;
+    public void setDailyTotalList(List<DailyExpenseTotal> dailyTotalList) {
+        this.mDailyTotalList = dailyTotalList;
     }
 
-    public void setExpenseList(List<Expense> mExpenseList) {
-        this.mExpenseList = mExpenseList;
+    public void setExpenseList(List<Expense> expenseList) {
+        this.mExpenseList = expenseList;
     }
 
-    public void setCategoryList(HashSet<String> mCategoryList) {
-        this.mCategoryList = mCategoryList;
+    public void setCategoryList(HashSet<String> categoryList) {
+        this.mCategoryList = categoryList;
     }
 
-    public void setColorList(List<Integer> mColorList) {
-        this.mColorList = mColorList;
+    public void setColorList(List<Integer> colorList) {
+        this.mColorList = colorList;
     }
 
 }

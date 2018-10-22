@@ -244,14 +244,21 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private void loadDataModel(){
-        mDataModel = new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(), new HashSet<String>(), new ArrayList<Integer>());
-
         //read saved data from preferences
         String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
 
         //if there is saved data, parse it from gson to list
         if (!dataModel.equals(EMPTY_DATA_MODEL)){
-            mDataModel = gson.fromJson(dataModel, new TypeToken<DataModel>(){}.getType());
+            DataModel tempModel =  gson.fromJson(dataModel, new TypeToken<DataModel>(){}.getType());
+
+            // Can't directly set mDataModel = tempModel because this will change the instance of mDataModel
+            // causing further update to the model by other presenters not reflected in this mDataModel, and
+            // as a result, not saving the correct model.
+            mDataModel.setExpenseList(tempModel.getExpenses());
+            mDataModel.setDailyTotalList(tempModel.getDailyTotals());
+            mDataModel.setCategoryList(tempModel.getCategories());
+            mDataModel.setColorList(tempModel.getColorList());
+
         }
     }
 }
