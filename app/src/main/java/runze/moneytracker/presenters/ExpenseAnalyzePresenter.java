@@ -1,6 +1,7 @@
 package runze.moneytracker.presenters;
 
 import android.graphics.Color;
+import android.support.annotation.VisibleForTesting;
 
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -51,7 +52,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
      * @param expenses a list of individual expenses
      * @return a list of daily expense total with expenses from the same date merged
      */
-    private List<DailyExpenseTotal> dateAsKey(List<Expense> expenses) {
+    public List<DailyExpenseTotal> dateAsKey(List<Expense> expenses) {
         boolean done = false;
         List<DailyExpenseTotal> listOfDailyExpenseTotal = new ArrayList<>();
 

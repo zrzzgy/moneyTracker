@@ -37,4 +37,9 @@ public class DailyExpenseTotalTest extends TestCase {
         assertEquals(1.1, dailyExpenseTotal.getTotalAmount());
 
     }
+
+    public void testGetDate() {
+        DailyExpenseTotal dailyExpenseTotal = new DailyExpenseTotal((double) 1,new Date(0));
+        assertEquals(new Date(0), dailyExpenseTotal.getDate());
+    }
 }

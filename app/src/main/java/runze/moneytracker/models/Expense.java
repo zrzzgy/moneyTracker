@@ -1,5 +1,7 @@
 package runze.moneytracker.models;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 import java.util.HashSet;
 
@@ -12,11 +14,11 @@ public class Expense {
     private Date mDate;
     private String mDescription;
 
-    public Expense(HashSet<String> category, Double amount, Date date, String description){
+    public Expense(@NonNull HashSet<String> category, @NonNull Double amount, @NonNull Date date, String description){
         mCategories = category;
         mAmount = amount;
         mDate = date;
-        mDescription = description;
+        mDescription = description == null ?  "" : description;
     }
 
     public HashSet<String> getCategory() {
