@@ -40,29 +40,27 @@ public class TestAppModule {
     @Provides
     @Singleton
     SettingsScreenFragment provideSettingsScreenFragment(){
-        return new SettingsScreenFragment();
+        return mock(SettingsScreenFragment.class);
     }
 
     @Provides
     InputScreenPresenter provideInputScreenPresenter(DataModel dataModel){
-        return new InputScreenPresenter(dataModel);
+        return mock(InputScreenPresenter.class);
     }
 
     @Provides
     SettingsScreenPresenter provideSettingsScreenPresenter(DataModel dataModel){
-        return new SettingsScreenPresenter(dataModel);
+        return mock(SettingsScreenPresenter.class);
     }
 
     @Provides
     ExpenseAnalyzePresenter provideExpenseAnalyzePresenter(DataModel dataModel){
-        return new ExpenseAnalyzePresenter(dataModel);
+        return mock(ExpenseAnalyzePresenter.class);
     }
 
     @Provides
     @Singleton
     DataModel provideDataModel(){
-        return new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(),
-                new HashSet<String>(),
-                new ArrayList<Integer>());
+        return mock(DataModel.class);
     }
 }
