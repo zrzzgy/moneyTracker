@@ -64,7 +64,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
 
             for (DailyExpenseTotal dailyExpenseTotal : listOfDailyExpenseTotal) {
-                if (dailyExpenseTotal.getDate().equals(expense.getDate())) {
+                if (dailyExpenseTotal.getDay().equals(expense.getDay())) {
                     double sum = dailyExpenseTotal.getTotalAmount() + expense.getAmount();
                     dailyExpenseTotal.setTotalAmount(sum);
                     done = true;
