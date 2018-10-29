@@ -34,4 +34,17 @@
     <!--stats screen-->
     <string name="expenses_by_category">按类别分类</string>
     <string name="expenses_by_date">按日期分类</string>
+
+    <string name="January">一月</string>
+    <string name="February">二月</string>
+    <string name="March">三月</string>
+    <string name="April">四月</string>
+    <string name="May">五月</string>
+    <string name="June">六月</string>
+    <string name="July">七月</string>
+    <string name="August">八月</string>
+    <string name="September">九月</string>
+    <string name="October">十月</string>
+    <string name="November">十一月</string>
+    <string name="December">十二月</string>
 </resources>
