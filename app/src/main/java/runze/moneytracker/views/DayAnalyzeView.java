@@ -61,8 +61,8 @@ public class DayAnalyzeView extends LinearLayout implements IView {
                         String month = dfMonth.format(itemDate);
 
                         if (keyValuePair.containsKey(month)) {
-                            int occurrenceMonth = keyValuePair.get(month);
-                            keyValuePair.put(month, occurrenceMonth + 1);
+                            int occurrence = keyValuePair.get(month);
+                            keyValuePair.put(month, occurrence + 1);
                         } else {
                             keyValuePair.put(month, 1);
                         }
