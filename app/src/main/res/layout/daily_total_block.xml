@@ -3,7 +3,7 @@
     android:id="@+id/daily_item"
     android:background="@color/offWhite"
     android:gravity="bottom"
-    android:layout_width="30dp"
+    android:layout_width="35dp"
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
     android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
