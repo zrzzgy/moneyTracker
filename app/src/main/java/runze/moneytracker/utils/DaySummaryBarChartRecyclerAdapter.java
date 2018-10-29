@@ -60,6 +60,8 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
 
         if (singleExpense.getTotalAmount() != 0) {
             holder.mBarDayTotal.setText(singleExpense.getTotalAmount().toString());
+        } else if(singleExpense.getTotalAmount() == 0) {
+            holder.mBarDayTotal.setText("");
         }
         holder.mBarDate.setText(df.format(singleExpense.getDate()));
         holder.mBarColorBlock.setHeight((int) (150 * singleExpense.getTotalAmount() / getMaxDailyTotal(mDataSet)));

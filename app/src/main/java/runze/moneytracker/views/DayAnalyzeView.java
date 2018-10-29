@@ -50,37 +50,76 @@ public class DayAnalyzeView extends LinearLayout implements IView {
             mDailyExpenseDetailGraph.setOnScrollChangeListener(new OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    int firstItemPosition =  ((LinearLayoutManager) mDailyExpenseDetailGraph.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                    int firstItemPosition = ((LinearLayoutManager) mDailyExpenseDetailGraph.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
                     int lastItemPosition = ((LinearLayoutManager) mDailyExpenseDetailGraph.getLayoutManager()).findLastCompletelyVisibleItemPosition();
 
                     Map<String, Integer> keyValuePair = new HashMap<>();
 
                     for (int i = firstItemPosition; i <= lastItemPosition; i++) {
-                        Date itemDate = ((DaySummaryBarChartRecyclerAdapter)mDailyExpenseDetailGraph.getAdapter()).getItem(i).getDate();
-                        SimpleDateFormat df = new SimpleDateFormat("MM", Locale.getDefault());
-                        String month = df.format(itemDate);
+                        Date itemDate = ((DaySummaryBarChartRecyclerAdapter) mDailyExpenseDetailGraph.getAdapter()).getItem(i).getDate();
+                        SimpleDateFormat dfMonth = new SimpleDateFormat("MM", Locale.getDefault());
+                        String month = dfMonth.format(itemDate);
 
-                        if (keyValuePair.containsKey(month)){
+                        if (keyValuePair.containsKey(month)) {
                             int occurrence = keyValuePair.get(month);
-                            keyValuePair.put(month, occurrence+1);
-                        }else{
+                            keyValuePair.put(month, occurrence + 1);
+                        } else {
                             keyValuePair.put(month, 1);
                         }
                     }
 
                     String largerMonth;
-                    if (keyValuePair.keySet().size() > 1){
+                    if (keyValuePair.keySet().size() > 1) {
                         Iterator<String> iterator = keyValuePair.keySet().iterator();
                         String firstMonth = iterator.next();
                         String secondMonth = iterator.next();
                         int firstMonthOccurrence = keyValuePair.get(firstMonth);
                         int secondMonthOccurrence = keyValuePair.get(secondMonth);
                         largerMonth = firstMonthOccurrence >= secondMonthOccurrence ? firstMonth : secondMonth;
-                    }else{
+                    } else {
                         largerMonth = keyValuePair.keySet().iterator().next();
                     }
+                    switch (largerMonth) {
+                        case "01":
+                            mDailyExpenseMonth.setText(R.string.January);
+                            break;
+                        case "02":
+                            mDailyExpenseMonth.setText(R.string.February);
+                            break;
+                        case "03":
+                            mDailyExpenseMonth.setText(R.string.March);
+                            break;
+                        case "04":
+                            mDailyExpenseMonth.setText(R.string.April);
+                            break;
+                        case "05":
+                            mDailyExpenseMonth.setText(R.string.May);
+                            break;
+                        case "06":
+                            mDailyExpenseMonth.setText(R.string.June);
+                            break;
+                        case "07":
+                            mDailyExpenseMonth.setText(R.string.July);
+                            break;
+                        case "08":
+                            mDailyExpenseMonth.setText(R.string.August);
+                            break;
+                        case "09":
+                            mDailyExpenseMonth.setText(R.string.September);
+                            break;
+                        case "10":
+                            mDailyExpenseMonth.setText(R.string.October);
+                            break;
+                        case "11":
+                            mDailyExpenseMonth.setText(R.string.November);
+                            break;
+                        case"12":
+                            mDailyExpenseMonth.setText(R.string.December);
+                            break;
+                            default:
+                                break;
 
-                    mDailyExpenseMonth.setText(largerMonth);
+                    }
                 }
             });
         }

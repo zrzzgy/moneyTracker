@@ -2,8 +2,10 @@ package runze.moneytracker.models;
 
 import android.support.annotation.NonNull;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 
 /**
  * Object that saves categories, amount, date, and description of a spending
@@ -43,6 +45,11 @@ public class Expense {
 
     public String getDescription() {
         return mDescription;
+    }
+
+    public String getDay() {
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+        return df.format(mDate);
     }
 
     public void setDescription(String description) {

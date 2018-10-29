@@ -53,24 +53,34 @@ public class ExpenseAnalyzePresenter implements IPresenter {
      * @return a list of daily expense total with expenses from the same date merged
      */
     public List<DailyExpenseTotal> dateAsKey(List<Expense> expenses) {
-        boolean done = false;
+        boolean done;
+        boolean addNew = false;
         List<DailyExpenseTotal> listOfDailyExpenseTotal = new ArrayList<>();
+
 
         for (int i = 0; i < expenses.size(); i++) {
             Expense expense = expenses.get(i);
+            done = false;
+
 
             for (DailyExpenseTotal dailyExpenseTotal : listOfDailyExpenseTotal) {
-                if (dailyExpenseTotal.getDate().equals(expense.getDate())) {
+                if (dailyExpenseTotal.getDay().equals(expense.getDay())) {
                     double sum = dailyExpenseTotal.getTotalAmount() + expense.getAmount();
-                    listOfDailyExpenseTotal.add(new DailyExpenseTotal(sum, expense.getDate()));
+                    dailyExpenseTotal.setTotalAmount(sum);
                     done = true;
                 }
             }
             if (!done) {
+                addNew = true;
                 listOfDailyExpenseTotal.add(new DailyExpenseTotal(expense.getAmount(), expense.getDate()));
             }
         }
-        return orderAndAddPlaceHolderDates(listOfDailyExpenseTotal);
+        if (addNew) {
+            return orderAndAddPlaceHolderDates(listOfDailyExpenseTotal);
+        }
+        else {
+            return listOfDailyExpenseTotal;
+        }
     }
 
 
