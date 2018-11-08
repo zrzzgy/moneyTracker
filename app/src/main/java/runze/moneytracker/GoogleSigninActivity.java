@@ -62,26 +62,6 @@ public class GoogleSigninActivity extends AppCompatActivity implements View.OnCl
     }
     // [END on_start_check_user]
 
-    // [START onactivityresult]
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-            }
-        }
-    }
-    // [END onactivityresult]
-
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
@@ -109,7 +89,19 @@ public class GoogleSigninActivity extends AppCompatActivity implements View.OnCl
     // [START signin]
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(signInIntent);
+        try {
+            // Google Sign In was successful, authenticate with Firebase
+            GoogleSignInAccount account = task.getResult(ApiException.class);
+            firebaseAuthWithGoogle(account);
+            Intent intent = new Intent();
+            intent.setClass(GoogleSigninActivity.this,HomeActivity.class);
+            startActivity(intent);
+        } catch (ApiException e) {
+            // Google Sign In failed, update UI appropriately
+            Log.w(TAG, "Google sign in failed", e);
+        }
+
     }
     // [END signin]
 
