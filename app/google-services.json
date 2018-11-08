@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "901952065208-su5n9r07jnkns34gen1aau6n5jmber66.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "runze.myapplication",
+            "certificate_hash": "68805c128ad8ee4265adfb2d47544654ce3e9e59"
+          }
+        },
+        {
           "client_id": "901952065208-9u5691poc3o5q6sc4kcrvpfguc6b2lr9.apps.googleusercontent.com",
           "client_type": 3
         }
