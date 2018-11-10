@@ -52,13 +52,6 @@ public class GoogleSignInActivity extends AppCompatActivity implements View.OnCl
         mAuth = FirebaseAuth.getInstance();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-    }
-
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -70,7 +63,14 @@ public class GoogleSignInActivity extends AppCompatActivity implements View.OnCl
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            Toast.makeText(getApplicationContext(), "Signed in successfully", Toast.LENGTH_SHORT).show();
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+
+                            Intent intent = new Intent();
+                            intent.putExtra("userName", currentUser);
+                            intent.setClass(GoogleSignInActivity.this,HomeActivity.class);
+                            startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -96,11 +96,6 @@ public class GoogleSignInActivity extends AppCompatActivity implements View.OnCl
             GoogleSignInAccount account = task.getResult(ApiException.class);
             assert account != null;
             firebaseAuthWithGoogle(account);
-
-            Toast.makeText(getApplicationContext(), "Signed in successfully", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent();
-            intent.setClass(GoogleSignInActivity.this,HomeActivity.class);
-            startActivity(intent);
         } catch (ApiException e) {
             // Google Sign In failed, update UI appropriately
             Log.w(TAG, "Google sign in failed: " + e.getStatusCode());

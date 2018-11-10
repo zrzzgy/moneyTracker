@@ -72,6 +72,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     private FirebaseDatabase database;
 
     private String userModelDataAsString;
+    private FirebaseUser user;
 
     @Inject InputScreenFragment mInputFragment;
     @Inject
@@ -117,11 +118,12 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);  // BaseActivity.getSharedPreferences()
         mEditor = mSharedPreferences.edit();
 
+        user = getIntent().getParcelableExtra("userName");
+
         database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("user1");
+        DatabaseReference myRef = database.getReference(user.getUid());
         // Read from the database
         myRef.addValueEventListener(this);
-        //read saved data from preferences
 
         setContentView(R.layout.bottom_nav);  // setContentView() to display a view
         initComponents();
@@ -262,7 +264,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         mEditor.putString(DATA_MODEL_KEY, userData).apply();
         // Write a message to the database
 
-        DatabaseReference myRef = database.getReference("user1");
+        DatabaseReference myRef = database.getReference(user.getUid());
 
         myRef.setValue(userData);
 
@@ -273,7 +275,8 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     private void loadDataModel(){
 
         //if there is saved data, parse it from gson to list
-        if (!userModelDataAsString.equals(EMPTY_DATA_MODEL)){
+        if ( userModelDataAsString != null &&
+                !userModelDataAsString.equals(EMPTY_DATA_MODEL)){
             DataModel tempModel =  gson.fromJson(userModelDataAsString, new TypeToken<DataModel>(){}.getType());
 
             // Can't directly set mDataModel = tempModel because this will change the instance of mDataModel
