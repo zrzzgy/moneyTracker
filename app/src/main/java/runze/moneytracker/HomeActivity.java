@@ -295,9 +295,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         //setup dataModel
         Log.d(TAG, "Value is: " + userModelDataAsString);
         loadDataModel();
-        if (getCurrentFragment() instanceof InputScreenFragment) {
-          ((InputScreenFragment) getCurrentFragment()).updateView();
-        }
+        mInputFragment.updateView();
     }
 
     @Override
