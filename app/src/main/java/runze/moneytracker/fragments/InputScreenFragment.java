@@ -35,6 +35,10 @@ public class InputScreenFragment extends BaseFragment<InputScreenView, InputScre
         return mView;
     }
 
+    public void updateView() {
+        mView.updateView();
+    }
+
     @Override
     public void onPause(){
         super.onPause();

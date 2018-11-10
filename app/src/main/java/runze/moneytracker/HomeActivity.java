@@ -56,7 +56,7 @@ import runze.moneytracker.views.SettingsScreenView;
 /**
  * Home Activity
  */
-public class HomeActivity extends AppCompatActivity{
+public class HomeActivity extends AppCompatActivity implements ValueEventListener{
     private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES_KEY = "EXPENSES_KEY";
@@ -70,6 +70,8 @@ public class HomeActivity extends AppCompatActivity{
     private BottomNavigationView mNavigation;
     private ViewPager mViewPager;
     private FirebaseDatabase database;
+
+    private String userModelDataAsString;
 
     @Inject InputScreenFragment mInputFragment;
     @Inject
@@ -116,54 +118,10 @@ public class HomeActivity extends AppCompatActivity{
         mEditor = mSharedPreferences.edit();
 
         database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-        final Query query = myRef;
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                dataSnapshot.getValue(String.class);
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        DatabaseReference myRef = database.getReference("user1");
         // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-
-        //setup dataModel
-        loadDataModel();
+        myRef.addValueEventListener(this);
+        //read saved data from preferences
 
         setContentView(R.layout.bottom_nav);  // setContentView() to display a view
         initComponents();
@@ -300,18 +258,23 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private void saveDataModel(){
-        mEditor.putString(DATA_MODEL_KEY, gson.toJson(mDataModel)).apply();
+        String userData = gson.toJson(mDataModel);
+        mEditor.putString(DATA_MODEL_KEY, userData).apply();
+        // Write a message to the database
+
+        DatabaseReference myRef = database.getReference("user1");
+
+        myRef.setValue(userData);
+
         String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
         Log.v(TAG, dataModel);
     }
 
     private void loadDataModel(){
-        //read saved data from preferences
-        String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
 
         //if there is saved data, parse it from gson to list
-        if (!dataModel.equals(EMPTY_DATA_MODEL)){
-            DataModel tempModel =  gson.fromJson(dataModel, new TypeToken<DataModel>(){}.getType());
+        if (!userModelDataAsString.equals(EMPTY_DATA_MODEL)){
+            DataModel tempModel =  gson.fromJson(userModelDataAsString, new TypeToken<DataModel>(){}.getType());
 
             // Can't directly set mDataModel = tempModel because this will change the instance of mDataModel
             // causing further update to the model by other presenters not reflected in this mDataModel, and
@@ -322,5 +285,24 @@ public class HomeActivity extends AppCompatActivity{
             mDataModel.setColorList(tempModel.getColorList());
 
         }
+    }
+
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        // This method is called once with the initial value and again
+        // whenever data at this location is updated.
+        userModelDataAsString = dataSnapshot.getValue(String.class);
+        //setup dataModel
+        Log.d(TAG, "Value is: " + userModelDataAsString);
+        loadDataModel();
+        if (getCurrentFragment() instanceof InputScreenFragment) {
+          ((InputScreenFragment) getCurrentFragment()).updateView();
+        }
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+        // Failed to read value
+        Log.w(TAG, "Failed to read value.", databaseError.toException());
     }
 }

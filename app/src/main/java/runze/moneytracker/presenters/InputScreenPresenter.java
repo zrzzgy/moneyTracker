@@ -39,7 +39,7 @@ public class InputScreenPresenter implements IPresenter {
 
     @Override
     public void updateView() {
-
+        mView.updateView();
     }
 
     public void saveData(String categoryString, double amount, String description, Date date) {
