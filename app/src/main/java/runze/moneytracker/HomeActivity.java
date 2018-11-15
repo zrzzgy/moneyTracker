@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -18,8 +19,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -41,7 +56,7 @@ import runze.moneytracker.views.SettingsScreenView;
 /**
  * Home Activity
  */
-public class HomeActivity extends AppCompatActivity{
+public class HomeActivity extends AppCompatActivity implements ValueEventListener{
     private final String TAG = this.getClass().getSimpleName();
     public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
     public static final String EXPENSES_KEY = "EXPENSES_KEY";
@@ -52,9 +67,12 @@ public class HomeActivity extends AppCompatActivity{
     private AppComponent mAppComponent;
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
-
     private BottomNavigationView mNavigation;
     private ViewPager mViewPager;
+    private FirebaseDatabase database;
+
+    private String userModelDataAsString;
+    private FirebaseUser user;
 
     @Inject InputScreenFragment mInputFragment;
     @Inject
@@ -100,8 +118,12 @@ public class HomeActivity extends AppCompatActivity{
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);  // BaseActivity.getSharedPreferences()
         mEditor = mSharedPreferences.edit();
 
-        //setup dataModel
-        loadDataModel();
+        user = getIntent().getParcelableExtra("userName");
+
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(user.getUid());
+        // Read from the database
+        myRef.addValueEventListener(this);
 
         setContentView(R.layout.bottom_nav);  // setContentView() to display a view
         initComponents();
@@ -238,18 +260,24 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private void saveDataModel(){
-        mEditor.putString(DATA_MODEL_KEY, gson.toJson(mDataModel)).apply();
+        String userData = gson.toJson(mDataModel);
+        mEditor.putString(DATA_MODEL_KEY, userData).apply();
+        // Write a message to the database
+
+        DatabaseReference myRef = database.getReference(user.getUid());
+
+        myRef.setValue(userData);
+
         String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
         Log.v(TAG, dataModel);
     }
 
     private void loadDataModel(){
-        //read saved data from preferences
-        String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
 
         //if there is saved data, parse it from gson to list
-        if (!dataModel.equals(EMPTY_DATA_MODEL)){
-            DataModel tempModel =  gson.fromJson(dataModel, new TypeToken<DataModel>(){}.getType());
+        if ( userModelDataAsString != null &&
+                !userModelDataAsString.equals(EMPTY_DATA_MODEL)){
+            DataModel tempModel =  gson.fromJson(userModelDataAsString, new TypeToken<DataModel>(){}.getType());
 
             // Can't directly set mDataModel = tempModel because this will change the instance of mDataModel
             // causing further update to the model by other presenters not reflected in this mDataModel, and
@@ -260,5 +288,22 @@ public class HomeActivity extends AppCompatActivity{
             mDataModel.setColorList(tempModel.getColorList());
 
         }
+    }
+
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        // This method is called once with the initial value and again
+        // whenever data at this location is updated.
+        userModelDataAsString = dataSnapshot.getValue(String.class);
+        //setup dataModel
+        Log.d(TAG, "Value is: " + userModelDataAsString);
+        loadDataModel();
+        mInputFragment.updateView();
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+        // Failed to read value
+        Log.w(TAG, "Failed to read value.", databaseError.toException());
     }
 }

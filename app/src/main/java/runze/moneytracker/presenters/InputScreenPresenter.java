@@ -39,7 +39,7 @@ public class InputScreenPresenter implements IPresenter {
 
     @Override
     public void updateView() {
-
+        mView.updateView();
     }
 
     public void saveData(String categoryString, double amount, String description, Date date) {
@@ -88,10 +88,12 @@ public class InputScreenPresenter implements IPresenter {
     }
 
     public HashSet<String> getCategories() {
+        mCategories = mDataModel.getCategories();
         return mCategories;
     }
 
     public List<Expense> getExpenses() {
+        mExpenses = mDataModel.getExpenses();
         return mExpenses;
     }
 
