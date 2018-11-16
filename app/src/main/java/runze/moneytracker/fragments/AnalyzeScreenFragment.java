@@ -3,6 +3,7 @@ package runze.moneytracker.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
+import runze.moneytracker.models.DataModel;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.views.CategoryAnalyzeView;
 import runze.moneytracker.views.DayAnalyzeView;
@@ -29,6 +31,7 @@ public class AnalyzeScreenFragment extends BaseFragment {
     private FrameLayout mChildAnalyzeLayout;
     private final int DAILY_TAB = 0;
     private final int CATEGORY_TAB = 1;
+    private RecyclerView mDetailList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,9 +69,14 @@ public class AnalyzeScreenFragment extends BaseFragment {
         mAnalyzePresenter.updateView();
     }
 
+    public void updateModel(DataModel dataModel) {
+        mAnalyzePresenter.updateModel(dataModel);
+    }
+
     private void init(View view) {
         mChildAnalyzeLayout = view.findViewById(R.id.child_analyze_view);
         mTabLayout = view.findViewById(R.id.tab_layout);
+        mDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
         mTabDaily = mTabLayout.getTabAt(0);
         mTabCategory = mTabLayout.getTabAt(1);
 

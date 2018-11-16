@@ -26,15 +26,17 @@ import runze.moneytracker.views.IView;
 
 public class ExpenseAnalyzePresenter implements IPresenter {
     private IView mView;
-    private List<Expense> mExpenses;
-    private HashSet<String> mCategories;
-    private List<Integer> mColorList;
+    private DataModel mDataModel;
+    private List<Expense> mListOfSameCategory;
+    private List<Expense> mListOfSameDay;
 
     public ExpenseAnalyzePresenter(DataModel dataModel) {
         super();
-        mExpenses = dataModel.getExpenses();
-        mCategories = dataModel.getCategories();
-        mColorList = dataModel.getColorList();
+        updateModel(dataModel);
+    }
+
+    public void updateModel(DataModel dataModel) {
+        mDataModel = dataModel;
     }
 
     @Override
@@ -132,13 +134,13 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
     private void analyzeData() {
         if (mView instanceof DayAnalyzeView) {
-            ((DayAnalyzeView) mView).updateBarChart(dateAsKey(mExpenses));
+            ((DayAnalyzeView) mView).updateBarChart(dateAsKey(mDataModel.getExpenses()));
         }else if (mView instanceof CategoryAnalyzeView)
             ((CategoryAnalyzeView) mView).updatePieChart(analyzeDataForPieChart());
     }
 
     private PieData analyzeDataForPieChart() {
-        Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(mExpenses);
+        Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(mDataModel.getExpenses());
         List<PieEntry> pieEntries = new ArrayList<>();
 
         //pie chart
@@ -146,13 +148,13 @@ public class ExpenseAnalyzePresenter implements IPresenter {
             pieEntries.add(new PieEntry(entry.getValue().floatValue(), entry.getKey()));
         }
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
-        if (pieEntries.size() > mColorList.size()) {
+        if (pieEntries.size() > mDataModel.getColorList().size()) {
             Random rng = new Random();
-            for (int i = mColorList.size(); i < pieEntries.size(); i++) {
-                mColorList.add(Color.rgb(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)));
+            for (int i = mDataModel.getColorList().size(); i < pieEntries.size(); i++) {
+                mDataModel.getColorList().add(Color.rgb(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)));
             }
         }
-        pieDataSet.setColors(mColorList);
+        pieDataSet.setColors(mDataModel.getColorList());
         pieDataSet.setValueTextSize(25);
         pieDataSet.setValueTextColor(Color.WHITE);
         return new PieData(pieDataSet);
@@ -178,5 +180,33 @@ public class ExpenseAnalyzePresenter implements IPresenter {
             }
         }
         return sortedData.entrySet();
+    }
+
+    private void generateListOfSameCategory(String category) {
+        List<Expense> expenseList = mDataModel.getExpenses();
+        for (int i = 0; i < expenseList.size(); i++) {
+            if (expenseList.get(i).getCategory().contains(category)) {
+                mListOfSameCategory.add(expenseList.get(i));
+            }
+        }
+    }
+
+    private void generateListOfSameDay(String date) {
+        List<Expense> expenseList = mDataModel.getExpenses();
+        for (int i = 0; i < expenseList.size(); i++) {
+            if (expenseList.get(i).getDay().equals(date)) {
+                mListOfSameDay.add(expenseList.get(i));
+            }
+        }
+    }
+
+    public List<Expense> getListOfSameCategory(String category) {
+        generateListOfSameCategory(category);
+        return mListOfSameCategory;
+    }
+
+    public List<Expense> getListOfSameDay(String date) {
+        generateListOfSameDay(date);
+        return mListOfSameDay;
     }
 }

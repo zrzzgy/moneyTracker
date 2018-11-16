@@ -27,7 +27,6 @@ public class DayAnalyzeView extends LinearLayout implements IView {
 
     private TextView mDailyExpenseMonth;
     private RecyclerView mDailyExpenseDetailGraph;
-    private RecyclerView mDailyExpenseDetailList;
     private DaySummaryBarChartRecyclerAdapter mAdapter;
     private ExpenseAnalyzePresenter mPresenter;
 
@@ -41,7 +40,6 @@ public class DayAnalyzeView extends LinearLayout implements IView {
     private void init(View view){
         mDailyExpenseMonth = view.findViewById(R.id.daily_expense_month);
         mDailyExpenseDetailGraph = view.findViewById(R.id.daily_expense_detail_graph);
-        mDailyExpenseDetailList = view.findViewById(R.id.daily_expense_detail_list);
 
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mDailyExpenseDetailGraph.setLayoutManager(mDailyExpenseDetailGraphLayoutManager);

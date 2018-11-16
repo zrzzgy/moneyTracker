@@ -299,6 +299,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         Log.d(TAG, "Value is: " + userModelDataAsString);
         loadDataModel();
         mInputFragment.updateView();
+        mStatsFragment.updateModel(mDataModel);
     }
 
     @Override
