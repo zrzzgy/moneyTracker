@@ -22,7 +22,7 @@ public class CategoryAnalyzeView extends LinearLayout implements IView {
 
     public CategoryAnalyzeView(Context context) {
         super(context);
-        LayoutInflater.from(context).inflate(R.layout.category_analyze_view, this);
+        LayoutInflater.from(context).inflate(R.layout.category_analysis_layout, this);
         init();
     }
 

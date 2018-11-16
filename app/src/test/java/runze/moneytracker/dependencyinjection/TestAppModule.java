@@ -1,18 +1,13 @@
 package runze.moneytracker.dependencyinjection;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import runze.moneytracker.fragments.AnalyzeScreenFragment;
+import runze.moneytracker.fragments.ExpenseAnalysisFragment;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
-import runze.moneytracker.models.Expense;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.InputScreenPresenter;
 import runze.moneytracker.presenters.SettingsScreenPresenter;
@@ -33,8 +28,8 @@ public class TestAppModule {
 
     @Provides
     @Singleton
-    AnalyzeScreenFragment provideStatsScreenFragment(){
-        return mock(AnalyzeScreenFragment.class);
+    ExpenseAnalysisFragment provideStatsScreenFragment(){
+        return mock(ExpenseAnalysisFragment.class);
     }
 
     @Provides

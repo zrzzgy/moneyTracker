@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -34,22 +33,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import junit.framework.TestCase;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import javax.inject.Inject;
 
 import runze.moneytracker.dependencyinjection.AppComponent;
 import runze.moneytracker.dependencyinjection.AppModule;
 import runze.moneytracker.dependencyinjection.DaggerAppComponent;
+import runze.moneytracker.fragments.ExpenseAnalysisFragment;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.fragments.AnalyzeScreenFragment;
-import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
-import runze.moneytracker.models.Expense;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
 import runze.moneytracker.views.SettingsScreenView;
 
@@ -76,7 +68,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
 
     @Inject InputScreenFragment mInputFragment;
     @Inject
-    AnalyzeScreenFragment mStatsFragment;
+    ExpenseAnalysisFragment mStatsFragment;
     @Inject SettingsScreenFragment mSettingsFragment;
     @Inject DataModel mDataModel;
 
@@ -125,10 +117,10 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         // Read from the database
         myRef.addValueEventListener(this);
 
-        setContentView(R.layout.bottom_nav);  // setContentView() to display a view
+        setContentView(R.layout.bottom_navigation_bar_layout);  // setContentView() to display a view
         initComponents();
 
-        this.getLayoutInflater().inflate((R.layout.home_base), null);
+        this.getLayoutInflater().inflate((R.layout.home_base_layout), null);
     }
 
     @Override
@@ -217,7 +209,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
                             }).show();
                     return true;
             }
-        }else if (currentFragment instanceof AnalyzeScreenFragment){
+        }else if (currentFragment instanceof ExpenseAnalysisFragment){
             switch (item.getItemId()){
                 case R.id.option_menu_edit:
                     return true;

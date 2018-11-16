@@ -11,8 +11,6 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import runze.moneytracker.R;
 import runze.moneytracker.models.DailyExpenseTotal;
@@ -30,7 +28,7 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
         private TextView mBarColorBlock;
         private TextView mBarDate;
 
-        ViewHolder(LinearLayout v, ViewGroup viewGroup) {
+        ViewHolder(LinearLayout v) {
             super(v);
             mView = v;
             mBarDayTotal = mView.findViewById(R.id.bar_chart_day_total);
@@ -48,8 +46,8 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
     @Override
     public DaySummaryBarChartRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.daily_total_block, parent, false);
-        return new DaySummaryBarChartRecyclerAdapter.ViewHolder(linearLayout, parent);
+                .inflate(R.layout.daily_expense_total_bar_chart_bar_layout, parent, false);
+        return new DaySummaryBarChartRecyclerAdapter.ViewHolder(linearLayout);
     }
 
     @SuppressLint("SetTextI18n")

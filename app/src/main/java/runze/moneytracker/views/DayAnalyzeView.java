@@ -33,7 +33,7 @@ public class DayAnalyzeView extends LinearLayout implements IView {
 
     public DayAnalyzeView(Context context) {
         super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.day_analyze_view, this);
+        View view = LayoutInflater.from(context).inflate(R.layout.day_analysis_layout, this);
         init(view);
     }
 

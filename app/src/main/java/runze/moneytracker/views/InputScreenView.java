@@ -45,7 +45,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
 
     public InputScreenView(Context context){
         super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.home_base, this);
+        View view = LayoutInflater.from(context).inflate(R.layout.home_base_layout, this);
         init(view);
     }
 
@@ -107,7 +107,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
 
             //setup auto-complete for categories
             List<String> categories = new ArrayList<>(mPresenter.getCategories());
-            ArrayAdapter<String> categoryAutoCompleteAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_menu, categories);
+            ArrayAdapter<String> categoryAutoCompleteAdapter = new ArrayAdapter<>(getContext(), R.layout.category_auto_complte_drop_down_menu, categories);
             MultiAutoCompleteTextView categoryTextView = mAlertLayout.findViewById(R.id.input_category);
             categoryTextView.setAdapter(categoryAutoCompleteAdapter);
             categoryTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());

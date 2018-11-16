@@ -7,9 +7,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import runze.moneytracker.fragments.ExpenseAnalysisFragment;
 import runze.moneytracker.fragments.InputScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.fragments.AnalyzeScreenFragment;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
@@ -30,8 +30,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    AnalyzeScreenFragment provideStatsScreenFragment(){
-        return new AnalyzeScreenFragment();
+    ExpenseAnalysisFragment provideStatsScreenFragment(){
+        return new ExpenseAnalysisFragment();
     }
 
     @Provides
