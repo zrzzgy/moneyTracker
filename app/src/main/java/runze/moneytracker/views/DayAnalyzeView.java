@@ -22,13 +22,17 @@ import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.utils.DaySummaryBarChartRecyclerAdapter;
+import runze.moneytracker.utils.ExpenseDetailAnalysisListRecyclerAdapter;
 
 public class DayAnalyzeView extends LinearLayout implements IView {
 
     private TextView mDailyExpenseMonth;
     private RecyclerView mDailyExpenseDetailGraph;
-    private DaySummaryBarChartRecyclerAdapter mAdapter;
+    private DaySummaryBarChartRecyclerAdapter mDaySummaryBarChartRecyclerAdapter;
     private ExpenseAnalyzePresenter mPresenter;
+
+    private RecyclerView mAnalysisDetailList;
+    private ExpenseDetailAnalysisListRecyclerAdapter mExpenseDetailAnalysisListRecyclerAdapter;
 
 
     public DayAnalyzeView(Context context) {
@@ -40,6 +44,7 @@ public class DayAnalyzeView extends LinearLayout implements IView {
     private void init(View view){
         mDailyExpenseMonth = view.findViewById(R.id.daily_expense_month);
         mDailyExpenseDetailGraph = view.findViewById(R.id.daily_expense_detail_graph);
+        mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
 
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mDailyExpenseDetailGraph.setLayoutManager(mDailyExpenseDetailGraphLayoutManager);
@@ -135,8 +140,8 @@ public class DayAnalyzeView extends LinearLayout implements IView {
     }
 
     public void updateBarChart(List<DailyExpenseTotal> expenseTotals){
-        mAdapter = new DaySummaryBarChartRecyclerAdapter(expenseTotals);
-        mDailyExpenseDetailGraph.setAdapter(mAdapter);
+        mDaySummaryBarChartRecyclerAdapter = new DaySummaryBarChartRecyclerAdapter(expenseTotals);
+        mDailyExpenseDetailGraph.setAdapter(mDaySummaryBarChartRecyclerAdapter);
     }
 
 }

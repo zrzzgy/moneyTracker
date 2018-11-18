@@ -15,6 +15,7 @@ import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
+import runze.moneytracker.utils.ExpenseDetailAnalysisListRecyclerAdapter;
 import runze.moneytracker.views.CategoryAnalyzeView;
 import runze.moneytracker.views.DayAnalyzeView;
 
@@ -29,7 +30,6 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     private FrameLayout mChildAnalysisLayout;
     private final int DAILY_TAB = 0;
     private final int CATEGORY_TAB = 1;
-    private RecyclerView mAnalysisDetailList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,6 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     private void init(View view) {
         mChildAnalysisLayout = view.findViewById(R.id.child_analyze_view);
         mTabLayout = view.findViewById(R.id.tab_layout);
-        mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
         mTabDaily = mTabLayout.getTabAt(0);
 
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

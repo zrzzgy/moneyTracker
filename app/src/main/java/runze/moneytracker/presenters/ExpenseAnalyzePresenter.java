@@ -209,4 +209,5 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         generateListOfSameDay(date);
         return mListOfSameDay;
     }
+
 }

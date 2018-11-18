@@ -17,7 +17,6 @@ public class CategoryAnalyzeView extends LinearLayout implements IView {
 
     private PieChart mPieChart;
     private Description mDescription;
-    private RecyclerView mRecyclerView;
     private ExpenseAnalyzePresenter mPresenter;
 
     public CategoryAnalyzeView(Context context) {
@@ -38,7 +37,6 @@ public class CategoryAnalyzeView extends LinearLayout implements IView {
 
     public void init() {
         mPieChart = findViewById(R.id.category_expense_detail_graph);
-        mRecyclerView = findViewById(R.id.category_expense_detail_list);
         mDescription = new Description();
         mDescription.setText("");
     }
