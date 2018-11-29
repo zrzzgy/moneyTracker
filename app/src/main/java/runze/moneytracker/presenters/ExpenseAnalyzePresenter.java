@@ -1,7 +1,6 @@
 package runze.moneytracker.presenters;
 
 import android.graphics.Color;
-import android.support.annotation.VisibleForTesting;
 
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -10,10 +9,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -24,8 +21,8 @@ import java.util.Set;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
-import runze.moneytracker.views.CategoryAnalyzeView;
-import runze.moneytracker.views.DayAnalyzeView;
+import runze.moneytracker.views.CategoryAnalysisView;
+import runze.moneytracker.views.DayAnalysisView;
 import runze.moneytracker.views.IView;
 
 public class ExpenseAnalyzePresenter implements IPresenter {
@@ -149,10 +146,10 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     }
 
     private void analyzeData() {
-        if (mView instanceof DayAnalyzeView) {
-            ((DayAnalyzeView) mView).updateBarChart(dateAsKey(mDataModel.getExpenses()));
-        }else if (mView instanceof CategoryAnalyzeView)
-            ((CategoryAnalyzeView) mView).updatePieChart(analyzeDataForPieChart());
+        if (mView instanceof DayAnalysisView) {
+            ((DayAnalysisView) mView).updateBarChart(dateAsKey(mDataModel.getExpenses()));
+        }else if (mView instanceof CategoryAnalysisView)
+            ((CategoryAnalysisView) mView).updatePieChart(analyzeDataForPieChart());
     }
 
     private PieData analyzeDataForPieChart() {
