@@ -3,7 +3,6 @@ package runze.moneytracker.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +14,13 @@ import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
-import runze.moneytracker.utils.ExpenseDetailAnalysisListRecyclerAdapter;
-import runze.moneytracker.views.CategoryAnalyzeView;
-import runze.moneytracker.views.DayAnalyzeView;
+import runze.moneytracker.views.CategoryAnalysisView;
+import runze.moneytracker.views.DayAnalysisView;
 
 
 public class ExpenseAnalysisFragment extends BaseFragment {
-    private DayAnalyzeView mDayAnalyzeView;
-    private CategoryAnalyzeView mCategoryAnalyzeView;
+    private DayAnalysisView mDayAnalysisView;
+    private CategoryAnalysisView mCategoryAnalysisView;
     @Inject
     ExpenseAnalyzePresenter mAnalyzePresenter;
     private TabLayout mTabLayout;
@@ -46,18 +44,18 @@ public class ExpenseAnalysisFragment extends BaseFragment {
         // Construct the view if it does not yet exist
         View view = LayoutInflater.from(getContext()).inflate(R.layout.analysis_view_layout, null);
         init(view);
-        if (mDayAnalyzeView == null) {
-            mDayAnalyzeView = new DayAnalyzeView(getContext());
-            mDayAnalyzeView.attachPresenter(mAnalyzePresenter);
+        if (mDayAnalysisView == null) {
+            mDayAnalysisView = new DayAnalysisView(getContext());
+            mDayAnalysisView.attachPresenter(mAnalyzePresenter);
         }
-        if (mCategoryAnalyzeView == null) {
-            mCategoryAnalyzeView = new CategoryAnalyzeView(getContext());
-            mCategoryAnalyzeView.attachPresenter(mAnalyzePresenter);
+        if (mCategoryAnalysisView == null) {
+            mCategoryAnalysisView = new CategoryAnalysisView(getContext());
+            mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
         }
 
         mChildAnalysisLayout.removeAllViews();
-        mChildAnalysisLayout.addView(mDayAnalyzeView);
-        mAnalyzePresenter.attachView(mDayAnalyzeView);
+        mChildAnalysisLayout.addView(mDayAnalysisView);
+        mAnalyzePresenter.attachView(mDayAnalysisView);
         return view;
     }
 
@@ -82,16 +80,16 @@ public class ExpenseAnalysisFragment extends BaseFragment {
                 switch (tab.getPosition()) {
                     case DAILY_TAB:
                         mChildAnalysisLayout.removeAllViews();
-                        mChildAnalysisLayout.addView(mDayAnalyzeView);
+                        mChildAnalysisLayout.addView(mDayAnalysisView);
 
-                        mAnalyzePresenter.attachView(mDayAnalyzeView);
+                        mAnalyzePresenter.attachView(mDayAnalysisView);
                         mAnalyzePresenter.updateView();
                         break;
                     case CATEGORY_TAB:
                         mChildAnalysisLayout.removeAllViews();
-                        mChildAnalysisLayout.addView(mCategoryAnalyzeView);
+                        mChildAnalysisLayout.addView(mCategoryAnalysisView);
 
-                        mAnalyzePresenter.attachView(mCategoryAnalyzeView);
+                        mAnalyzePresenter.attachView(mCategoryAnalysisView);
                         mAnalyzePresenter.updateView();
                         break;
 
@@ -116,8 +114,8 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mAnalyzePresenter.detachView();
-        mCategoryAnalyzeView.detachPresenter();
-        mDayAnalyzeView.detachPresenter();
+        mCategoryAnalysisView.detachPresenter();
+        mDayAnalysisView.detachPresenter();
     }
 
 }

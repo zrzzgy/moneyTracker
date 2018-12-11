@@ -8,13 +8,13 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import runze.moneytracker.fragments.ExpenseAnalysisFragment;
-import runze.moneytracker.fragments.InputScreenFragment;
+import runze.moneytracker.fragments.MainScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
-import runze.moneytracker.presenters.InputScreenPresenter;
+import runze.moneytracker.presenters.MainScreenPresenter;
 import runze.moneytracker.presenters.SettingsScreenPresenter;
 
 /**
@@ -24,8 +24,8 @@ import runze.moneytracker.presenters.SettingsScreenPresenter;
 public class AppModule {
     @Provides
     @Singleton   // static
-    InputScreenFragment provideInputScreenFragment(){
-        return new InputScreenFragment();
+    MainScreenFragment provideInputScreenFragment(){
+        return new MainScreenFragment();
     }
 
     @Provides
@@ -41,8 +41,8 @@ public class AppModule {
     }
 
     @Provides
-    InputScreenPresenter provideInputScreenPresenter(DataModel dataModel){
-        return new InputScreenPresenter(dataModel);
+    MainScreenPresenter provideInputScreenPresenter(DataModel dataModel){
+        return new MainScreenPresenter(dataModel);
     }
 
     @Provides

@@ -13,13 +13,13 @@ import runze.moneytracker.R;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.IPresenter;
 
-public class CategoryAnalyzeView extends LinearLayout implements IView {
+public class CategoryAnalysisView extends LinearLayout implements IView {
 
     private PieChart mPieChart;
     private Description mDescription;
     private ExpenseAnalyzePresenter mPresenter;
 
-    public CategoryAnalyzeView(Context context) {
+    public CategoryAnalysisView(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.category_analysis_layout, this);
         init();

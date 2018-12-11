@@ -18,17 +18,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -39,7 +33,7 @@ import runze.moneytracker.dependencyinjection.AppComponent;
 import runze.moneytracker.dependencyinjection.AppModule;
 import runze.moneytracker.dependencyinjection.DaggerAppComponent;
 import runze.moneytracker.fragments.ExpenseAnalysisFragment;
-import runze.moneytracker.fragments.InputScreenFragment;
+import runze.moneytracker.fragments.MainScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
@@ -66,7 +60,8 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     private String userModelDataAsString;
     private FirebaseUser user;
 
-    @Inject InputScreenFragment mInputFragment;
+    @Inject
+    MainScreenFragment mInputFragment;
     @Inject
     ExpenseAnalysisFragment mStatsFragment;
     @Inject SettingsScreenFragment mSettingsFragment;

@@ -5,11 +5,11 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import runze.moneytracker.fragments.ExpenseAnalysisFragment;
-import runze.moneytracker.fragments.InputScreenFragment;
+import runze.moneytracker.fragments.MainScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
-import runze.moneytracker.presenters.InputScreenPresenter;
+import runze.moneytracker.presenters.MainScreenPresenter;
 import runze.moneytracker.presenters.SettingsScreenPresenter;
 
 import static org.mockito.Mockito.mock;
@@ -22,8 +22,8 @@ public class TestAppModule {
     @Provides
     @Singleton
         // static
-    InputScreenFragment provideInputScreenFragment(){
-        return mock(InputScreenFragment.class);
+    MainScreenFragment provideInputScreenFragment(){
+        return mock(MainScreenFragment.class);
     }
 
     @Provides
@@ -39,8 +39,8 @@ public class TestAppModule {
     }
 
     @Provides
-    InputScreenPresenter provideInputScreenPresenter(DataModel dataModel){
-        return mock(InputScreenPresenter.class);
+    MainScreenPresenter provideInputScreenPresenter(DataModel dataModel){
+        return mock(MainScreenPresenter.class);
     }
 
     @Provides

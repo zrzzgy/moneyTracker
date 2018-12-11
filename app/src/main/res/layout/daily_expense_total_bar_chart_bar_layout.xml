@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/daily_item"
     android:background="@color/offWhite"
     android:gravity="bottom"
@@ -7,26 +7,25 @@
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
     android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
-    android:animateLayoutChanges="true"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/bar_chart_day_total"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"/>
+    android:animateLayoutChanges="true">
 
     <TextView
         android:id="@+id/bar_chart_color_block"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/gradient_background"/>
+        android:layout_height="0dp"
+        android:background="@drawable/gradient_background"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"/>
 
     <TextView
         android:id="@+id/bar_chart_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center" />
-
-</LinearLayout>
+        android:textAlignment="center"
+        android:text="12"
+        android:layout_alignStart="@id/bar_chart_color_block"
+        android:layout_alignEnd="@+id/bar_chart_color_block"
+        android:layout_below="@id/bar_chart_color_block"
+        android:padding="2dp"/>
+</RelativeLayout>
 

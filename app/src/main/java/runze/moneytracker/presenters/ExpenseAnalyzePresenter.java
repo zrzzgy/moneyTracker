@@ -1,18 +1,19 @@
 package runze.moneytracker.presenters;
 
 import android.graphics.Color;
-import android.support.annotation.VisibleForTesting;
 
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -20,8 +21,8 @@ import java.util.Set;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
-import runze.moneytracker.views.CategoryAnalyzeView;
-import runze.moneytracker.views.DayAnalyzeView;
+import runze.moneytracker.views.CategoryAnalysisView;
+import runze.moneytracker.views.DayAnalysisView;
 import runze.moneytracker.views.IView;
 
 public class ExpenseAnalyzePresenter implements IPresenter {
@@ -111,10 +112,22 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
             //add place holder dates
             for (int i = 1; i < n; i++) {
-                long timeInBetween = data.get(i - 1).getDate().getTime() - data.get(i).getDate().getTime();
-                long daysInBetween = timeInBetween / (1000 * 60 * 60 * 24);
-                result.add(data.get(i - 1));
-                for (int j = 0; j < daysInBetween - 1; j++) {
+                String day1 = data.get(i - 1).getDay();
+                String day2 = data.get(i).getDay();
+                Date date1 = new Date();
+                Date date2 = new Date();
+                try {
+                    date1 = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).parse(day1);
+                    date2 = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).parse(day2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                long timeInBetween = date1.getTime() - date2.getTime();
+                long daysInBetween = (long) Math.ceil((double) timeInBetween / (1000 * 60 * 60 * 24)) -1;
+                result.add(data.get(i - 1)); // Add the latest day first
+
+                for (int j = 0;j < daysInBetween; j++) {
                     long nextTime = result.get(result.size() - 1).getDate().getTime() - 1000 * 60 * 60 * 24;
                     Date nextDate = new Date(nextTime);
                     DailyExpenseTotal placeHolder = new DailyExpenseTotal((double) 0, nextDate);
@@ -133,10 +146,10 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     }
 
     private void analyzeData() {
-        if (mView instanceof DayAnalyzeView) {
-            ((DayAnalyzeView) mView).updateBarChart(dateAsKey(mDataModel.getExpenses()));
-        }else if (mView instanceof CategoryAnalyzeView)
-            ((CategoryAnalyzeView) mView).updatePieChart(analyzeDataForPieChart());
+        if (mView instanceof DayAnalysisView) {
+            ((DayAnalysisView) mView).updateBarChart(dateAsKey(mDataModel.getExpenses()));
+        }else if (mView instanceof CategoryAnalysisView)
+            ((CategoryAnalysisView) mView).updatePieChart(analyzeDataForPieChart());
     }
 
     private PieData analyzeDataForPieChart() {
