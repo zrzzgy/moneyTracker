@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/offWhite"
-    android:gravity="bottom"
-    android:orientation="vertical">
+    android:gravity="bottom">
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/category_expense_detail_graph"
@@ -25,4 +24,3 @@
         android:layout_below="@id/category_sorted_expense_graph"/>
 
 </RelativeLayout>
-
