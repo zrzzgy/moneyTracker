@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/offWhite"
-    android:gravity="bottom">
+    android:gravity="top">
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/category_expense_detail_graph"
@@ -12,15 +12,9 @@
         android:layout_height="200dp"
         android:layout_margin="@dimen/graph_margin" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/category_sorted_expense_graph"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@id/category_expense_detail_graph"/>
-
     <include layout="@layout/analyze_view_expense_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/category_sorted_expense_graph"/>
+        android:layout_below="@id/category_expense_detail_graph" />
 
 </RelativeLayout>

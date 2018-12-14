@@ -1,10 +1,19 @@
 package runze.moneytracker.presenters;
 
 import android.graphics.Color;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +39,18 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     private DataModel mDataModel;
     private List<Expense> mListOfSameCategory;
     private List<Expense> mListOfSameDay;
+    private OnChartValueSelectedListener mPieChartOnClickListener = new OnChartValueSelectedListener() {
+        @Override
+        public void onNothingSelected() {
+
+        }
+
+        @Override
+        public void onValueSelected(Entry e, Highlight h) {
+
+            ((CategoryAnalysisView)mView).setListOfSameCategory(((int) h.getX()));
+        }
+    };
 
     public ExpenseAnalyzePresenter(DataModel dataModel) {
         super();
@@ -43,6 +64,9 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     @Override
     public void attachView(IView view) {
         mView = view;
+        if (mView instanceof CategoryAnalysisView) {
+            ((CategoryAnalysisView) mView).setGraphOnClickListener(mPieChartOnClickListener);
+        }
     }
 
     @Override
@@ -196,6 +220,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     }
 
     private void generateListOfSameCategory(String category) {
+        mListOfSameCategory = new ArrayList<>();
         List<Expense> expenseList = mDataModel.getExpenses();
         for (int i = 0; i < expenseList.size(); i++) {
             if (expenseList.get(i).getCategory().contains(category)) {
@@ -205,6 +230,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     }
 
     private void generateListOfSameDay(String date) {
+        mListOfSameDay = new ArrayList<>();
         List<Expense> expenseList = mDataModel.getExpenses();
         for (int i = 0; i < expenseList.size(); i++) {
             if (expenseList.get(i).getDay().equals(date)) {

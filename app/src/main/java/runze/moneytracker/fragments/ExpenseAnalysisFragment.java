@@ -56,6 +56,7 @@ public class ExpenseAnalysisFragment extends BaseFragment {
         mChildAnalysisLayout.removeAllViews();
         mChildAnalysisLayout.addView(mDayAnalysisView);
         mAnalyzePresenter.attachView(mDayAnalysisView);
+
         return view;
     }
 

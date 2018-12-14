@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -26,17 +27,13 @@ import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.utils.DaySummaryBarChartRecyclerAdapter;
 import runze.moneytracker.utils.ExpenseDetailAnalysisListRecyclerAdapter;
 
-public class DayAnalysisView extends LinearLayout implements IView {
+public class DayAnalysisView extends RelativeLayout implements IView {
 
     private TextView mDailyExpenseMonth;
     private RecyclerView mDailyExpenseDetailGraph;
     private ImageView mDateHighLightCircle;
     private DaySummaryBarChartRecyclerAdapter mDaySummaryBarChartRecyclerAdapter;
     private ExpenseAnalyzePresenter mPresenter;
-
-    private RecyclerView mAnalysisDetailList;
-    private ExpenseDetailAnalysisListRecyclerAdapter mExpenseDetailAnalysisListRecyclerAdapter;
-
 
     public DayAnalysisView(Context context) {
         super(context);
@@ -48,7 +45,7 @@ public class DayAnalysisView extends LinearLayout implements IView {
         mDailyExpenseMonth = view.findViewById(R.id.daily_expense_month);
         mDailyExpenseDetailGraph = view.findViewById(R.id.date_sorted_expense_graph);
         mDateHighLightCircle = view.findViewById(R.id.date_highlight_circle);
-        mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
+       // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
 
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mDailyExpenseDetailGraph.setLayoutManager(mDailyExpenseDetailGraphLayoutManager);
