@@ -1,18 +1,12 @@
 package runze.moneytracker.presenters;
 
 import android.graphics.Color;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.text.ParseException;
@@ -48,7 +42,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         @Override
         public void onValueSelected(Entry e, Highlight h) {
 
-            ((CategoryAnalysisView)mView).setListOfSameCategory(((int) h.getX()));
+            ((CategoryAnalysisView) mView).setListOfSameCategory(((int) h.getX()),mDataModel.getExpenseTotal());
         }
     };
 
@@ -76,6 +70,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
     /**
      * Sort the data into a list according to different date, merge expenses from the same date
+     *
      * @param expenses a list of individual expenses
      * @return a list of daily expense total with expenses from the same date merged
      */
@@ -104,8 +99,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         }
         if (addNew) {
             return orderAndAddPlaceHolderDates(listOfDailyExpenseTotal);
-        }
-        else {
+        } else {
             return listOfDailyExpenseTotal;
         }
     }
@@ -114,6 +108,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     /**
      * Sort the date-oriented data by placing earlier dates in the front,
      * and add dates with 0 expense so that dates are consecutive.
+     *
      * @param data list of expenses sorted and merged by date
      * @return list of consecutive expenses sorted and merged by date
      */
@@ -148,10 +143,10 @@ public class ExpenseAnalyzePresenter implements IPresenter {
                 }
 
                 long timeInBetween = date1.getTime() - date2.getTime();
-                long daysInBetween = (long) Math.ceil((double) timeInBetween / (1000 * 60 * 60 * 24)) -1;
+                long daysInBetween = (long) Math.ceil((double) timeInBetween / (1000 * 60 * 60 * 24)) - 1;
                 result.add(data.get(i - 1)); // Add the latest day first
 
-                for (int j = 0;j < daysInBetween; j++) {
+                for (int j = 0; j < daysInBetween; j++) {
                     long nextTime = result.get(result.size() - 1).getDate().getTime() - 1000 * 60 * 60 * 24;
                     Date nextDate = new Date(nextTime);
                     DailyExpenseTotal placeHolder = new DailyExpenseTotal((double) 0, nextDate);
@@ -172,7 +167,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     private void analyzeData() {
         if (mView instanceof DayAnalysisView) {
             ((DayAnalysisView) mView).updateBarChart(dateAsKey(mDataModel.getExpenses()));
-        }else if (mView instanceof CategoryAnalysisView)
+        } else if (mView instanceof CategoryAnalysisView)
             ((CategoryAnalysisView) mView).updatePieChart(analyzeDataForPieChart());
     }
 
@@ -200,6 +195,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
     /**
      * Sort the data according to different categories. Expenses of the same category are merged
+     *
      * @param expenses a list of individual expenses
      * @return A hash map of <category, amount>
      */
@@ -239,8 +235,26 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         }
     }
 
-    public List<Expense> getListOfSameCategory(String category) {
+    private void sortListOfSameCategory(String category) {
         generateListOfSameCategory(category);
+        int n = mListOfSameCategory.size();
+
+        if (n > 0) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 1; j < n - i; j++) {
+                    if (mListOfSameCategory.get(j - 1).getDate().getTime() < mListOfSameCategory.get(j).getDate().getTime()) {
+                        // swap data[j] and data[j+1]
+                        Expense temp = mListOfSameCategory.get(j - 1);
+                        mListOfSameCategory.set(j - 1, mListOfSameCategory.get(j));
+                        mListOfSameCategory.set(j, temp);
+                    }
+                }
+            }
+        }
+    }
+
+    public List<Expense> getListOfSameCategory(String category) {
+        sortListOfSameCategory(category);
         return mListOfSameCategory;
     }
 

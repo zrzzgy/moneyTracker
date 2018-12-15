@@ -3,6 +3,7 @@ package runze.moneytracker.utils;
 import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,11 +16,11 @@ import java.util.Locale;
 import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
 
-public class ExpenseDetailAnalysisListRecyclerAdapter extends RecyclerView.Adapter<ExpenseDetailAnalysisListRecyclerAdapter.ViewHolder>{
+public class ExpenseCategoryDetailAnalysisListRecyclerAdapter extends RecyclerView.Adapter<ExpenseCategoryDetailAnalysisListRecyclerAdapter.ViewHolder>{
     private List<Expense> mDataSet;
 
 
-    public ExpenseDetailAnalysisListRecyclerAdapter(List<Expense> dataSet){
+    public ExpenseCategoryDetailAnalysisListRecyclerAdapter(List<Expense> dataSet){
         mDataSet = dataSet;
     }
 
@@ -54,8 +55,9 @@ public class ExpenseDetailAnalysisListRecyclerAdapter extends RecyclerView.Adapt
         String categoriesList = Arrays.toString(singleExpense.getCategory().toArray());
 
         holder.mAmountTextView.setText(singleExpense.getAmount().toString());
-        holder.mCategoryTextView.setText(categoriesList.substring(1, categoriesList.length()-1));
+        holder.mCategoryTextView.setVisibility(View.GONE);
         holder.mDateTextView.setText(df.format(singleExpense.getDate()));
+        holder.mDateTextView.setVisibility(View.VISIBLE);
     }
 
     @Override

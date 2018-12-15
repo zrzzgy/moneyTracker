@@ -1,14 +1,12 @@
 package runze.moneytracker.views;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,7 +23,6 @@ import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.utils.DaySummaryBarChartRecyclerAdapter;
-import runze.moneytracker.utils.ExpenseDetailAnalysisListRecyclerAdapter;
 
 public class DayAnalysisView extends RelativeLayout implements IView {
 
