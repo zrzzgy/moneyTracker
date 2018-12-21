@@ -189,6 +189,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     public boolean onContextItemSelected(MenuItem item){
         Fragment currentFragment = getCurrentFragment();
         if (currentFragment instanceof SettingsScreenFragment){
+            /*
             switch (item.getItemId()){
                 case R.id.option_menu_edit:
                     ((SettingsScreenView) currentFragment.getView()).showEditDialog(item);
@@ -203,7 +204,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
                                 }
                             }).show();
                     return true;
-            }
+            }**/
         }else if (currentFragment instanceof ExpenseAnalysisFragment){
             switch (item.getItemId()){
                 case R.id.option_menu_edit:
@@ -238,9 +239,11 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         return fragment;
     }
 
+    /*
     private void undoRemoveCategory(){
         ((SettingsScreenFragment) getCurrentFragment()).getPresenter().undoRemoveCategory();
     }
+    **/
 
     public AppComponent getAppComponent(){
         return mAppComponent;

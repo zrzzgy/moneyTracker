@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.firebase:firebase-database:16.0.4'
+    implementation 'com.github.skydoves:colorpickerpreference:1.0.2'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.7.13'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
