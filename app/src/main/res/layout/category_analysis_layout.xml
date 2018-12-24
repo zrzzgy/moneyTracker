@@ -15,9 +15,8 @@
         android:id="@+id/category_expense_detail_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_below="@id/category_expense_detail_graph"
-        />
+        android:gravity="end"
+        android:layout_below="@id/category_expense_detail_graph"/>
 
     <include layout="@layout/analyze_view_expense_detail_layout"
         android:layout_width="match_parent"
