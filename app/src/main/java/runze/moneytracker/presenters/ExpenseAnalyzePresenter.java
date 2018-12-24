@@ -41,8 +41,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
         @Override
         public void onValueSelected(Entry e, Highlight h) {
-
-            ((CategoryAnalysisView) mView).setListOfSameCategory(((int) h.getX()),mDataModel.getExpenseTotal());
+            ((CategoryAnalysisView) mView).setListOfSameCategory(((int) h.getX()), mDataModel.getExpenseTotal());
         }
     };
 
@@ -71,19 +70,17 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     /**
      * Sort the data into a list according to different date, merge expenses from the same date
      *
-     * @param expenses a list of individual expenses
      * @return a list of daily expense total with expenses from the same date merged
      */
-    public List<DailyExpenseTotal> dateAsKey(List<Expense> expenses) {
+    public List<DailyExpenseTotal> sortDataForDayAnalysis() {
         boolean done;
         boolean addNew = false;
         List<DailyExpenseTotal> listOfDailyExpenseTotal = new ArrayList<>();
 
 
-        for (int i = 0; i < expenses.size(); i++) {
-            Expense expense = expenses.get(i);
+        for (int i = 0; i < mDataModel.getExpenses().size(); i++) {
+            Expense expense = mDataModel.getExpenses().get(i);
             done = false;
-
 
             for (DailyExpenseTotal dailyExpenseTotal : listOfDailyExpenseTotal) {
                 if (dailyExpenseTotal.getDay().equals(expense.getDay())) {
@@ -161,17 +158,15 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     }
 
     public void updateView() {
-        analyzeData();
-    }
-
-    private void analyzeData() {
         if (mView instanceof DayAnalysisView) {
-            ((DayAnalysisView) mView).updateBarChart(dateAsKey(mDataModel.getExpenses()));
-        } else if (mView instanceof CategoryAnalysisView)
-            ((CategoryAnalysisView) mView).updatePieChart(analyzeDataForPieChart());
+            ((DayAnalysisView) mView).updateBarChart(sortDataForDayAnalysis());
+        } else if (mView instanceof CategoryAnalysisView) {
+            ((CategoryAnalysisView) mView).updatePieChart(sortDataForCategoryAnalysis());
+            ((CategoryAnalysisView) mView).setListOfSameCategory(0, mDataModel.getExpenseTotal());
+        }
     }
 
-    private PieData analyzeDataForPieChart() {
+    private PieData sortDataForCategoryAnalysis() {
         Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(mDataModel.getExpenses());
         List<PieEntry> pieEntries = new ArrayList<>();
 
@@ -262,5 +257,4 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         generateListOfSameDay(date);
         return mListOfSameDay;
     }
-
 }
