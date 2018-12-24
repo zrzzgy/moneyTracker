@@ -16,11 +16,11 @@ import java.util.Locale;
 import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
 
-public class ExpenseCategoryDetailAnalysisListRecyclerAdapter extends RecyclerView.Adapter<ExpenseCategoryDetailAnalysisListRecyclerAdapter.ViewHolder>{
+public class CategoryAnalysisRecyclerAdapter extends RecyclerView.Adapter<CategoryAnalysisRecyclerAdapter.ViewHolder>{
     private List<Expense> mDataSet;
 
 
-    public ExpenseCategoryDetailAnalysisListRecyclerAdapter(List<Expense> dataSet){
+    public CategoryAnalysisRecyclerAdapter(List<Expense> dataSet){
         mDataSet = dataSet;
     }
 

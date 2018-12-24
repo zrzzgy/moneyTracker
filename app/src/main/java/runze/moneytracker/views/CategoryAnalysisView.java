@@ -19,14 +19,13 @@ import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.IPresenter;
-import runze.moneytracker.utils.ExpenseCategoryDetailAnalysisListRecyclerAdapter;
+import runze.moneytracker.utils.CategoryAnalysisRecyclerAdapter;
 
 public class CategoryAnalysisView extends RelativeLayout implements IView {
 
     private PieChart mPieChart;
     private Description mDescription;
     private RecyclerView mDetailedExpenseList;
-    private ExpenseCategoryDetailAnalysisListRecyclerAdapter mExpenseCategoryDetailAnalysisListRecyclerAdapter;
     private PieData mPieData;
     private ExpenseAnalyzePresenter mPresenter;
     private TextView mCategoryTotalText;
@@ -77,7 +76,6 @@ public class CategoryAnalysisView extends RelativeLayout implements IView {
 
         mCategoryTotalText.setText(categoryTotal + "/" + String.valueOf(total));
         List<Expense> listOfSameCategory = mPresenter.getListOfSameCategory(category);
-        mExpenseCategoryDetailAnalysisListRecyclerAdapter = new ExpenseCategoryDetailAnalysisListRecyclerAdapter(listOfSameCategory);
-        mDetailedExpenseList.setAdapter(mExpenseCategoryDetailAnalysisListRecyclerAdapter);
+        mDetailedExpenseList.setAdapter(new CategoryAnalysisRecyclerAdapter(listOfSameCategory));
     }
 }

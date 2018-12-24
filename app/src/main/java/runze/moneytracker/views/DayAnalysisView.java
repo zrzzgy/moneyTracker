@@ -28,7 +28,6 @@ public class DayAnalysisView extends RelativeLayout implements IView {
 
     private TextView mDailyExpenseMonth;
     private RecyclerView mDailyExpenseDetailGraph;
-    private ImageView mDateHighLightCircle;
     private DaySummaryBarChartRecyclerAdapter mDaySummaryBarChartRecyclerAdapter;
     private ExpenseAnalyzePresenter mPresenter;
 
@@ -41,13 +40,10 @@ public class DayAnalysisView extends RelativeLayout implements IView {
     private void init(View view){
         mDailyExpenseMonth = view.findViewById(R.id.daily_expense_month);
         mDailyExpenseDetailGraph = view.findViewById(R.id.date_sorted_expense_graph);
-        mDateHighLightCircle = view.findViewById(R.id.date_highlight_circle);
        // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
 
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mDailyExpenseDetailGraph.setLayoutManager(mDailyExpenseDetailGraphLayoutManager);
-
-//        mDateHighLightCircle.setMode(R.color.colorSecondary, PorterDuff.Mode.OVERLAY);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mDailyExpenseDetailGraph.setOnScrollChangeListener(new OnScrollChangeListener() {

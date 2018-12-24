@@ -23,11 +23,11 @@ public class ExpenseAnalyzePresenterTest extends TestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
     }
-    public void testDateAskey() {
-        DataModel dataModel = new DataModel(null,null,null,null);
-        ExpenseAnalyzePresenter expenseAnalyzePresenter = new ExpenseAnalyzePresenter(dataModel);
+
+    public void testDateAsKey() {
         HashSet<String> category = new HashSet<>();
         Double amount = 2.2;
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(118, 10, 24);
         Date date2 = calendar.getTime();
@@ -35,20 +35,21 @@ public class ExpenseAnalyzePresenterTest extends TestCase {
         Date date1 = calendar.getTime();
         calendar.set(118,10,25);
         Date date3 = calendar.getTime();
+
         Expense expense1 = new Expense(category, amount, date1, null);
         Expense expense2 = new Expense(category, amount, date2,null);
         List<Expense> expenseList = new ArrayList<>();
         expenseList.add(expense1);
         expenseList.add(expense2);
+
         DailyExpenseTotal dailyExpenseTotal1 = new DailyExpenseTotal(2.2, date1);
         DailyExpenseTotal dailyExpenseTotal2 = new DailyExpenseTotal((double)0, date3);
         DailyExpenseTotal dailyExpenseTotal3 = new DailyExpenseTotal(2.2, date2);
-        List<DailyExpenseTotal> dailyExpenseTotalList = new ArrayList<>();
-        dailyExpenseTotalList.add(dailyExpenseTotal1);
-        dailyExpenseTotalList.add(dailyExpenseTotal2);
-        dailyExpenseTotalList.add(dailyExpenseTotal3);
 
-        List<DailyExpenseTotal> dailyExpenseTotalListResult = expenseAnalyzePresenter.dateAsKey(expenseList);
+        DataModel dataModel = new DataModel(expenseList,null,null,null);
+        ExpenseAnalyzePresenter expenseAnalyzePresenter = new ExpenseAnalyzePresenter(dataModel);
+
+        List<DailyExpenseTotal> dailyExpenseTotalListResult = expenseAnalyzePresenter.sortDataForDayAnalysis();
         assertEquals(dailyExpenseTotal1.getDate(), dailyExpenseTotalListResult.get(0).getDate());
         assertEquals(dailyExpenseTotal2.getDate(), dailyExpenseTotalListResult.get(1).getDate());
         assertEquals(dailyExpenseTotal3.getDate(), dailyExpenseTotalListResult.get(2).getDate());

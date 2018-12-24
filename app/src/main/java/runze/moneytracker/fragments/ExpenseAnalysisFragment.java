@@ -25,7 +25,7 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     ExpenseAnalyzePresenter mAnalyzePresenter;
     private TabLayout mTabLayout;
     private TabLayout.Tab mTabDaily;
-    private FrameLayout mChildAnalysisLayout;
+    private FrameLayout mChildLayout;
     private final int DAILY_TAB = 0;
     private final int CATEGORY_TAB = 1;
 
@@ -53,8 +53,8 @@ public class ExpenseAnalysisFragment extends BaseFragment {
             mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
         }
 
-        mChildAnalysisLayout.removeAllViews();
-        mChildAnalysisLayout.addView(mDayAnalysisView);
+        mChildLayout.removeAllViews();
+        mChildLayout.addView(mDayAnalysisView);
         mAnalyzePresenter.attachView(mDayAnalysisView);
 
         return view;
@@ -71,7 +71,7 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     }
 
     private void init(View view) {
-        mChildAnalysisLayout = view.findViewById(R.id.child_analyze_view);
+        mChildLayout = view.findViewById(R.id.child_analyze_view);
         mTabLayout = view.findViewById(R.id.tab_layout);
         mTabDaily = mTabLayout.getTabAt(0);
 
@@ -80,15 +80,15 @@ public class ExpenseAnalysisFragment extends BaseFragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case DAILY_TAB:
-                        mChildAnalysisLayout.removeAllViews();
-                        mChildAnalysisLayout.addView(mDayAnalysisView);
+                        mChildLayout.removeAllViews();
+                        mChildLayout.addView(mDayAnalysisView);
 
                         mAnalyzePresenter.attachView(mDayAnalysisView);
                         mAnalyzePresenter.updateView();
                         break;
                     case CATEGORY_TAB:
-                        mChildAnalysisLayout.removeAllViews();
-                        mChildAnalysisLayout.addView(mCategoryAnalysisView);
+                        mChildLayout.removeAllViews();
+                        mChildLayout.addView(mCategoryAnalysisView);
 
                         mAnalyzePresenter.attachView(mCategoryAnalysisView);
                         mAnalyzePresenter.updateView();
