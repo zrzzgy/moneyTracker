@@ -40,7 +40,7 @@ public class SettingsScreenView extends LinearLayout implements IView{
         LayoutInflater layoutInflater = LayoutInflater.from(themeWrapper);
         View v = layoutInflater.inflate(R.layout.settings_view_layout, this);
         init(v);
-    }
+        }
 
     private void init(View view){
         mHelllo = view.findViewById(R.id.hello_user_header);
