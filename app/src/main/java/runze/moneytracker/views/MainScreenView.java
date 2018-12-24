@@ -26,16 +26,16 @@ import java.util.List;
 import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.presenters.IPresenter;
-import runze.moneytracker.presenters.InputScreenPresenter;
+import runze.moneytracker.presenters.MainScreenPresenter;
 import runze.moneytracker.utils.MainScreenRecyclerAdapter;
 import runze.moneytracker.utils.RecyclerItemTouchHelper;
 
-public class InputScreenView extends RelativeLayout implements IView, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
+public class MainScreenView extends RelativeLayout implements IView, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
     private final String TAG = this.getClass().getSimpleName();
 
     private RecyclerView mExpenseList;
     private TextView mTotalView;
-    private InputScreenPresenter mPresenter;
+    private MainScreenPresenter mPresenter;
 
     private TextView mErrorMessage;
     private AlertDialog mAlertDialog;
@@ -43,9 +43,9 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
 
     private MainScreenRecyclerAdapter mAdapter;
 
-    public InputScreenView(Context context){
+    public MainScreenView(Context context){
         super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.home_base, this);
+        View view = LayoutInflater.from(context).inflate(R.layout.home_base_layout, this);
         init(view);
     }
 
@@ -79,7 +79,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
         if (presenter == null) {
             throw new IllegalArgumentException("presenter cannot be null.");
         }
-        mPresenter = (InputScreenPresenter) presenter;
+        mPresenter = (MainScreenPresenter) presenter;
     }
 
     @Override
@@ -107,7 +107,7 @@ public class InputScreenView extends RelativeLayout implements IView, RecyclerIt
 
             //setup auto-complete for categories
             List<String> categories = new ArrayList<>(mPresenter.getCategories());
-            ArrayAdapter<String> categoryAutoCompleteAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_menu, categories);
+            ArrayAdapter<String> categoryAutoCompleteAdapter = new ArrayAdapter<>(getContext(), R.layout.category_auto_complte_drop_down_menu, categories);
             MultiAutoCompleteTextView categoryTextView = mAlertLayout.findViewById(R.id.input_category);
             categoryTextView.setAdapter(categoryAutoCompleteAdapter);
             categoryTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());

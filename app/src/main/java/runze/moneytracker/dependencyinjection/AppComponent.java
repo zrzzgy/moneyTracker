@@ -4,10 +4,10 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import runze.moneytracker.HomeActivity;
-import runze.moneytracker.fragments.InputScreenFragment;
+import runze.moneytracker.fragments.ExpenseAnalysisFragment;
+import runze.moneytracker.fragments.MainScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
-import runze.moneytracker.fragments.AnalyzeScreenFragment;
-import runze.moneytracker.presenters.InputScreenPresenter;
+import runze.moneytracker.presenters.MainScreenPresenter;
 import runze.moneytracker.presenters.SettingsScreenPresenter;
 
 /**
@@ -19,10 +19,10 @@ import runze.moneytracker.presenters.SettingsScreenPresenter;
 public interface AppComponent {
     void inject(HomeActivity homeActivity);
 
-    void inject(InputScreenFragment inputScreenFragment);
-    void inject(AnalyzeScreenFragment analyzeScreenFragment);
+    void inject(MainScreenFragment mainScreenFragment);
+    void inject(ExpenseAnalysisFragment expenseAnalysisFragment);
     void inject(SettingsScreenFragment settingsScreenFragment);
 
-    void inject(InputScreenPresenter inputScreenPresenter);
+    void inject(MainScreenPresenter mainScreenPresenter);
     void inject(SettingsScreenPresenter settingsScreenPresenter);
 }

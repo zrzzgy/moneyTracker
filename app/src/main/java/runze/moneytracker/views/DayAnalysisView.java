@@ -6,7 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -23,28 +24,30 @@ import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.utils.DaySummaryBarChartRecyclerAdapter;
 
-public class DayAnalyzeView extends LinearLayout implements IView {
+public class DayAnalysisView extends RelativeLayout implements IView {
 
     private TextView mDailyExpenseMonth;
     private RecyclerView mDailyExpenseDetailGraph;
-    private RecyclerView mDailyExpenseDetailList;
-    private DaySummaryBarChartRecyclerAdapter mAdapter;
+    private ImageView mDateHighLightCircle;
+    private DaySummaryBarChartRecyclerAdapter mDaySummaryBarChartRecyclerAdapter;
     private ExpenseAnalyzePresenter mPresenter;
 
-
-    public DayAnalyzeView(Context context) {
+    public DayAnalysisView(Context context) {
         super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.day_analyze_view, this);
+        View view = LayoutInflater.from(context).inflate(R.layout.day_analysis_layout, this);
         init(view);
     }
 
     private void init(View view){
         mDailyExpenseMonth = view.findViewById(R.id.daily_expense_month);
-        mDailyExpenseDetailGraph = view.findViewById(R.id.daily_expense_detail_graph);
-        mDailyExpenseDetailList = view.findViewById(R.id.daily_expense_detail_list);
+        mDailyExpenseDetailGraph = view.findViewById(R.id.date_sorted_expense_graph);
+        mDateHighLightCircle = view.findViewById(R.id.date_highlight_circle);
+       // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
 
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mDailyExpenseDetailGraph.setLayoutManager(mDailyExpenseDetailGraphLayoutManager);
+
+//        mDateHighLightCircle.setMode(R.color.colorSecondary, PorterDuff.Mode.OVERLAY);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mDailyExpenseDetailGraph.setOnScrollChangeListener(new OnScrollChangeListener() {
@@ -137,8 +140,8 @@ public class DayAnalyzeView extends LinearLayout implements IView {
     }
 
     public void updateBarChart(List<DailyExpenseTotal> expenseTotals){
-        mAdapter = new DaySummaryBarChartRecyclerAdapter(expenseTotals);
-        mDailyExpenseDetailGraph.setAdapter(mAdapter);
+        mDaySummaryBarChartRecyclerAdapter = new DaySummaryBarChartRecyclerAdapter(expenseTotals);
+        mDailyExpenseDetailGraph.setAdapter(mDaySummaryBarChartRecyclerAdapter);
     }
 
 }

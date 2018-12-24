@@ -8,7 +8,7 @@
     android:layout_alignParentTop="true"
     >
 
-    <!--category input field-->
+    <!--category input field
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,19 +26,31 @@
             android:layout_height="wrap_content"
             android:text="@string/add_category_button"
             android:layout_weight="1"/>
-    </LinearLayout>
+    </LinearLayout>-->
     <TextView
-        android:id="@+id/null_category_place_holder"
-        android:layout_width="wrap_content"
+        android:id="@+id/hello_user_header"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/stats_text_size"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:text="@string/null_category_place_holder_text"/>
+        android:text="Hello"/>
+    <Button
+        android:id="@+id/change_theme_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!--category list
     <ListView
         android:id="@+id/category_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin">
-    </ListView>
+    </ListView>-->
 </LinearLayout>

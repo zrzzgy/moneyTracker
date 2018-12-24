@@ -32,6 +32,14 @@ public class DataModel {
         return mExpenseList;
     }
 
+    public long getExpenseTotal() {
+        long total = 0;
+        for (Expense expense : mExpenseList) {
+            total += expense.getAmount();
+        }
+        return total;
+    }
+
     public HashSet<String> getCategories() {
         return mCategoryList;
     }

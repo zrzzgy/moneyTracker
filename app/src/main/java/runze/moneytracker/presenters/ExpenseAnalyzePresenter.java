@@ -1,18 +1,22 @@
 package runze.moneytracker.presenters;
 
 import android.graphics.Color;
-import android.support.annotation.VisibleForTesting;
 
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -20,26 +24,43 @@ import java.util.Set;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
-import runze.moneytracker.views.CategoryAnalyzeView;
-import runze.moneytracker.views.DayAnalyzeView;
+import runze.moneytracker.views.CategoryAnalysisView;
+import runze.moneytracker.views.DayAnalysisView;
 import runze.moneytracker.views.IView;
 
 public class ExpenseAnalyzePresenter implements IPresenter {
     private IView mView;
-    private List<Expense> mExpenses;
-    private HashSet<String> mCategories;
-    private List<Integer> mColorList;
+    private DataModel mDataModel;
+    private List<Expense> mListOfSameCategory;
+    private List<Expense> mListOfSameDay;
+    private OnChartValueSelectedListener mPieChartOnClickListener = new OnChartValueSelectedListener() {
+        @Override
+        public void onNothingSelected() {
+
+        }
+
+        @Override
+        public void onValueSelected(Entry e, Highlight h) {
+
+            ((CategoryAnalysisView) mView).setListOfSameCategory(((int) h.getX()),mDataModel.getExpenseTotal());
+        }
+    };
 
     public ExpenseAnalyzePresenter(DataModel dataModel) {
         super();
-        mExpenses = dataModel.getExpenses();
-        mCategories = dataModel.getCategories();
-        mColorList = dataModel.getColorList();
+        updateModel(dataModel);
+    }
+
+    public void updateModel(DataModel dataModel) {
+        mDataModel = dataModel;
     }
 
     @Override
     public void attachView(IView view) {
         mView = view;
+        if (mView instanceof CategoryAnalysisView) {
+            ((CategoryAnalysisView) mView).setGraphOnClickListener(mPieChartOnClickListener);
+        }
     }
 
     @Override
@@ -49,6 +70,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
     /**
      * Sort the data into a list according to different date, merge expenses from the same date
+     *
      * @param expenses a list of individual expenses
      * @return a list of daily expense total with expenses from the same date merged
      */
@@ -77,8 +99,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         }
         if (addNew) {
             return orderAndAddPlaceHolderDates(listOfDailyExpenseTotal);
-        }
-        else {
+        } else {
             return listOfDailyExpenseTotal;
         }
     }
@@ -87,6 +108,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     /**
      * Sort the date-oriented data by placing earlier dates in the front,
      * and add dates with 0 expense so that dates are consecutive.
+     *
      * @param data list of expenses sorted and merged by date
      * @return list of consecutive expenses sorted and merged by date
      */
@@ -109,10 +131,22 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
             //add place holder dates
             for (int i = 1; i < n; i++) {
-                long timeInBetween = data.get(i - 1).getDate().getTime() - data.get(i).getDate().getTime();
-                long daysInBetween = timeInBetween / (1000 * 60 * 60 * 24);
-                result.add(data.get(i - 1));
-                for (int j = 0; j < daysInBetween - 1; j++) {
+                String day1 = data.get(i - 1).getDay();
+                String day2 = data.get(i).getDay();
+                Date date1 = new Date();
+                Date date2 = new Date();
+                try {
+                    date1 = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).parse(day1);
+                    date2 = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).parse(day2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                long timeInBetween = date1.getTime() - date2.getTime();
+                long daysInBetween = (long) Math.ceil((double) timeInBetween / (1000 * 60 * 60 * 24)) - 1;
+                result.add(data.get(i - 1)); // Add the latest day first
+
+                for (int j = 0; j < daysInBetween; j++) {
                     long nextTime = result.get(result.size() - 1).getDate().getTime() - 1000 * 60 * 60 * 24;
                     Date nextDate = new Date(nextTime);
                     DailyExpenseTotal placeHolder = new DailyExpenseTotal((double) 0, nextDate);
@@ -131,14 +165,14 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     }
 
     private void analyzeData() {
-        if (mView instanceof DayAnalyzeView) {
-            ((DayAnalyzeView) mView).updateBarChart(dateAsKey(mExpenses));
-        }else if (mView instanceof CategoryAnalyzeView)
-            ((CategoryAnalyzeView) mView).updatePieChart(analyzeDataForPieChart());
+        if (mView instanceof DayAnalysisView) {
+            ((DayAnalysisView) mView).updateBarChart(dateAsKey(mDataModel.getExpenses()));
+        } else if (mView instanceof CategoryAnalysisView)
+            ((CategoryAnalysisView) mView).updatePieChart(analyzeDataForPieChart());
     }
 
     private PieData analyzeDataForPieChart() {
-        Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(mExpenses);
+        Set<Map.Entry<String, Double>> dataForPieChart = categoryAsKey(mDataModel.getExpenses());
         List<PieEntry> pieEntries = new ArrayList<>();
 
         //pie chart
@@ -146,13 +180,13 @@ public class ExpenseAnalyzePresenter implements IPresenter {
             pieEntries.add(new PieEntry(entry.getValue().floatValue(), entry.getKey()));
         }
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
-        if (pieEntries.size() > mColorList.size()) {
+        if (pieEntries.size() > mDataModel.getColorList().size()) {
             Random rng = new Random();
-            for (int i = mColorList.size(); i < pieEntries.size(); i++) {
-                mColorList.add(Color.rgb(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)));
+            for (int i = mDataModel.getColorList().size(); i < pieEntries.size(); i++) {
+                mDataModel.getColorList().add(Color.rgb(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)));
             }
         }
-        pieDataSet.setColors(mColorList);
+        pieDataSet.setColors(mDataModel.getColorList());
         pieDataSet.setValueTextSize(25);
         pieDataSet.setValueTextColor(Color.WHITE);
         return new PieData(pieDataSet);
@@ -161,6 +195,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
     /**
      * Sort the data according to different categories. Expenses of the same category are merged
+     *
      * @param expenses a list of individual expenses
      * @return A hash map of <category, amount>
      */
@@ -179,4 +214,53 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         }
         return sortedData.entrySet();
     }
+
+    private void generateListOfSameCategory(String category) {
+        mListOfSameCategory = new ArrayList<>();
+        List<Expense> expenseList = mDataModel.getExpenses();
+        for (int i = 0; i < expenseList.size(); i++) {
+            if (expenseList.get(i).getCategory().contains(category)) {
+                mListOfSameCategory.add(expenseList.get(i));
+            }
+        }
+    }
+
+    private void generateListOfSameDay(String date) {
+        mListOfSameDay = new ArrayList<>();
+        List<Expense> expenseList = mDataModel.getExpenses();
+        for (int i = 0; i < expenseList.size(); i++) {
+            if (expenseList.get(i).getDay().equals(date)) {
+                mListOfSameDay.add(expenseList.get(i));
+            }
+        }
+    }
+
+    private void sortListOfSameCategory(String category) {
+        generateListOfSameCategory(category);
+        int n = mListOfSameCategory.size();
+
+        if (n > 0) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 1; j < n - i; j++) {
+                    if (mListOfSameCategory.get(j - 1).getDate().getTime() < mListOfSameCategory.get(j).getDate().getTime()) {
+                        // swap data[j] and data[j+1]
+                        Expense temp = mListOfSameCategory.get(j - 1);
+                        mListOfSameCategory.set(j - 1, mListOfSameCategory.get(j));
+                        mListOfSameCategory.set(j, temp);
+                    }
+                }
+            }
+        }
+    }
+
+    public List<Expense> getListOfSameCategory(String category) {
+        sortListOfSameCategory(category);
+        return mListOfSameCategory;
+    }
+
+    public List<Expense> getListOfSameDay(String date) {
+        generateListOfSameDay(date);
+        return mListOfSameDay;
+    }
+
 }

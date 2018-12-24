@@ -38,7 +38,7 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<MainScreenRe
         private TextView mDateTextView;
         private TextView mDescriptionTextView;
 
-        ViewHolder(RelativeLayout v, ViewGroup viewGroup) {
+        ViewHolder(RelativeLayout v) {
             super(v);
             mView = v;
             mAmountTextView = mView.findViewById(R.id.list_amount);
@@ -59,8 +59,8 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<MainScreenRe
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.expense_block, parent, false);
-        return new ViewHolder(relativeLayout, parent);
+                .inflate(R.layout.expense_layout, parent, false);
+        return new ViewHolder(relativeLayout);
     }
 
     @SuppressLint("SetTextI18n")

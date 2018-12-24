@@ -12,21 +12,20 @@ import javax.inject.Inject;
 
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
+import runze.moneytracker.models.DataModel;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
-import runze.moneytracker.views.CategoryAnalyzeView;
-import runze.moneytracker.views.DayAnalyzeView;
-import runze.moneytracker.views.IView;
+import runze.moneytracker.views.CategoryAnalysisView;
+import runze.moneytracker.views.DayAnalysisView;
 
 
-public class AnalyzeScreenFragment extends BaseFragment {
-    private DayAnalyzeView mDayAnalyzeView;
-    private CategoryAnalyzeView mCategoryAnalyzeView;
+public class ExpenseAnalysisFragment extends BaseFragment {
+    private DayAnalysisView mDayAnalysisView;
+    private CategoryAnalysisView mCategoryAnalysisView;
     @Inject
     ExpenseAnalyzePresenter mAnalyzePresenter;
     private TabLayout mTabLayout;
     private TabLayout.Tab mTabDaily;
-    private TabLayout.Tab mTabCategory;
-    private FrameLayout mChildAnalyzeLayout;
+    private FrameLayout mChildAnalysisLayout;
     private final int DAILY_TAB = 0;
     private final int CATEGORY_TAB = 1;
 
@@ -43,20 +42,21 @@ public class AnalyzeScreenFragment extends BaseFragment {
         ((HomeActivity) getActivity()).getAppComponent().inject(this);
 
         // Construct the view if it does not yet exist
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.analyze_view_layout, null);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.analysis_view_layout, null);
         init(view);
-        if (mDayAnalyzeView == null) {
-            mDayAnalyzeView = new DayAnalyzeView(getContext());
-            mDayAnalyzeView.attachPresenter(mAnalyzePresenter);
+        if (mDayAnalysisView == null) {
+            mDayAnalysisView = new DayAnalysisView(getContext());
+            mDayAnalysisView.attachPresenter(mAnalyzePresenter);
         }
-        if (mCategoryAnalyzeView == null) {
-            mCategoryAnalyzeView = new CategoryAnalyzeView(getContext());
-            mCategoryAnalyzeView.attachPresenter(mAnalyzePresenter);
+        if (mCategoryAnalysisView == null) {
+            mCategoryAnalysisView = new CategoryAnalysisView(getContext());
+            mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
         }
 
-        mChildAnalyzeLayout.removeAllViews();
-        mChildAnalyzeLayout.addView(mDayAnalyzeView);
-        mAnalyzePresenter.attachView(mDayAnalyzeView);
+        mChildAnalysisLayout.removeAllViews();
+        mChildAnalysisLayout.addView(mDayAnalysisView);
+        mAnalyzePresenter.attachView(mDayAnalysisView);
+
         return view;
     }
 
@@ -66,28 +66,31 @@ public class AnalyzeScreenFragment extends BaseFragment {
         mAnalyzePresenter.updateView();
     }
 
+    public void updateModel(DataModel dataModel) {
+        mAnalyzePresenter.updateModel(dataModel);
+    }
+
     private void init(View view) {
-        mChildAnalyzeLayout = view.findViewById(R.id.child_analyze_view);
+        mChildAnalysisLayout = view.findViewById(R.id.child_analyze_view);
         mTabLayout = view.findViewById(R.id.tab_layout);
         mTabDaily = mTabLayout.getTabAt(0);
-        mTabCategory = mTabLayout.getTabAt(1);
 
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case DAILY_TAB:
-                        mChildAnalyzeLayout.removeAllViews();
-                        mChildAnalyzeLayout.addView(mDayAnalyzeView);
+                        mChildAnalysisLayout.removeAllViews();
+                        mChildAnalysisLayout.addView(mDayAnalysisView);
 
-                        mAnalyzePresenter.attachView(mDayAnalyzeView);
+                        mAnalyzePresenter.attachView(mDayAnalysisView);
                         mAnalyzePresenter.updateView();
                         break;
                     case CATEGORY_TAB:
-                        mChildAnalyzeLayout.removeAllViews();
-                        mChildAnalyzeLayout.addView(mCategoryAnalyzeView);
+                        mChildAnalysisLayout.removeAllViews();
+                        mChildAnalysisLayout.addView(mCategoryAnalysisView);
 
-                        mAnalyzePresenter.attachView(mCategoryAnalyzeView);
+                        mAnalyzePresenter.attachView(mCategoryAnalysisView);
                         mAnalyzePresenter.updateView();
                         break;
 
@@ -112,8 +115,8 @@ public class AnalyzeScreenFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mAnalyzePresenter.detachView();
-        mCategoryAnalyzeView.detachPresenter();
-        mDayAnalyzeView.detachPresenter();
+        mCategoryAnalysisView.detachPresenter();
+        mDayAnalysisView.detachPresenter();
     }
 
 }
