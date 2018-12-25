@@ -27,7 +27,6 @@ import runze.moneytracker.presenters.SettingsScreenPresenter;
  */
 public class SettingsScreenView extends LinearLayout implements IView{
     private SettingsScreenPresenter mPresenter;
-    private TextView mHelllo;
     private Button mChangeTheme;
     private Button mLogout;
     private  View mColorDialogView;
@@ -43,7 +42,6 @@ public class SettingsScreenView extends LinearLayout implements IView{
         }
 
     private void init(View view){
-        mHelllo = view.findViewById(R.id.hello_user_header);
         mChangeTheme = view.findViewById(R.id.change_theme_button);
         mChangeTheme.setOnClickListener(mChangeThemeButtonListener);
         mLogout = view.findViewById(R.id.logout_button);

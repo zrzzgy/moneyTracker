@@ -32,6 +32,9 @@
     <string name="category_already_exists">Category Already Exists</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="change_theme">Change Theme</string>
+    <string name="log_out">Log out</string>
+    <string name="about">About</string>>
 
 
     <!--stats screen-->
