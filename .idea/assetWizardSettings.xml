@@ -28,9 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ff5638" />
-                            <entry key="outputName" value="ic_brightness_1_black_24dp" />
-                            <entry key="sourceFile" value="$APPLICATION_HOME_DIR$/bin/C:\Users\runze" />
+                            <entry key="outputName" value="ic_color_picker" />
+                            <entry key="sourceFile" value="$PROJECT_DIR$/../color-picker.psd" />
                           </map>
                         </option>
                       </PersistentState>

@@ -3,54 +3,58 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
     android:animateLayoutChanges="true"
     android:layout_alignParentTop="true"
+    android:background="#dadbda"
     >
 
-    <!--category input field
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin">
-        <EditText
-            android:id="@+id/category_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="50"/>
-        <Button
-            android:id="@+id/add_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_category_button"
-            android:layout_weight="1"/>
-    </LinearLayout>-->
-    <TextView
-        android:id="@+id/hello_user_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/stats_text_size"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:text="Hello"/>
     <Button
         android:id="@+id/change_theme_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/offWhite"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:drawableStart="@drawable/ic_color_picker"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:text="@string/change_theme"
+        android:textAlignment="viewStart"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
         />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark"/>
+
     <Button
         android:id="@+id/logout_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <!--category list
-    <ListView
-        android:id="@+id/category_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin">
-    </ListView>-->
+        android:drawableStart="@drawable/ic_logout_sketch"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:text="@string/log_out"
+        android:textAlignment="viewStart"
+        android:background="@color/offWhite"
+        android:paddingEnd="@dimen/activity_horizontal_margin"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark"/>
+
+    <Button
+        android:id="@+id/about_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:drawableStart="@drawable/ic_information"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:text="@string/about"
+        android:textAlignment="viewStart"
+        android:background="@color/offWhite"
+        android:paddingEnd="@dimen/activity_horizontal_margin"/>
+
+
 </LinearLayout>
