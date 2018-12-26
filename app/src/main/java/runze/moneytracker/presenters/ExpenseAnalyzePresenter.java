@@ -1,6 +1,7 @@
 package runze.moneytracker.presenters;
 
 import android.graphics.Color;
+import android.view.View;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -182,8 +183,8 @@ public class ExpenseAnalyzePresenter implements IPresenter {
             }
         }
         pieDataSet.setColors(mDataModel.getColorList());
-        pieDataSet.setValueTextSize(25);
-        pieDataSet.setValueTextColor(Color.WHITE);
+        pieDataSet.setValueTextSize(0);
+        pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         return new PieData(pieDataSet);
     }
 

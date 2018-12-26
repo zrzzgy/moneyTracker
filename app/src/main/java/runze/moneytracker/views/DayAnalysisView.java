@@ -20,16 +20,18 @@ import java.util.Map;
 
 import runze.moneytracker.R;
 import runze.moneytracker.models.DailyExpenseTotal;
+import runze.moneytracker.models.Expense;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.IPresenter;
+import runze.moneytracker.utils.DailyAnalysisRecyclerAdapter;
 import runze.moneytracker.utils.DaySummaryBarChartRecyclerAdapter;
 
 public class DayAnalysisView extends RelativeLayout implements IView {
 
     private TextView mDailyExpenseMonth;
     private RecyclerView mDailyExpenseDetailGraph;
-    private DaySummaryBarChartRecyclerAdapter mDaySummaryBarChartRecyclerAdapter;
     private ExpenseAnalyzePresenter mPresenter;
+    private RecyclerView mDailyExpenseDetailList;
 
     public DayAnalysisView(Context context) {
         super(context);
@@ -40,10 +42,15 @@ public class DayAnalysisView extends RelativeLayout implements IView {
     private void init(View view){
         mDailyExpenseMonth = view.findViewById(R.id.daily_expense_month);
         mDailyExpenseDetailGraph = view.findViewById(R.id.date_sorted_expense_graph);
+        mDailyExpenseDetailList = view.findViewById(R.id.expense_detail_list_category);
        // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
 
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mDailyExpenseDetailGraph.setLayoutManager(mDailyExpenseDetailGraphLayoutManager);
+
+        mDailyExpenseDetailList.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mDailyExpenseDetailList.setLayoutManager(mLayoutManager);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mDailyExpenseDetailGraph.setOnScrollChangeListener(new OnScrollChangeListener() {
@@ -136,8 +143,14 @@ public class DayAnalysisView extends RelativeLayout implements IView {
     }
 
     public void updateBarChart(List<DailyExpenseTotal> expenseTotals){
-        mDaySummaryBarChartRecyclerAdapter = new DaySummaryBarChartRecyclerAdapter(expenseTotals);
+        DaySummaryBarChartRecyclerAdapter mDaySummaryBarChartRecyclerAdapter = new DaySummaryBarChartRecyclerAdapter(expenseTotals);
         mDailyExpenseDetailGraph.setAdapter(mDaySummaryBarChartRecyclerAdapter);
     }
 
+    public void setListOfSameDay(Date date) {
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+
+        List<Expense> listOfSameDay = mPresenter.getListOfSameDay( df.format(date));
+        mDailyExpenseDetailList.setAdapter(new DailyAnalysisRecyclerAdapter(listOfSameDay));
+    }
 }

@@ -1,6 +1,7 @@
 package runze.moneytracker.views;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,6 +61,8 @@ public class CategoryAnalysisView extends RelativeLayout implements IView {
     public void updatePieChart(PieData pieData) {
         mPieData = pieData;
         mPieChart.setDescription(mDescription);
+        mPieChart.setEntryLabelTextSize(15);
+        mPieChart.setEntryLabelColor(Color.BLACK);
         mPieChart.setData(pieData);
         mPieChart.setNoDataText("No Data");
         mPieChart.invalidate();

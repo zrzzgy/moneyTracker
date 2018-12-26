@@ -9,8 +9,8 @@
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/category_expense_detail_graph"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="@dimen/graph_margin" />
+        android:layout_height="300dp"
+         />
     <TextView
         android:id="@+id/category_expense_detail_total"
         android:layout_width="match_parent"

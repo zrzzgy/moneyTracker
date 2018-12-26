@@ -3,7 +3,9 @@ package runze.moneytracker.utils;
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +18,7 @@ import java.util.Locale;
 
 import runze.moneytracker.R;
 import runze.moneytracker.models.DailyExpenseTotal;
+import runze.moneytracker.views.DayAnalysisView;
 
 /**
  * Class used in the recycler view that shows daily spending bar chart
@@ -24,7 +27,7 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
     private final String TAG = this.getClass().getSimpleName();
     private List<DailyExpenseTotal> mDataSet;
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private RelativeLayout mView;
         private TextView mBarColorBlock;
         private TextView mBarDate;
@@ -51,12 +54,21 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull final DaySummaryBarChartRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final DaySummaryBarChartRecyclerAdapter.ViewHolder holder, final int position) {
+        // int position: the position of the ViewHolder item
         DailyExpenseTotal singleExpense = (DailyExpenseTotal) mDataSet.toArray()[position];
         SimpleDateFormat df = new SimpleDateFormat("dd", Locale.getDefault());
 
         holder.mBarDate.setText(df.format(singleExpense.getDate()));
         holder.mBarColorBlock.setHeight((int) (150 * singleExpense.getTotalAmount() / getMaxDailyTotal(mDataSet)));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // on list item click
+                Log.v(TAG, "Clicked " + position);
+                ((DayAnalysisView) view.getParent().getParent().getParent()).setListOfSameDay(getItem(position).getDate());
+            }
+        });
     }
 
     @Override
