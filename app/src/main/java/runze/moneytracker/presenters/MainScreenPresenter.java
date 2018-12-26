@@ -10,12 +10,12 @@ import java.util.List;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.views.IView;
-import runze.moneytracker.views.MainScreenView;
+import runze.moneytracker.views.MainView;
 
 public class MainScreenPresenter implements IPresenter {
     private final String TAG = this.getClass().getSimpleName();
 
-    private MainScreenView mView;
+    private MainView mView;
     private DataModel mDataModel;
     private HashSet<String> mCategories;
     private List<Expense> mExpenses;
@@ -29,7 +29,7 @@ public class MainScreenPresenter implements IPresenter {
 
     @Override
     public void attachView(IView view) {
-        mView = (MainScreenView) view;
+        mView = (MainView) view;
     }
 
     @Override

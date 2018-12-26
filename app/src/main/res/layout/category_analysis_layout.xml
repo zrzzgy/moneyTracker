@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/category_expense_view"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/offWhite"
-    android:gravity="top">
+    android:layout_height="match_parent">
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/category_expense_detail_graph"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="@dimen/graph_margin" />
-    <TextView
-        android:id="@+id/category_expense_detail_total"
+    <RelativeLayout
+        android:id="@+id/category_expense_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:gravity="end"
-        android:layout_below="@id/category_expense_detail_graph"/>
+        android:background="@color/offWhite"
+        android:gravity="top">
 
-    <include layout="@layout/analyze_view_expense_detail_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/category_expense_detail_total" />
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/category_expense_detail_graph"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_margin="@dimen/graph_margin" />
+        <TextView
+            android:id="@+id/category_expense_detail_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:gravity="end"
+            android:layout_below="@id/category_expense_detail_graph"/>
 
-
+        <include layout="@layout/analyze_view_expense_detail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/category_expense_detail_total" />
 </RelativeLayout>
+</ScrollView>

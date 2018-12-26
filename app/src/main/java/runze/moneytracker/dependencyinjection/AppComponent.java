@@ -8,7 +8,7 @@ import runze.moneytracker.fragments.ExpenseAnalysisFragment;
 import runze.moneytracker.fragments.MainScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.presenters.MainScreenPresenter;
-import runze.moneytracker.presenters.SettingsScreenPresenter;
+import runze.moneytracker.presenters.SettingsPresenter;
 
 /**
  *  App component for dependency injection
@@ -24,5 +24,5 @@ public interface AppComponent {
     void inject(SettingsScreenFragment settingsScreenFragment);
 
     void inject(MainScreenPresenter mainScreenPresenter);
-    void inject(SettingsScreenPresenter settingsScreenPresenter);
+    void inject(SettingsPresenter settingsPresenter);
 }
