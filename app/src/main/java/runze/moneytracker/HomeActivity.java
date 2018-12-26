@@ -37,7 +37,6 @@ import runze.moneytracker.fragments.MainScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
-import runze.moneytracker.views.SettingsScreenView;
 
 /**
  * Home Activity
@@ -288,8 +287,12 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         //setup dataModel
         Log.d(TAG, "Value is: " + userModelDataAsString);
         loadDataModel();
-        mInputFragment.updateView();
-        mStatsFragment.updateModel(mDataModel);
+        if (mInputFragment != null) {
+            mInputFragment.updateView();
+        }
+        if (mStatsFragment != null) {
+            mStatsFragment.updateModel(mDataModel);
+        }
     }
 
     @Override

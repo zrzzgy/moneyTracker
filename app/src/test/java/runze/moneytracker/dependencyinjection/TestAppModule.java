@@ -10,7 +10,7 @@ import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.MainScreenPresenter;
-import runze.moneytracker.presenters.SettingsScreenPresenter;
+import runze.moneytracker.presenters.SettingsPresenter;
 
 import static org.mockito.Mockito.mock;
 
@@ -44,8 +44,8 @@ public class TestAppModule {
     }
 
     @Provides
-    SettingsScreenPresenter provideSettingsScreenPresenter(DataModel dataModel){
-        return mock(SettingsScreenPresenter.class);
+    SettingsPresenter provideSettingsScreenPresenter(DataModel dataModel){
+        return mock(SettingsPresenter.class);
     }
 
     @Provides

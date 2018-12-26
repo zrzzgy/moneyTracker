@@ -9,15 +9,15 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import runze.moneytracker.HomeActivity;
-import runze.moneytracker.models.DataModel;
-import runze.moneytracker.presenters.SettingsScreenPresenter;
-import runze.moneytracker.views.SettingsScreenView;
+import runze.moneytracker.presenters.SettingsPresenter;
+import runze.moneytracker.views.SettingsView;
 
 
 
 public class SettingsScreenFragment extends BaseFragment {
-    private SettingsScreenView mView;
-    @Inject SettingsScreenPresenter mPresenter;
+    private SettingsView mView;
+    @Inject
+    SettingsPresenter mPresenter;
 
     @Nullable
     @Override
@@ -25,7 +25,7 @@ public class SettingsScreenFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        mView = new SettingsScreenView(getContext());
+        mView = new SettingsView(getContext());
         ((HomeActivity) getActivity()).getAppComponent().inject(this);
 
         mPresenter.attachView(mView);
@@ -48,7 +48,7 @@ public class SettingsScreenFragment extends BaseFragment {
         mView = null;
     }
 
-    public SettingsScreenPresenter getPresenter() {
+    public SettingsPresenter getPresenter() {
         return mPresenter;
     }
 

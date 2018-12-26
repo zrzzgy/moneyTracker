@@ -10,10 +10,10 @@ import javax.inject.Inject;
 
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.presenters.MainScreenPresenter;
-import runze.moneytracker.views.MainScreenView;
+import runze.moneytracker.views.MainView;
 
-public class MainScreenFragment extends BaseFragment<MainScreenView, MainScreenPresenter> {
-    private MainScreenView mView;
+public class MainScreenFragment extends BaseFragment<MainView, MainScreenPresenter> {
+    private MainView mView;
     @Inject
     MainScreenPresenter mPresenter;
 
@@ -28,7 +28,7 @@ public class MainScreenFragment extends BaseFragment<MainScreenView, MainScreenP
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        mView = new MainScreenView(getContext());
+        mView = new MainView(getContext());
         ((HomeActivity) getActivity()).getAppComponent().inject(this);
         mPresenter.attachView(mView);
         mView.attachPresenter(mPresenter);
@@ -37,7 +37,9 @@ public class MainScreenFragment extends BaseFragment<MainScreenView, MainScreenP
     }
 
     public void updateView() {
-        mView.updateView();
+        if (mView != null) {
+            mView.updateView();
+        }
     }
 
     @Override
