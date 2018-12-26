@@ -30,7 +30,7 @@ import runze.moneytracker.presenters.MainScreenPresenter;
 import runze.moneytracker.utils.MainScreenRecyclerAdapter;
 import runze.moneytracker.utils.RecyclerItemTouchHelper;
 
-public class MainScreenView extends RelativeLayout implements IView, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
+public class MainView extends RelativeLayout implements IView, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
     private final String TAG = this.getClass().getSimpleName();
 
     private RecyclerView mExpenseList;
@@ -43,7 +43,7 @@ public class MainScreenView extends RelativeLayout implements IView, RecyclerIte
 
     private MainScreenRecyclerAdapter mAdapter;
 
-    public MainScreenView(Context context){
+    public MainView(Context context){
         super(context);
         View view = LayoutInflater.from(context).inflate(R.layout.home_base_layout, this);
         init(view);

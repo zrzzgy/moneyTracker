@@ -15,7 +15,7 @@ import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.MainScreenPresenter;
-import runze.moneytracker.presenters.SettingsScreenPresenter;
+import runze.moneytracker.presenters.SettingsPresenter;
 
 /**
  * App Module for dependency injection n
@@ -46,8 +46,8 @@ public class AppModule {
     }
 
     @Provides
-    SettingsScreenPresenter provideSettingsScreenPresenter(DataModel dataModel){
-        return new SettingsScreenPresenter(dataModel);
+    SettingsPresenter provideSettingsScreenPresenter(){
+        return new SettingsPresenter();
     }
 
     @Provides
