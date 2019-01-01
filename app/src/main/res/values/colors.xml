@@ -10,4 +10,25 @@
     <color name="colorSecondaryLight">#ffdd71</color>
     <color name="red">#ff0000</color>
 
+    <color name="colorPrimaryBlue">#90caf9</color>
+    <color name="colorPrimaryDarkBlue">#5d99c6</color>
+    <color name="colorPrimaryLightBlue">#c3fdff</color>
+    <color name="colorSecondaryBlue">#64b5f6</color>
+    <color name="colorSecondaryDarkBlue">#2286c3</color>
+    <color name="colorSecondaryLightBlue">#9be7ff</color>
+
+    <color name="colorPrimaryGreen">#80cbc4</color>
+    <color name="colorPrimaryDarkGreen">#4f9a94</color>
+    <color name="colorPrimaryLightGreen">#b2fef7</color>
+    <color name="colorSecondaryGreen">#4db6ac</color>
+    <color name="colorSecondaryDarkGreen">#00867d</color>
+    <color name="colorSecondaryLightGreen">#82e9de</color>
+
+    <color name="colorPrimaryPink">#fce4ec</color>
+    <color name="colorPrimaryDarkPink">#c9b2ba</color>
+    <color name="colorPrimaryLightPink">#ffffff</color>
+    <color name="colorSecondaryPink">#f8bbd0</color>
+    <color name="colorSecondaryDarkPink">#c48b9f</color>
+    <color name="colorSecondaryLightPink">#ffeeff</color>
+
 </resources>

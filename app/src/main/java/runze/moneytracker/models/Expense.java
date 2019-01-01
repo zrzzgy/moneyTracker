@@ -15,6 +15,7 @@ public class Expense {
     private Double mAmount;
     private Date mDate;
     private String mDescription;
+    private String mChildId;
 
     public Expense(@NonNull HashSet<String> category, @NonNull Double amount, @NonNull Date date, String description){
         mCategories = category;
@@ -25,6 +26,14 @@ public class Expense {
 
     public HashSet<String> getCategory() {
         return mCategories;
+    }
+
+    public String getChildId() {
+        return mChildId;
+    }
+
+    public void setChildId(String childId) {
+        mChildId = childId;
     }
 
     public void setCategory(HashSet<String> newCategory){

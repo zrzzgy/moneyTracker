@@ -30,12 +30,14 @@ public class DailyAnalysisRecyclerAdapter extends RecyclerView.Adapter<runze.mon
         private TextView mAmountTextView;
         private TextView mCategoryTextView;
         private TextView mDateTextView;
+        private TextView mDescription;
 
         ViewHolder(LinearLayout v) {
             super(v);
             mAmountTextView = v.findViewById(R.id.detailed_analysis_list_item_amount);
             mCategoryTextView = v.findViewById(R.id.detailed_analysis_list_item_category);
             mDateTextView = v.findViewById(R.id.detailed_analysis_list_item_date);
+            mDescription = v.findViewById(R.id.detailed_analysis_list_item_description);
         }
     }
 
@@ -53,9 +55,11 @@ public class DailyAnalysisRecyclerAdapter extends RecyclerView.Adapter<runze.mon
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
 
         holder.mAmountTextView.setText(singleExpense.getAmount().toString());
-        holder.mCategoryTextView.setVisibility(View.GONE);
-        holder.mDateTextView.setText(df.format(singleExpense.getDate()));
-        holder.mDateTextView.setVisibility(View.VISIBLE);
+        String categoriesList = singleExpense.getCategory().toString();
+        holder.mCategoryTextView.setText(categoriesList.substring(1, categoriesList.length()-1));
+        holder.mCategoryTextView.setVisibility(View.VISIBLE);
+        holder.mDateTextView.setVisibility(View.GONE);
+        holder.mDescription.setText(singleExpense.getDescription());
     }
 
     @Override

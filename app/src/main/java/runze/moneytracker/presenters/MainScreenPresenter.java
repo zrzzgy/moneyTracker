@@ -7,8 +7,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
+import runze.moneytracker.models.UnsyncedExpense;
 import runze.moneytracker.views.IView;
 import runze.moneytracker.views.MainView;
 
@@ -20,11 +23,13 @@ public class MainScreenPresenter implements IPresenter {
     private HashSet<String> mCategories;
     private List<Expense> mExpenses;
     private List<Expense> mBackupExpenses = new ArrayList<>();
+    private List<UnsyncedExpense> mUnsyncedExpenseList;
 
-    public MainScreenPresenter(DataModel dataModel) {
+    public MainScreenPresenter(DataModel dataModel, List<UnsyncedExpense> unsyncedExpenseList) {
         mDataModel = dataModel;
         mCategories = dataModel.getCategories();
         mExpenses = dataModel.getExpenses();
+        mUnsyncedExpenseList = unsyncedExpenseList;
     }
 
     @Override
@@ -51,6 +56,7 @@ public class MainScreenPresenter implements IPresenter {
         //put in new data
         mExpenses.add(newExpense);
         mCategories.addAll(categories);
+        mUnsyncedExpenseList.add(new UnsyncedExpense(newExpense, true));
 
         updateModel();
     }
@@ -65,6 +71,7 @@ public class MainScreenPresenter implements IPresenter {
             Expense expense = iterator.next();
             if (expense.isSameExpense(itemToDelete)) {
                 mExpenses.remove(expense);
+                mUnsyncedExpenseList.add(new UnsyncedExpense(expense, false));
                 result = true;
                 break;
             }

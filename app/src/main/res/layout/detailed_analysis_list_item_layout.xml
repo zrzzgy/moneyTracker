@@ -1,38 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/detailed_analysis_list_item_bullet"
-        android:layout_width="13dp"
-        android:layout_height="13dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:src="@drawable/ic_bullet_point" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/detailed_analysis_list_item_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="$123 "/>
-
-    <TextView
-        android:id="@+id/detailed_analysis_list_item_category"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_gravity="end"
-        android:visibility="visible"
-        android:text="food"/>
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        >
+
+        <ImageView
+            android:id="@+id/detailed_analysis_list_item_bullet"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_bullet_point" />
+
+        <TextView
+            android:id="@+id/detailed_analysis_list_item_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
+            android:layout_toEndOf="@id/detailed_analysis_list_item_bullet"
+            android:text="$123 "
+            android:textAlignment="viewStart" />
+
+        <TextView
+            android:id="@+id/detailed_analysis_list_item_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_toEndOf="@id/detailed_analysis_list_item_amount"
+            android:textAlignment="viewStart"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/detailed_analysis_list_item_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/detailed_analysis_list_item_category"
+            android:textAlignment="viewEnd"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
     <TextView
-        android:id="@+id/detailed_analysis_list_item_date"
+        android:id="@+id/detailed_analysis_list_item_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:visibility="gone"
-        android:text="12-22-2018"/>
-
+        android:layout_marginLeft="@dimen/activity_horizontal_margin" />
 </LinearLayout>

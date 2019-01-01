@@ -66,7 +66,7 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
             public void onClick(View view) {
                 // on list item click
                 Log.v(TAG, "Clicked " + position);
-                ((DayAnalysisView) view.getParent().getParent().getParent()).setListOfSameDay(getItem(position).getDate());
+                ((DayAnalysisView) view.getParent().getParent().getParent()).setListOfSameDay(getItem(position).getDate(),getItem(position).getTotalAmount());
             }
         });
     }

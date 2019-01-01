@@ -32,6 +32,7 @@ public class DayAnalysisView extends RelativeLayout implements IView {
     private RecyclerView mDailyExpenseDetailGraph;
     private ExpenseAnalyzePresenter mPresenter;
     private RecyclerView mDailyExpenseDetailList;
+    private TextView mDailyExpenseDetailTotal;
 
     public DayAnalysisView(Context context) {
         super(context);
@@ -44,6 +45,7 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         mDailyExpenseDetailGraph = view.findViewById(R.id.date_sorted_expense_graph);
         mDailyExpenseDetailList = view.findViewById(R.id.expense_detail_list_category);
        // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
+        mDailyExpenseDetailTotal = view.findViewById(R.id.daily_expense_detail_total);
 
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mDailyExpenseDetailGraph.setLayoutManager(mDailyExpenseDetailGraphLayoutManager);
@@ -147,9 +149,10 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         mDailyExpenseDetailGraph.setAdapter(mDaySummaryBarChartRecyclerAdapter);
     }
 
-    public void setListOfSameDay(Date date) {
+    public void setListOfSameDay(Date date, double totalAmount) {
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
 
+        mDailyExpenseDetailTotal.setText(String.valueOf(mPresenter.getExpenseTotal()) +"/" + String.valueOf(totalAmount));
         List<Expense> listOfSameDay = mPresenter.getListOfSameDay( df.format(date));
         mDailyExpenseDetailList.setAdapter(new DailyAnalysisRecyclerAdapter(listOfSameDay));
     }
