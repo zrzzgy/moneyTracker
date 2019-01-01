@@ -2,6 +2,7 @@ package runze.moneytracker.dependencyinjection;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.inject.Singleton;
 
@@ -13,6 +14,7 @@ import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
+import runze.moneytracker.models.UnsyncedExpense;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.MainScreenPresenter;
 import runze.moneytracker.presenters.SettingsPresenter;
@@ -41,8 +43,8 @@ public class AppModule {
     }
 
     @Provides
-    MainScreenPresenter provideInputScreenPresenter(DataModel dataModel){
-        return new MainScreenPresenter(dataModel);
+    MainScreenPresenter provideInputScreenPresenter(DataModel dataModel, List<UnsyncedExpense> unsyncedExpenseList){
+        return new MainScreenPresenter(dataModel, unsyncedExpenseList);
     }
 
     @Provides
@@ -61,5 +63,11 @@ public class AppModule {
         return new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(),
                 new HashSet<String>(),
                 new ArrayList<Integer>());
+    }
+
+    @Provides
+    @Singleton
+    List<UnsyncedExpense> provideUnsyncedExpenseList() {
+        return new ArrayList<>();
     }
 }

@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.presenters.IPresenter;
@@ -145,6 +146,7 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
                     calendar.set(year, month, day);
                     Date date = calendar.getTime();
                     mPresenter.saveData(categories, amount, description, date);
+                    ((HomeActivity) getContext()).saveDataModel();
                     Log.v(TAG, "input validated, dismissing input dialog");
                     mAlertDialog.dismiss();
                     updateView();

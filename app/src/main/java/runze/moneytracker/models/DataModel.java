@@ -2,6 +2,7 @@ package runze.moneytracker.models;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 

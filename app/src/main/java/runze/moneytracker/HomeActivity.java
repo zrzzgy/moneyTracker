@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import runze.moneytracker.dependencyinjection.AppComponent;
@@ -36,6 +43,8 @@ import runze.moneytracker.fragments.ExpenseAnalysisFragment;
 import runze.moneytracker.fragments.MainScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.models.DataModel;
+import runze.moneytracker.models.Expense;
+import runze.moneytracker.models.UnsyncedExpense;
 import runze.moneytracker.utils.MTFragmentPagerAdapter;
 
 /**
@@ -43,11 +52,12 @@ import runze.moneytracker.utils.MTFragmentPagerAdapter;
  */
 public class HomeActivity extends AppCompatActivity implements ValueEventListener{
     private final String TAG = this.getClass().getSimpleName();
-    public static final String CATEGORIES_KEY = "CATEGORIES_KEY";
-    public static final String EXPENSES_KEY = "EXPENSES_KEY";
     public static final String DATA_MODEL_KEY = "DATA_MODEL_KEY";
     public static final String EMPTY_DATA_MODEL = "EMPTY_DATA_MODEL";
+    public static final String EMPTY_EXPENSE_DATA = "EMPTY_EXPENSE_DATA";
+    public static final String UNSYNCED_EXPENSE_KEY = "UNSYNCED_EXPENSE_KEY";
     private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
+
 
     private AppComponent mAppComponent;
     public SharedPreferences mSharedPreferences;
@@ -56,8 +66,11 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     private ViewPager mViewPager;
     private FirebaseDatabase database;
 
-    private String userModelDataAsString;
+    private String userExpenseDataAsString;
     private FirebaseUser user;
+
+    @Inject
+    List<UnsyncedExpense> mUnsyncedExpenseList;
 
     @Inject
     MainScreenFragment mInputFragment;
@@ -91,7 +104,6 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         }
     };
 
-
     @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +116,16 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         mSharedPreferences = getSharedPreferences(SHARED_PREF_ID, Context.MODE_PRIVATE);  // BaseActivity.getSharedPreferences()
         mEditor = mSharedPreferences.edit();
 
+        List<UnsyncedExpense> cachedUnsyncedChanges =
+                gson.fromJson(mSharedPreferences.getString(UNSYNCED_EXPENSE_KEY, ""),
+                new TypeToken<List>() {}.getType());
+        if(mUnsyncedExpenseList.isEmpty() &&
+                cachedUnsyncedChanges != null) {
+            mUnsyncedExpenseList.addAll(cachedUnsyncedChanges);
+        }
+
         user = getIntent().getParcelableExtra("userName");
+
 
         database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(user.getUid());
@@ -248,45 +269,79 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         return mAppComponent;
     }
 
-    private void saveDataModel(){
+    public void saveDataModel(){
         String userData = gson.toJson(mDataModel);
         mEditor.putString(DATA_MODEL_KEY, userData).apply();
+
         // Write a message to the database
+        final DatabaseReference myRef = database.getReference(user.getUid());
 
-        DatabaseReference myRef = database.getReference(user.getUid());
+        Iterator<UnsyncedExpense> iterator = mUnsyncedExpenseList.iterator();
+        while (iterator.hasNext()){
+            final UnsyncedExpense tempUnsyncedExpense = iterator.next();
+            if(tempUnsyncedExpense.isAdd()) {
+                final DatabaseReference newChild = myRef.push();
+                tempUnsyncedExpense.getExpense().setChildId(newChild.getKey());
+                String unsyncedExpenseString = gson.toJson(tempUnsyncedExpense.getExpense());
+                newChild.setValue(unsyncedExpenseString, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        if (databaseError == null) {
+                            mUnsyncedExpenseList.remove(tempUnsyncedExpense);
+                            String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
+                            mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
+                        }
+                    }
+                });
+            }else {
+                // remove expense from database
+                myRef.child(tempUnsyncedExpense.getExpense().getChildId()).removeValue(new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        if (databaseError == null) {
+                            mUnsyncedExpenseList.remove(tempUnsyncedExpense);
+                            String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
+                            mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
+                        }
+                    }
+                });
+            }
 
-        myRef.setValue(userData);
+            String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
+            mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
+        }
 
-        String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
-        Log.v(TAG, dataModel);
+        // String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
+        // Log.v(TAG, dataModel);
     }
 
-    private void loadDataModel(){
-
-        //if there is saved data, parse it from gson to list
-        if ( userModelDataAsString != null &&
-                !userModelDataAsString.equals(EMPTY_DATA_MODEL)){
-            DataModel tempModel =  gson.fromJson(userModelDataAsString, new TypeToken<DataModel>(){}.getType());
-
-            // Can't directly set mDataModel = tempModel because this will change the instance of mDataModel
-            // causing further update to the model by other presenters not reflected in this mDataModel, and
-            // as a result, not saving the correct model.
-            mDataModel.setExpenseList(tempModel.getExpenses());
-            mDataModel.setDailyTotalList(tempModel.getDailyTotals());
-            mDataModel.setCategoryList(tempModel.getCategories());
-            mDataModel.setColorList(tempModel.getColorList());
-
+    private void loadDataModel(List<Expense> loadFromDatabaseExpenseList){
+        HashSet<String> category = new HashSet<>();
+        if(!loadFromDatabaseExpenseList.isEmpty()) {
+            Iterator<Expense> iterator = loadFromDatabaseExpenseList.iterator();
+            while (iterator.hasNext()){
+                category.addAll(iterator.next().getCategory());
+            }
+            mDataModel.setCategoryList(category);
+            mDataModel.setExpenseList(loadFromDatabaseExpenseList);
         }
+
     }
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        List<Expense> loadFromDatabaseExpenseList = new ArrayList<>();
         // This method is called once with the initial value and again
         // whenever data at this location is updated.
-        userModelDataAsString = dataSnapshot.getValue(String.class);
+        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+        while (iterator.hasNext()) {
+            userExpenseDataAsString = iterator.next().getValue(String.class);
+            Expense tempExpense =  gson.fromJson(userExpenseDataAsString, new TypeToken<Expense>(){}.getType());
+            loadFromDatabaseExpenseList.add(tempExpense);
+        }
         //setup dataModel
-        Log.d(TAG, "Value is: " + userModelDataAsString);
-        loadDataModel();
+        Log.d(TAG, "Value is: " + userExpenseDataAsString);
+        loadDataModel(loadFromDatabaseExpenseList);
         if (mInputFragment != null) {
             mInputFragment.updateView();
         }
