@@ -77,7 +77,13 @@ public class CategoryAnalysisView extends RelativeLayout implements IView {
         String category = ((PieDataSet) mPieData.getDataSet()).getValues().get(categoryIndex).getLabel();
         String categoryTotal =  String.valueOf(((PieDataSet) mPieData.getDataSet()).getValues().get(categoryIndex).getY());
 
-        mCategoryTotalText.setText(categoryTotal + "/" + String.valueOf(total));
+        mCategoryTotalText.setText(
+                String.format("%s%s %s%s%s",
+                        category,
+                        getContext().getString(R.string.partVsTotal),
+                        categoryTotal,
+                        getContext().getString(R.string.slash),
+                        String.valueOf(total)));
         List<Expense> listOfSameCategory = mPresenter.getListOfSameCategory(category);
         mDetailedExpenseList.setAdapter(new CategoryAnalysisRecyclerAdapter(listOfSameCategory));
     }

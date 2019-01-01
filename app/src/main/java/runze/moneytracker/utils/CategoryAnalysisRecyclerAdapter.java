@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -31,20 +32,22 @@ public class CategoryAnalysisRecyclerAdapter extends RecyclerView.Adapter<Catego
         private TextView mAmountTextView;
         private TextView mCategoryTextView;
         private TextView mDateTextView;
+        private TextView mDescriptionView;
 
-        ViewHolder(LinearLayout v) {
+        ViewHolder(RelativeLayout v) {
             super(v);
             mAmountTextView = v.findViewById(R.id.detailed_analysis_list_item_amount);
             mCategoryTextView = v.findViewById(R.id.detailed_analysis_list_item_category);
             mDateTextView = v.findViewById(R.id.detailed_analysis_list_item_date);
+            mDescriptionView = v.findViewById(R.id.detailed_analysis_list_item_description);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext())
+        RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.detailed_analysis_list_item_layout, parent, false);
-        return new ViewHolder(linearLayout);
+        return new ViewHolder(relativeLayout);
     }
 
     @SuppressLint("SetTextI18n")
@@ -55,9 +58,10 @@ public class CategoryAnalysisRecyclerAdapter extends RecyclerView.Adapter<Catego
         String categoriesList = Arrays.toString(singleExpense.getCategory().toArray());
 
         holder.mAmountTextView.setText(singleExpense.getAmount().toString());
-        holder.mCategoryTextView.setVisibility(View.GONE);
+        holder.mCategoryTextView.setVisibility(View.INVISIBLE);
         holder.mDateTextView.setText(df.format(singleExpense.getDate()));
         holder.mDateTextView.setVisibility(View.VISIBLE);
+        holder.mDescriptionView.setText(singleExpense.getDescription());
     }
 
     @Override

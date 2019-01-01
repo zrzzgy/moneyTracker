@@ -53,8 +53,6 @@ import runze.moneytracker.utils.MTFragmentPagerAdapter;
 public class HomeActivity extends AppCompatActivity implements ValueEventListener{
     private final String TAG = this.getClass().getSimpleName();
     public static final String DATA_MODEL_KEY = "DATA_MODEL_KEY";
-    public static final String EMPTY_DATA_MODEL = "EMPTY_DATA_MODEL";
-    public static final String EMPTY_EXPENSE_DATA = "EMPTY_EXPENSE_DATA";
     public static final String UNSYNCED_EXPENSE_KEY = "UNSYNCED_EXPENSE_KEY";
     private static final String SHARED_PREF_ID = "moneyTrackerPreferenceFile";
 
@@ -208,24 +206,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     @Override
     public boolean onContextItemSelected(MenuItem item){
         Fragment currentFragment = getCurrentFragment();
-        if (currentFragment instanceof SettingsScreenFragment){
-            /*
-            switch (item.getItemId()){
-                case R.id.option_menu_edit:
-                    ((SettingsScreenView) currentFragment.getView()).showEditDialog(item);
-                    return true;
-                case R.id.option_menu_delete:
-                    ((SettingsScreenFragment) currentFragment).getPresenter().removeCategory(item);
-                    Snackbar.make(mViewPager, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
-                            .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                   undoRemoveCategory();
-                                }
-                            }).show();
-                    return true;
-            }**/
-        }else if (currentFragment instanceof ExpenseAnalysisFragment){
+        if (currentFragment instanceof ExpenseAnalysisFragment){
             switch (item.getItemId()){
                 case R.id.option_menu_edit:
                     return true;
@@ -244,11 +225,11 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     }
 
     @Override
-    public void onBackPressed(){   // for the return key
+    public void onBackPressed(){
            finish(); // end this activity
     }
 
-    protected Fragment getCurrentFragment() {
+    public Fragment getCurrentFragment() {
         Fragment fragment = null;
         FragmentManager fm = getSupportFragmentManager();
         if (fm != null && fm.getBackStackEntryCount() > 0) {
@@ -258,12 +239,6 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         }
         return fragment;
     }
-
-    /*
-    private void undoRemoveCategory(){
-        ((SettingsScreenFragment) getCurrentFragment()).getPresenter().undoRemoveCategory();
-    }
-    **/
 
     public AppComponent getAppComponent(){
         return mAppComponent;

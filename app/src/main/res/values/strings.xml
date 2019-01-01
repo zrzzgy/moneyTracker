@@ -43,17 +43,22 @@
     <string name="tab_tile_daily">By Date</string>
     <string name="tab_title_category">By Category</string>
 
-    <string name="January">January</string>
-    <string name="February">February</string>
-    <string name="March">March</string>
-    <string name="April">April</string>
+    <string name="January">Jan</string>
+    <string name="February">Feb</string>
+    <string name="March">Mar</string>
+    <string name="April">Apr</string>
     <string name="May">May</string>
-    <string name="June">June</string>
-    <string name="July">July</string>
-    <string name="August">August</string>
-    <string name="September">September</string>
-    <string name="October">October</string>
-    <string name="November">November</string>
-    <string name="December">December</string>
+    <string name="June">Jun</string>
+    <string name="July">Jul</string>
+    <string name="August">Aug</string>
+    <string name="September">Sept</string>
+    <string name="October">Oct</string>
+    <string name="November">Nov</string>
+    <string name="December">Dec</string>
+    <string name="partVsTotal">/total :</string>
+    <string name="slash">/</string>
+
+    <!--about screen-->
+    <string name = "app_version">Version 1.0.0</string>
 
 </resources>

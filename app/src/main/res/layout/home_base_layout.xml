@@ -7,13 +7,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    tools:context="runze.moneytracker.HomeActivity">
+    tools:context="runze.moneytracker.HomeActivity"
+    android:layout_marginTop="@dimen/tight_activity_vertical_margin">
 
     <TextView
         android:id="@+id/total_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/TotalExpenseText"
+        android:text="Total"
+        android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
         />
 
     <android.support.v7.widget.RecyclerView

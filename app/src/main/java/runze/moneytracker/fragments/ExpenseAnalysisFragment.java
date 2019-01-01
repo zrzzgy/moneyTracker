@@ -67,7 +67,9 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     }
 
     public void updateModel(DataModel dataModel) {
-        mAnalyzePresenter.updateModel(dataModel);
+        if (mAnalyzePresenter != null) {
+            mAnalyzePresenter.updateModel(dataModel);
+        }
     }
 
     private void init(View view) {

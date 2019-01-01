@@ -21,6 +21,7 @@ import com.skydoves.colorpickerpreference.ColorPickerDialog;
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
 import runze.moneytracker.SignInActivity;
+import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.presenters.SettingsPresenter;
 
@@ -109,5 +110,9 @@ public class SettingsView extends LinearLayout implements IView{
         intent.setClass(getContext(), SignInActivity.class);
         getContext().startActivity(intent);
         ((HomeActivity) getContext()).finish();
+    }
+
+    public void navigateToAboutScreen(){
+        ((SettingsScreenFragment) ((HomeActivity) getContext()).getCurrentFragment()).navigateAboutView();
     }
 }

@@ -23,6 +23,7 @@
     <string name="no_amount_entered">没有输入金额</string>
     <string name="cancel">取消</string>
     <string name="ok">确认</string>
+    <string name="total_title">总计：%1$s</string>
 
     <!--settings screen-->
     <string name="null_category_place_holder_text">没有类别，请添加一个类别</string>
@@ -30,10 +31,15 @@
     <string name="drop_down_title">选择类别</string>
     <string name="no_category_entered">没有输入类别</string>
     <string name="category_already_exists">类别已存在</string>
+    <string name="change_theme">主题</string>
+    <string name="log_out">登出</string>
+    <string name="about">关于</string>>
 
     <!--stats screen-->
     <string name="expenses_by_category">按类别分类</string>
     <string name="expenses_by_date">按日期分类</string>
+    <string name="tab_tile_daily">按日期</string>
+    <string name="tab_title_category">按类别</string>
 
     <string name="January">一月</string>
     <string name="February">二月</string>
@@ -47,4 +53,8 @@
     <string name="October">十月</string>
     <string name="November">十一月</string>
     <string name="December">十二月</string>
+    <string name="partVsTotal">/总计：</string>
+
+    <!--about screen-->
+    <string name = "app_version">版本 1.0.0</string>
 </resources>

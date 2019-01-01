@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/tight_activity_vertical_margin">
+
+    <ImageView
+        android:id="@+id/detailed_analysis_list_item_bullet"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:src="@drawable/ic_bullet_point"
+        android:layout_alignTop="@+id/card"
+        android:layout_alignBottom="@+id/card"/>
 
     <RelativeLayout
+        android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        >
-
-        <ImageView
-            android:id="@+id/detailed_analysis_list_item_bullet"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_bullet_point" />
+        android:layout_toEndOf="@id/detailed_analysis_list_item_bullet"
+        android:background="@drawable/card_background"
+        android:elevation="@dimen/card_elevation"
+        android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
+        android:layout_marginTop="@dimen/tight_activity_vertical_margin"
+        android:layout_marginBottom="@dimen/tight_activity_vertical_margin"
+        android:padding="@dimen/card_padding">
 
         <TextView
             android:id="@+id/detailed_analysis_list_item_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
-            android:layout_toEndOf="@id/detailed_analysis_list_item_bullet"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:text="$123 "
             android:textAlignment="viewStart" />
 
@@ -33,6 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_toEndOf="@id/detailed_analysis_list_item_amount"
+            android:text="category"
             android:textAlignment="viewStart"
             android:visibility="visible" />
 
@@ -42,13 +51,15 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/detailed_analysis_list_item_category"
             android:textAlignment="viewEnd"
+            android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/detailed_analysis_list_item_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/detailed_analysis_list_item_amount"
+            android:layout_below="@id/detailed_analysis_list_item_amount"
+            android:text="description" />
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/detailed_analysis_list_item_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-</LinearLayout>
+</RelativeLayout>

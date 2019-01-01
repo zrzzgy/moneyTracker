@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -32,7 +33,7 @@ public class DailyAnalysisRecyclerAdapter extends RecyclerView.Adapter<runze.mon
         private TextView mDateTextView;
         private TextView mDescription;
 
-        ViewHolder(LinearLayout v) {
+        ViewHolder(RelativeLayout v) {
             super(v);
             mAmountTextView = v.findViewById(R.id.detailed_analysis_list_item_amount);
             mCategoryTextView = v.findViewById(R.id.detailed_analysis_list_item_category);
@@ -43,9 +44,9 @@ public class DailyAnalysisRecyclerAdapter extends RecyclerView.Adapter<runze.mon
 
     @Override
     public runze.moneytracker.utils.DailyAnalysisRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext())
+        RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.detailed_analysis_list_item_layout, parent, false);
-        return new runze.moneytracker.utils.DailyAnalysisRecyclerAdapter.ViewHolder(linearLayout);
+        return new runze.moneytracker.utils.DailyAnalysisRecyclerAdapter.ViewHolder(relativeLayout);
     }
 
     @SuppressLint("SetTextI18n")
