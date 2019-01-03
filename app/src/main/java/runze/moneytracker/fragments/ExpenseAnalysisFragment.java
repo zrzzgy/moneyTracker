@@ -42,7 +42,7 @@ public class ExpenseAnalysisFragment extends BaseFragment {
         ((HomeActivity) getActivity()).getAppComponent().inject(this);
 
         // Construct the view if it does not yet exist
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.analysis_view_layout, null);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.analysis_base_layout, null);
         init(view);
         if (mDayAnalysisView == null) {
             mDayAnalysisView = new DayAnalysisView(getContext());

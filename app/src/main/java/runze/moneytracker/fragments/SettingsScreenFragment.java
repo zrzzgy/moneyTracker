@@ -61,7 +61,7 @@ public class SettingsScreenFragment extends BaseFragment {
         AboutFragment aboutFragment = new AboutFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.settings_container, aboutFragment).commit();
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("aboutFragment");
+        fragmentTransaction.replace(R.id.fragment_container, aboutFragment, "aboutFragment").commit();
     }
 }

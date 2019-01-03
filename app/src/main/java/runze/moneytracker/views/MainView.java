@@ -46,7 +46,7 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
 
     public MainView(Context context){
         super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.home_base_layout, this);
+        View view = LayoutInflater.from(context).inflate(R.layout.home_screen_layout, this);
         init(view);
     }
 

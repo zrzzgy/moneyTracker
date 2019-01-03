@@ -2,11 +2,12 @@ package runze.moneytracker.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.widget.LinearLayout;
 
 import runze.moneytracker.R;
 import runze.moneytracker.presenters.IPresenter;
 
-public class AboutView extends SettingsView implements IView{
+public class AboutView extends LinearLayout implements IView{
 
     public AboutView(Context context) {
         super(context);

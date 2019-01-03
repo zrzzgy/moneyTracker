@@ -8,10 +8,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -28,7 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -45,12 +43,11 @@ import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.models.UnsyncedExpense;
-import runze.moneytracker.utils.MTFragmentPagerAdapter;
 
 /**
  * Home Activity
  */
-public class HomeActivity extends AppCompatActivity implements ValueEventListener{
+public class HomeActivity extends AppCompatActivity implements ValueEventListener {
     private final String TAG = this.getClass().getSimpleName();
     public static final String DATA_MODEL_KEY = "DATA_MODEL_KEY";
     public static final String UNSYNCED_EXPENSE_KEY = "UNSYNCED_EXPENSE_KEY";
@@ -61,7 +58,6 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     public SharedPreferences mSharedPreferences;
     public SharedPreferences.Editor mEditor;
     private BottomNavigationView mNavigation;
-    private ViewPager mViewPager;
     private FirebaseDatabase database;
 
     private String userExpenseDataAsString;
@@ -74,8 +70,10 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     MainScreenFragment mInputFragment;
     @Inject
     ExpenseAnalysisFragment mStatsFragment;
-    @Inject SettingsScreenFragment mSettingsFragment;
-    @Inject DataModel mDataModel;
+    @Inject
+    SettingsScreenFragment mSettingsFragment;
+    @Inject
+    DataModel mDataModel;
 
     private Gson gson = new Gson();
 
@@ -84,21 +82,24 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_input:
-                    mViewPager.setCurrentItem(0);  // display page 0
-                    mInputFragment.onResume();
-                    return true;
+                    fragmentTransaction.replace(R.id.fragment_container, mInputFragment, "inputFragment");
+                    fragmentTransaction.addToBackStack("inputFragment");
+                    break;
                 case R.id.navigation_stats:
-                    mViewPager.setCurrentItem(1);   // display page 1
-                    mStatsFragment.onResume();
-                    return true;
+                    fragmentTransaction.replace(R.id.fragment_container, mStatsFragment, "statsFragment");
+                    fragmentTransaction.addToBackStack("statsFragment");
+                    break;
                 case R.id.navigation_settings:
-                   mViewPager.setCurrentItem(2);    // display page 2
-                   mSettingsFragment.onResume();
-                   return true;
+                    fragmentTransaction.replace(R.id.fragment_container, mSettingsFragment, "settingsFragment");
+                    fragmentTransaction.addToBackStack("settingsFragment");
+                    break;
             }
-            return false;
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            fragmentTransaction.commit();
+            return true;
         }
     };
 
@@ -116,24 +117,22 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
 
         List<UnsyncedExpense> cachedUnsyncedChanges =
                 gson.fromJson(mSharedPreferences.getString(UNSYNCED_EXPENSE_KEY, ""),
-                new TypeToken<List>() {}.getType());
-        if(mUnsyncedExpenseList.isEmpty() &&
+                        new TypeToken<List>() {
+                        }.getType());
+        if (mUnsyncedExpenseList.isEmpty() &&
                 cachedUnsyncedChanges != null) {
             mUnsyncedExpenseList.addAll(cachedUnsyncedChanges);
         }
 
         user = getIntent().getParcelableExtra("userName");
-
-
         database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(user.getUid());
         // Read from the database
         myRef.addValueEventListener(this);
 
-        setContentView(R.layout.bottom_navigation_bar_layout);  // setContentView() to display a view
+        setContentView(R.layout.base_layout);  // setContentView() to display a view
         initComponents();
-
-        this.getLayoutInflater().inflate((R.layout.home_base_layout), null);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mInputFragment).commit();
     }
 
     @Override
@@ -143,55 +142,11 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
     }
 
-    public void initComponents(){
-        MTFragmentPagerAdapter mFragmentPagerAdapter = new MTFragmentPagerAdapter(getSupportFragmentManager());
-        mFragmentPagerAdapter.addFragment(mInputFragment);
-        mFragmentPagerAdapter.addFragment(mStatsFragment);
-        mFragmentPagerAdapter.addFragment(mSettingsFragment);
-
-        mViewPager = findViewById(R.id.home_view_pager);
-        mViewPager.setAdapter(mFragmentPagerAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Log.v(TAG, "Page " + position + " selected");
-                for (int i = 0; i < 3; i++) {
-                    if (i == position) {
-                        mNavigation.getMenu().getItem(position).setChecked(true);
-                    }else {
-                        mNavigation.getMenu().getItem(position).setChecked(false);
-                    }
-                }
-
-                switch (position) {
-                    case 0:
-                        mInputFragment.onResume();
-                        break;
-                    case 1:
-                        mStatsFragment.onResume();
-                        break;
-                    case 2:
-                        mSettingsFragment.onResume();
-                        break;
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        mViewPager.setCurrentItem(0);
-
+    public void initComponents() {
         mNavigation = findViewById(R.id.navigation);
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -204,29 +159,10 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item){
-        Fragment currentFragment = getCurrentFragment();
-        if (currentFragment instanceof ExpenseAnalysisFragment){
-            switch (item.getItemId()){
-                case R.id.option_menu_edit:
-                    return true;
-                case R.id.option_menu_delete:
-                    Snackbar.make(mViewPager, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
-                            .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                }
-                            }).show();
-                    return true;
-            }
+    public void onBackPressed() {
+        if (!getSupportFragmentManager().popBackStackImmediate()){
+            finish();
         }
-        return false;
-    }
-
-    @Override
-    public void onBackPressed(){
-           finish(); // end this activity
     }
 
     public Fragment getCurrentFragment() {
@@ -240,11 +176,11 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         return fragment;
     }
 
-    public AppComponent getAppComponent(){
+    public AppComponent getAppComponent() {
         return mAppComponent;
     }
 
-    public void saveDataModel(){
+    public void saveDataModel() {
         String userData = gson.toJson(mDataModel);
         mEditor.putString(DATA_MODEL_KEY, userData).apply();
 
@@ -252,9 +188,9 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         final DatabaseReference myRef = database.getReference(user.getUid());
 
         Iterator<UnsyncedExpense> iterator = mUnsyncedExpenseList.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             final UnsyncedExpense tempUnsyncedExpense = iterator.next();
-            if(tempUnsyncedExpense.isAdd()) {
+            if (tempUnsyncedExpense.isAdd()) {
                 final DatabaseReference newChild = myRef.push();
                 tempUnsyncedExpense.getExpense().setChildId(newChild.getKey());
                 String unsyncedExpenseString = gson.toJson(tempUnsyncedExpense.getExpense());
@@ -268,7 +204,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
                         }
                     }
                 });
-            }else {
+            } else {
                 // remove expense from database
                 myRef.child(tempUnsyncedExpense.getExpense().getChildId()).removeValue(new DatabaseReference.CompletionListener() {
                     @Override
@@ -290,11 +226,11 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         // Log.v(TAG, dataModel);
     }
 
-    private void loadDataModel(List<Expense> loadFromDatabaseExpenseList){
+    private void loadDataModel(List<Expense> loadFromDatabaseExpenseList) {
         HashSet<String> category = new HashSet<>();
-        if(!loadFromDatabaseExpenseList.isEmpty()) {
+        if (!loadFromDatabaseExpenseList.isEmpty()) {
             Iterator<Expense> iterator = loadFromDatabaseExpenseList.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 category.addAll(iterator.next().getCategory());
             }
             mDataModel.setCategoryList(category);
@@ -311,7 +247,8 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
         while (iterator.hasNext()) {
             userExpenseDataAsString = iterator.next().getValue(String.class);
-            Expense tempExpense =  gson.fromJson(userExpenseDataAsString, new TypeToken<Expense>(){}.getType());
+            Expense tempExpense = gson.fromJson(userExpenseDataAsString, new TypeToken<Expense>() {
+            }.getType());
             loadFromDatabaseExpenseList.add(tempExpense);
         }
         //setup dataModel
