@@ -6,6 +6,7 @@
     android:animateLayoutChanges="true"
     android:layout_alignParentTop="true"
     android:background="#dadbda"
+    android:id="@+id/settings_container"
     >
 
     <Button

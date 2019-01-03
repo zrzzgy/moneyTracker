@@ -42,7 +42,7 @@ public class SettingsView extends LinearLayout implements IView{
         LayoutInflater layoutInflater = LayoutInflater.from(themeWrapper);
         View v = layoutInflater.inflate(R.layout.settings_view_layout, this);
         init(v);
-        }
+    }
 
     private void init(View view){
         mChangeThemeButton = view.findViewById(R.id.change_theme_button);
@@ -113,6 +113,6 @@ public class SettingsView extends LinearLayout implements IView{
     }
 
     public void navigateToAboutScreen(){
-        ((SettingsScreenFragment) ((HomeActivity) getContext()).getCurrentFragment()).navigateAboutView();
+         (( SettingsScreenFragment) ((HomeActivity) getContext()).getCurrentFragment()).navigateAboutScreen();
     }
 }
