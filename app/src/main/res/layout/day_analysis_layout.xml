@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/daily_expense_view"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:background="@color/offWhite"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/daily_expense_month"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/December"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/date_sorted_expense_graph"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@id/daily_expense_month"/>
-
-    <TextView
-        android:id="@+id/daily_expense_detail_total"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:gravity="end"
-        android:layout_below="@id/date_sorted_expense_graph"/>
-
-    <include layout="@layout/analyze_view_expense_detail_layout"
+    <RelativeLayout
+        android:id="@+id/daily_expense_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/daily_expense_detail_total"/>
+        android:animateLayoutChanges="true"
+        android:background="@color/offWhite"
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/daily_expense_month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/December" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/date_sorted_expense_graph"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/daily_expense_month" />
+
+        <TextView
+            android:id="@+id/daily_expense_detail_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date_sorted_expense_graph"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:gravity="end" />
+
+        <include
+            layout="@layout/analyze_view_expense_detail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/daily_expense_detail_total" />
+
+    </RelativeLayout>
+</ScrollView>
