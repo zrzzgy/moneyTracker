@@ -25,7 +25,7 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     ExpenseAnalyzePresenter mAnalyzePresenter;
     private TabLayout mTabLayout;
     private TabLayout.Tab mTabDaily;
-    private FrameLayout mChildLayout;
+    private FrameLayout mFrameLayout;
     private final int DAILY_TAB = 0;
     private final int CATEGORY_TAB = 1;
 
@@ -42,7 +42,7 @@ public class ExpenseAnalysisFragment extends BaseFragment {
         ((HomeActivity) getActivity()).getAppComponent().inject(this);
 
         // Construct the view if it does not yet exist
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.analysis_view_layout, null);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.analysis_base_layout, null);
         init(view);
         if (mDayAnalysisView == null) {
             mDayAnalysisView = new DayAnalysisView(getContext());
@@ -53,9 +53,12 @@ public class ExpenseAnalysisFragment extends BaseFragment {
             mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
         }
 
-        mChildLayout.removeAllViews();
-        mChildLayout.addView(mDayAnalysisView);
+        if (mDayAnalysisView.getParent() != null) {
+            ((ViewGroup) mDayAnalysisView.getParent()).removeView(mDayAnalysisView);
+        }
+        mFrameLayout.addView(mDayAnalysisView);
         mAnalyzePresenter.attachView(mDayAnalysisView);
+        mDayAnalysisView.attachPresenter(mAnalyzePresenter); // to set presenter
 
         return view;
     }
@@ -67,11 +70,13 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     }
 
     public void updateModel(DataModel dataModel) {
-        mAnalyzePresenter.updateModel(dataModel);
+        if (mAnalyzePresenter != null) {
+            mAnalyzePresenter.updateModel(dataModel);
+        }
     }
 
     private void init(View view) {
-        mChildLayout = view.findViewById(R.id.child_analyze_view);
+        mFrameLayout = view.findViewById(R.id.child_analyze_view);
         mTabLayout = view.findViewById(R.id.tab_layout);
         mTabDaily = mTabLayout.getTabAt(0);
 
@@ -80,17 +85,21 @@ public class ExpenseAnalysisFragment extends BaseFragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case DAILY_TAB:
-                        mChildLayout.removeAllViews();
-                        mChildLayout.addView(mDayAnalysisView);
-
+                        if (mDayAnalysisView.getParent() != null) {
+                            ((ViewGroup) mDayAnalysisView.getParent()).removeAllViews();
+                        }
+                        mFrameLayout.addView(mDayAnalysisView);
                         mAnalyzePresenter.attachView(mDayAnalysisView);
+                        mDayAnalysisView.attachPresenter(mAnalyzePresenter);
                         mAnalyzePresenter.updateView();
                         break;
                     case CATEGORY_TAB:
-                        mChildLayout.removeAllViews();
-                        mChildLayout.addView(mCategoryAnalysisView);
-
+                        if (mCategoryAnalysisView.getParent() != null) {
+                            ((ViewGroup) mCategoryAnalysisView.getParent()).removeAllViews();
+                        }
+                        mFrameLayout.addView(mCategoryAnalysisView);
                         mAnalyzePresenter.attachView(mCategoryAnalysisView);
+                        mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
                         mAnalyzePresenter.updateView();
                         break;
 

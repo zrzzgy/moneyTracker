@@ -12,7 +12,7 @@
         android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
         android:layout_marginTop="@dimen/tight_activity_vertical_margin"
         android:layout_marginBottom="@dimen/tight_activity_vertical_margin"
-        android:padding="@dimen/card_margin"
+        android:padding="@dimen/card_padding"
         android:animateLayoutChanges="true"
         android:orientation="horizontal">
 

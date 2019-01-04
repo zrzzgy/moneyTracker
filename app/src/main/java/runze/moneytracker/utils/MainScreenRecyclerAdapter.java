@@ -71,7 +71,7 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<MainScreenRe
         String categoriesList = Arrays.toString(singleExpense.getCategory().toArray());
 
         holder.mAmountTextView.setText(singleExpense.getAmount().toString());
-        holder.mCategoryTextView.setText(categoriesList.substring(1, categoriesList.length()-1));
+        holder.mCategoryTextView.setText(categoriesList.substring(1, categoriesList.length() - 1));
         holder.mDateTextView.setText(df.format(singleExpense.getDate()));
         holder.mDescriptionTextView.setText(singleExpense.getDescription());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -79,9 +79,9 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<MainScreenRe
             public void onClick(View view) {
                 // on list item click
                 Log.v(TAG, "Clicked " + view.getId());
-                if (((TextView) view.findViewById(R.id.list_description)).getMaxLines() == 1){
+                if (((TextView) view.findViewById(R.id.list_description)).getMaxLines() == 1) {
                     ((TextView) view.findViewById(R.id.list_description)).setMaxLines(Integer.MAX_VALUE);
-                }else{
+                } else {
                     ((TextView) view.findViewById(R.id.list_description)).setMaxLines(1);
                 }
             }

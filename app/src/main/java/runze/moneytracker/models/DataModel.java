@@ -52,7 +52,6 @@ public class DataModel {
     public void setDailyTotalList(List<DailyExpenseTotal> dailyTotalList) {
         this.mDailyTotalList = dailyTotalList;
     }
-
     public void setExpenseList(List<Expense> expenseList) {
         this.mExpenseList = expenseList;
     }

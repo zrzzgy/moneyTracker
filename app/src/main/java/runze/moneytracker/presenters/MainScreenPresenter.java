@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.models.UnsyncedExpense;
@@ -99,13 +97,32 @@ public class MainScreenPresenter implements IPresenter {
         return mCategories;
     }
 
-    public List<Expense> getExpenses() {
-        mExpenses = mDataModel.getExpenses();
+    public List<Expense> sortExpenseetByDate() {
+        int n = mExpenses.size();
+
+        if (n > 0) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 1; j < n - i; j++) {
+                    if (mExpenses.get(j - 1).getDate().getTime() < mExpenses.get(j).getDate().getTime()) {
+                        // swap data[j] and data[j+1]
+                        Expense temp = mExpenses.get(j - 1);
+                        mExpenses.set(j - 1, mExpenses.get(j));
+                        mExpenses.set(j, temp);
+                    }
+                }
+            }
+        }
         return mExpenses;
     }
 
-    private void updateModel(){
+    public List<Expense> getExpenses() {
+        mExpenses = mDataModel.getExpenses();
+        return sortExpenseetByDate();
+    }
+
+    private void updateModel() {
         mDataModel.setExpenseList(mExpenses);
         mDataModel.setCategoryList(mCategories);
+
     }
 }

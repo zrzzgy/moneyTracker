@@ -149,10 +149,17 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         mDailyExpenseDetailGraph.setAdapter(mDaySummaryBarChartRecyclerAdapter);
     }
 
-    public void setListOfSameDay(Date date, double totalAmount) {
+    public void setListOfSameDay(Date date, double dayAmount) {
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+        SimpleDateFormat day = new SimpleDateFormat("dd", Locale.getDefault());
 
-        mDailyExpenseDetailTotal.setText(String.valueOf(mPresenter.getExpenseTotal()) +"/" + String.valueOf(totalAmount));
+        mDailyExpenseDetailTotal.setText(String.format("%s %s%s %s%s%s",
+                mDailyExpenseMonth.getText(),
+                day.format(date),
+                getContext().getString(R.string.partVsTotal),
+                String.valueOf(dayAmount),
+                getContext().getString(R.string.slash),
+                String.valueOf(mPresenter.getExpenseTotal())));
         List<Expense> listOfSameDay = mPresenter.getListOfSameDay( df.format(date));
         mDailyExpenseDetailList.setAdapter(new DailyAnalysisRecyclerAdapter(listOfSameDay));
     }
