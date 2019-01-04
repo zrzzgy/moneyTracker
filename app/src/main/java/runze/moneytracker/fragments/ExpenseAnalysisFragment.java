@@ -25,7 +25,7 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     ExpenseAnalyzePresenter mAnalyzePresenter;
     private TabLayout mTabLayout;
     private TabLayout.Tab mTabDaily;
-    private FrameLayout mChildLayout;
+    private FrameLayout mFrameLayout;
     private final int DAILY_TAB = 0;
     private final int CATEGORY_TAB = 1;
 
@@ -56,7 +56,7 @@ public class ExpenseAnalysisFragment extends BaseFragment {
         if (mDayAnalysisView.getParent() != null) {
             ((ViewGroup) mDayAnalysisView.getParent()).removeView(mDayAnalysisView);
         }
-        mChildLayout.addView(mDayAnalysisView);
+        mFrameLayout.addView(mDayAnalysisView);
         mAnalyzePresenter.attachView(mDayAnalysisView);
         mDayAnalysisView.attachPresenter(mAnalyzePresenter); // to set presenter
 
@@ -76,7 +76,7 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     }
 
     private void init(View view) {
-        mChildLayout = view.findViewById(R.id.child_analyze_view);
+        mFrameLayout = view.findViewById(R.id.child_analyze_view);
         mTabLayout = view.findViewById(R.id.tab_layout);
         mTabDaily = mTabLayout.getTabAt(0);
 
@@ -86,18 +86,18 @@ public class ExpenseAnalysisFragment extends BaseFragment {
                 switch (tab.getPosition()) {
                     case DAILY_TAB:
                         if (mDayAnalysisView.getParent() != null) {
-                            ((ViewGroup) mDayAnalysisView.getParent()).removeView(mDayAnalysisView);
+                            ((ViewGroup) mDayAnalysisView.getParent()).removeAllViews();
                         }
-                        mChildLayout.addView(mDayAnalysisView);
+                        mFrameLayout.addView(mDayAnalysisView);
                         mAnalyzePresenter.attachView(mDayAnalysisView);
                         mDayAnalysisView.attachPresenter(mAnalyzePresenter);
                         mAnalyzePresenter.updateView();
                         break;
                     case CATEGORY_TAB:
                         if (mCategoryAnalysisView.getParent() != null) {
-                            ((ViewGroup) mCategoryAnalysisView.getParent()).removeView(mCategoryAnalysisView);
+                            ((ViewGroup) mCategoryAnalysisView.getParent()).removeAllViews();
                         }
-                        mChildLayout.addView(mCategoryAnalysisView);
+                        mFrameLayout.addView(mCategoryAnalysisView);
                         mAnalyzePresenter.attachView(mCategoryAnalysisView);
                         mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
                         mAnalyzePresenter.updateView();
