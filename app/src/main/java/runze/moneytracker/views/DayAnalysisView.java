@@ -6,11 +6,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,11 +40,11 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         init(view);
     }
 
-    private void init(View view){
+    private void init(View view) {
         mDailyExpenseMonth = view.findViewById(R.id.daily_expense_month);
         mDailyExpenseDetailGraph = view.findViewById(R.id.date_sorted_expense_graph);
         mDailyExpenseDetailList = view.findViewById(R.id.expense_detail_list_category);
-       // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
+        // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
         mDailyExpenseDetailTotal = view.findViewById(R.id.daily_expense_detail_total);
 
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
@@ -121,11 +121,11 @@ public class DayAnalysisView extends RelativeLayout implements IView {
                         case "11":
                             mDailyExpenseMonth.setText(R.string.November);
                             break;
-                        case"12":
+                        case "12":
                             mDailyExpenseMonth.setText(R.string.December);
                             break;
-                            default:
-                                break;
+                        default:
+                            break;
 
                     }
                 }
@@ -144,15 +144,20 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         mPresenter = null;
     }
 
-    public void updateBarChart(List<DailyExpenseTotal> expenseTotals){
+    public void updateBarChart(List<DailyExpenseTotal> expenseTotals) {
         DaySummaryBarChartRecyclerAdapter mDaySummaryBarChartRecyclerAdapter = new DaySummaryBarChartRecyclerAdapter(expenseTotals);
         mDailyExpenseDetailGraph.setAdapter(mDaySummaryBarChartRecyclerAdapter);
     }
 
-    public void setListOfSameDay(Date date, double dayAmount) {
+    public void setListOfSameDay(Date date) {
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+        List<Expense> listOfSameDay = mPresenter.getListOfSameDay(df.format(date));
+        mDailyExpenseDetailTotal.setText("");
+        double dayAmount = 0;
+        for (Expense expense : listOfSameDay) {
+            dayAmount += expense.getAmount();
+        }
         SimpleDateFormat day = new SimpleDateFormat("dd", Locale.getDefault());
-
         mDailyExpenseDetailTotal.setText(String.format("%s %s%s %s%s%s",
                 mDailyExpenseMonth.getText(),
                 day.format(date),
@@ -160,7 +165,6 @@ public class DayAnalysisView extends RelativeLayout implements IView {
                 String.valueOf(dayAmount),
                 getContext().getString(R.string.slash),
                 String.valueOf(mPresenter.getExpenseTotal())));
-        List<Expense> listOfSameDay = mPresenter.getListOfSameDay( df.format(date));
         mDailyExpenseDetailList.setAdapter(new DailyAnalysisRecyclerAdapter(listOfSameDay));
     }
 }

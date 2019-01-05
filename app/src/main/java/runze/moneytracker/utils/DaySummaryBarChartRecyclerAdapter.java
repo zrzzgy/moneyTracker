@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -66,7 +64,8 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
             public void onClick(View view) {
                 // on list item click
                 Log.v(TAG, "Clicked " + position);
-                ((DayAnalysisView) view.getParent().getParent().getParent().getParent()).setListOfSameDay(getItem(position).getDate(),getItem(position).getTotalAmount());
+                ((DayAnalysisView) view.getParent().getParent().getParent().getParent()).
+                        setListOfSameDay(getItem(position).getDate());
             }
         });
     }
@@ -83,8 +82,8 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
     private double getMaxDailyTotal(List<DailyExpenseTotal> data) {
         double max = 0;
 
-        for (DailyExpenseTotal daily: data) {
-            if (max < daily.getTotalAmount()){
+        for (DailyExpenseTotal daily : data) {
+            if (max < daily.getTotalAmount()) {
                 max = daily.getTotalAmount();
             }
         }

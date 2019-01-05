@@ -161,6 +161,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     public void updateView() {
         if (mView instanceof DayAnalysisView) {
             ((DayAnalysisView) mView).updateBarChart(sortDataForDayAnalysis());
+            ((DayAnalysisView) mView).setListOfSameDay(new Date());
         } else if (mView instanceof CategoryAnalysisView) {
             ((CategoryAnalysisView) mView).updatePieChart(sortDataForCategoryAnalysis());
             ((CategoryAnalysisView) mView).setListOfSameCategory(0, mDataModel.getExpenseTotal());

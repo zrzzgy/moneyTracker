@@ -52,15 +52,15 @@ public class DailyAnalysisRecyclerAdapter extends RecyclerView.Adapter<runze.mon
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(runze.moneytracker.utils.DailyAnalysisRecyclerAdapter.ViewHolder holder, int position) {
-        Expense singleExpense = mDataSet.get(position);
-        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+            Expense singleExpense = mDataSet.get(position);
+            SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
 
-        holder.mAmountTextView.setText(singleExpense.getAmount().toString());
-        String categoriesList = singleExpense.getCategory().toString();
-        holder.mCategoryTextView.setText(categoriesList.substring(1, categoriesList.length()-1));
-        holder.mCategoryTextView.setVisibility(View.VISIBLE);
-        holder.mDateTextView.setVisibility(View.GONE);
-        holder.mDescription.setText(singleExpense.getDescription());
+            holder.mAmountTextView.setText(singleExpense.getAmount().toString());
+            String categoriesList = singleExpense.getCategory().toString();
+            holder.mCategoryTextView.setText(categoriesList.substring(1, categoriesList.length() - 1));
+            holder.mCategoryTextView.setVisibility(View.VISIBLE);
+            holder.mDateTextView.setVisibility(View.GONE);
+            holder.mDescription.setText(singleExpense.getDescription());
     }
 
     @Override

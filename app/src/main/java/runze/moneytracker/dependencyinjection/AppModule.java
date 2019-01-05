@@ -60,7 +60,8 @@ public class AppModule {
     @Provides
     @Singleton
     DataModel provideDataModel(){
-        return new DataModel(new ArrayList<Expense>(), new ArrayList<DailyExpenseTotal>(),
+        return new DataModel(new ArrayList<Expense>(),
+                new ArrayList<DailyExpenseTotal>(),
                 new HashSet<String>(),
                 new ArrayList<Integer>());
     }
