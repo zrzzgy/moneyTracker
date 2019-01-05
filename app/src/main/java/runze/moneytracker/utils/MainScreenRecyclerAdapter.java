@@ -93,20 +93,6 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<MainScreenRe
         return mDataSet.size();
     }
 
-    public void removeItem(int position) {
-        mDataSet.remove(position);
-        // notify the item removed by position
-        // to perform recycler view delete animations
-        // NOTE: don't call notifyDataSetChanged()
-        notifyItemRemoved(position);
-    }
-
-    public void restoreItem(Expense item, int position) {
-        mDataSet.add(position, item);
-        // notify item added by position
-        notifyItemInserted(position);
-    }
-
     public List<Expense> getDataSet(){
         return mDataSet;
     }

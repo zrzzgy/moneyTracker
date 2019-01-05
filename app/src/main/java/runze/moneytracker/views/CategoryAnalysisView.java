@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import runze.moneytracker.R;
@@ -68,23 +69,28 @@ public class CategoryAnalysisView extends RelativeLayout implements IView {
         mPieChart.invalidate();
     }
 
-    public void setGraphOnClickListener(OnChartValueSelectedListener listener){
+    public void setGraphOnClickListener(OnChartValueSelectedListener listener) {
         mPieChart.setOnChartValueSelectedListener(listener);
     }
 
 
-    public void setListOfSameCategory (int categoryIndex, float total) {
-        String category = ((PieDataSet) mPieData.getDataSet()).getValues().get(categoryIndex).getLabel();
-        String categoryTotal =  String.valueOf(((PieDataSet) mPieData.getDataSet()).getValues().get(categoryIndex).getY());
+    public void setListOfSameCategory(int categoryIndex, float total) {
+        String category = "";
+        mCategoryTotalText.setText("");
+        if (total != 0) {
+            category = ((PieDataSet) mPieData.getDataSet()).getValues().get(categoryIndex).getLabel();
+            String categoryTotal = String.valueOf(((PieDataSet) mPieData.getDataSet()).getValues().get(categoryIndex).getY());
 
-        mCategoryTotalText.setText(
-                String.format("%s%s %s%s%s",
-                        category,
-                        getContext().getString(R.string.partVsTotal),
-                        categoryTotal,
-                        getContext().getString(R.string.slash),
-                        String.valueOf(total)));
-        List<Expense> listOfSameCategory = mPresenter.getListOfSameCategory(category);
-        mDetailedExpenseList.setAdapter(new CategoryAnalysisRecyclerAdapter(listOfSameCategory));
+            mCategoryTotalText.setText(
+                    String.format("%s%s %s%s%s",
+                            category,
+                            getContext().getString(R.string.partVsTotal),
+                            categoryTotal,
+                            getContext().getString(R.string.slash),
+                            String.valueOf(total)));
+        }
+            List<Expense> listOfSameCategory = mPresenter.getListOfSameCategory(category);
+            mDetailedExpenseList.setAdapter(new CategoryAnalysisRecyclerAdapter(listOfSameCategory));
+
     }
 }

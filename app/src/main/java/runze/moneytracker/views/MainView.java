@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
@@ -43,6 +45,7 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
     private  View mAlertLayout;
 
     private MainScreenRecyclerAdapter mAdapter;
+
 
     public MainView(Context context){
         super(context);
@@ -182,7 +185,7 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
 
                     // undo is selected, restore the deleted item
                     mPresenter.restoreDeletedItem();
-                    mAdapter.restoreItem(itemToDelete, position);
+                    // mAdapter.restoreItem(itemToDelete, position);
                     Log.v(TAG, "Item restored");
                     updateView();
                 }

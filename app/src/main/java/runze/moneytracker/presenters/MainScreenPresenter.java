@@ -1,6 +1,5 @@
 package runze.moneytracker.presenters;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -20,8 +19,9 @@ public class MainScreenPresenter implements IPresenter {
     private DataModel mDataModel;
     private HashSet<String> mCategories;
     private List<Expense> mExpenses;
-    private List<Expense> mBackupExpenses = new ArrayList<>();
+    private Expense mBackupExpense;
     private List<UnsyncedExpense> mUnsyncedExpenseList;
+    private UnsyncedExpense mUnsyncedExpense;
 
     public MainScreenPresenter(DataModel dataModel, List<UnsyncedExpense> unsyncedExpenseList) {
         mDataModel = dataModel;
@@ -61,15 +61,15 @@ public class MainScreenPresenter implements IPresenter {
 
     public boolean removeExpense(Expense itemToDelete) {
         boolean result = false;
-        mBackupExpenses.clear();
-        mBackupExpenses.addAll(mExpenses);
+        mBackupExpense = itemToDelete;
 
         Iterator<Expense> iterator = mExpenses.iterator();
         while (iterator.hasNext()) {
             Expense expense = iterator.next();
             if (expense.isSameExpense(itemToDelete)) {
                 mExpenses.remove(expense);
-                mUnsyncedExpenseList.add(new UnsyncedExpense(expense, false));
+                mUnsyncedExpense = new UnsyncedExpense(expense, false);
+                mUnsyncedExpenseList.add(mUnsyncedExpense);
                 result = true;
                 break;
             }
@@ -80,7 +80,8 @@ public class MainScreenPresenter implements IPresenter {
     }
 
     public void restoreDeletedItem() {
-        mExpenses = mBackupExpenses;
+        mExpenses.add(mBackupExpense);
+        mUnsyncedExpenseList.remove(mUnsyncedExpense);
         updateModel();
     }
 
@@ -97,7 +98,7 @@ public class MainScreenPresenter implements IPresenter {
         return mCategories;
     }
 
-    public List<Expense> sortExpenseetByDate() {
+    private List<Expense> sortExpenseByDate() {
         int n = mExpenses.size();
 
         if (n > 0) {
@@ -117,7 +118,7 @@ public class MainScreenPresenter implements IPresenter {
 
     public List<Expense> getExpenses() {
         mExpenses = mDataModel.getExpenses();
-        return sortExpenseetByDate();
+        return sortExpenseByDate();
     }
 
     private void updateModel() {
