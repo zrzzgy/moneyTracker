@@ -149,7 +149,7 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
                     calendar.set(year, month, day);
                     Date date = calendar.getTime();
                     mPresenter.saveData(categories, amount, description, date);
-                    ((HomeActivity) getContext()).saveDataModel();
+                    ((HomeActivity) getContext()).persistDataAndUpload();
                     Log.v(TAG, "input validated, dismissing input dialog");
                     mAlertDialog.dismiss();
                     updateView();
