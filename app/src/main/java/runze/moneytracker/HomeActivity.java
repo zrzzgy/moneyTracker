@@ -37,12 +37,14 @@ import javax.inject.Inject;
 import runze.moneytracker.dependencyinjection.AppComponent;
 import runze.moneytracker.dependencyinjection.AppModule;
 import runze.moneytracker.dependencyinjection.DaggerAppComponent;
+import runze.moneytracker.fragments.AboutFragment;
 import runze.moneytracker.fragments.ExpenseAnalysisFragment;
 import runze.moneytracker.fragments.MainScreenFragment;
 import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.models.UnsyncedExpense;
+import runze.moneytracker.views.AboutView;
 
 /**
  * Home Activity
@@ -160,8 +162,10 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
 
     @Override
     public void onBackPressed() {
-        if (!getSupportFragmentManager().popBackStackImmediate()){
-            finish();
+        if (getCurrentFragment() instanceof AboutFragment) {
+            getSupportFragmentManager().popBackStackImmediate();
+        } else {
+            finish();  // kill current activity
         }
     }
 
