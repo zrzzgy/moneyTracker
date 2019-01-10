@@ -34,6 +34,8 @@
     <string name="delete">Delete</string>
     <string name="change_theme">Change Theme</string>
     <string name="log_out">Log out</string>
+    <string name="log_in">Log in</string>
+    <string name="use_offline"><u>Use offline</u></string>>
     <string name="about">About</string>>
 
 

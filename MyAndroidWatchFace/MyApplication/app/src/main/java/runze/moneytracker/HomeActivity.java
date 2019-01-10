@@ -143,43 +143,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item){
-        Fragment currentFragment = getCurrentFragment();
-        if (currentFragment instanceof SettingsScreenFragment){
-            switch (item.getItemId()){
-                case R.id.option_menu_edit:
-                    ((SettingsScreenFragment) currentFragment).getPresenter().editCategory(item);
-                    return true;
-                case R.id.option_menu_delete:
-                    ((SettingsScreenFragment) currentFragment).getPresenter().removeCategory(item);
-                    Snackbar.make(mViewPager, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
-                            .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                   undoRemoveCategory();
-                                }
-                            }).show();
-                    return true;
-            }
-        }else if (currentFragment instanceof StatsScreenFragment){
-            switch (item.getItemId()){
-                case R.id.option_menu_edit:
-                    return true;
-                case R.id.option_menu_delete:
-                    Snackbar.make(mViewPager, getResources().getString(R.string.snack_bar_message), Snackbar.LENGTH_LONG)
-                            .setAction(getResources().getString(R.string.snack_bar_undo), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                }
-                            }).show();
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public void onBackPressed(){
            finish();
     }

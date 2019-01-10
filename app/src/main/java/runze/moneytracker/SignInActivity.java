@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,6 +30,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
+    private TextView mUseOffineButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.google_sign_in_layout);
 
         // Button listeners
-        findViewById(R.id.signInButton).setOnClickListener(this);
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
+        findViewById(R.id.offline_use_button).setOnClickListener(this);
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -62,14 +65,26 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.signInButton) {
-            startSignInProcess();
+        switch (i) {
+            case R.id.sign_in_button:
+                startSignInProcess();
+                break;
+            case R.id.offline_use_button:
+                useOffline();
+                break;
         }
     }
 
     private void startSignInProcess() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void useOffline() {
+        Intent intent = new Intent();
+        intent.setClass(SignInActivity.this,HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

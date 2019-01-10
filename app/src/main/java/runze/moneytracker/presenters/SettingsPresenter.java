@@ -5,6 +5,9 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Set;
+
+import runze.moneytracker.R;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.views.AboutView;
 import runze.moneytracker.views.IView;
