@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,8 +24,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import runze.moneytracker.HomeActivity;
 import runze.moneytracker.R;
 import runze.moneytracker.models.Expense;
@@ -33,7 +32,7 @@ import runze.moneytracker.presenters.MainScreenPresenter;
 import runze.moneytracker.utils.MainScreenRecyclerAdapter;
 import runze.moneytracker.utils.RecyclerItemTouchHelper;
 
-public class MainView extends RelativeLayout implements IView, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
+public class MainView extends RelativeLayout implements IView, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     private final String TAG = this.getClass().getSimpleName();
 
     private RecyclerView mExpenseList;
@@ -42,18 +41,18 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
 
     private TextView mErrorMessage;
     private AlertDialog mAlertDialog;
-    private  View mAlertLayout;
+    private View mAlertLayout;
 
     private MainScreenRecyclerAdapter mAdapter;
 
 
-    public MainView(Context context){
+    public MainView(Context context) {
         super(context);
         View view = LayoutInflater.from(context).inflate(R.layout.home_screen_layout, this);
         init(view);
     }
 
-    private void init(View view){
+    private void init(View view) {
         FloatingActionButton fab = view.findViewById(R.id.new_item_fab);
         fab.setOnClickListener(mFabListener);
 
@@ -67,7 +66,7 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
         mExpenseList.setLayoutManager(mLayoutManager);
     }
 
-    public void updateView(){
+    public void updateView() {
         // populate the view with data
         mAdapter = new MainScreenRecyclerAdapter(mPresenter.getExpenses());
         mExpenseList.setAdapter(mAdapter);
@@ -76,10 +75,11 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mExpenseList);
 
         long total = mPresenter.calculateTotal();
-        mTotalView.setText(String.format(getResources().getString(R.string.total_title), String.valueOf(total)));    }
+        mTotalView.setText(String.format(getResources().getString(R.string.total_title), String.valueOf(total)));
+    }
 
     @Override
-    public void attachPresenter(IPresenter presenter){
+    public void attachPresenter(IPresenter presenter) {
         if (presenter == null) {
             throw new IllegalArgumentException("presenter cannot be null.");
         }
@@ -87,7 +87,7 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
     }
 
     @Override
-    public void detachPresenter(){
+    public void detachPresenter() {
         mPresenter = null;
     }
 
@@ -99,7 +99,7 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
             assert inflater != null;
 
             mAlertLayout = inflater.inflate(R.layout.input_dialog, null);
-            mAlertDialog  = new AlertDialog.Builder(getContext())
+            mAlertDialog = new AlertDialog.Builder(getContext())
                     .setView(mAlertLayout)
                     .setTitle(getResources().getString(R.string.input_dialog_title))
                     .setNegativeButton(getResources().getString(R.string.cancel), mCancelListener)
@@ -135,9 +135,9 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
             Log.v(TAG, "confirming input dialog");
 
             Double amount = Double.parseDouble(((EditText) mAlertLayout.findViewById(R.id.input_amount)).getText().toString());
-            if (amount <= 0){
+            if (amount <= 0) {
                 mErrorMessage.setText(getResources().getString(R.string.amount_invalid));
-            }else {
+            } else {
                 String categories = ((EditText) mAlertLayout.findViewById(R.id.input_category)).getText().toString();
                 String description = ((EditText) mAlertLayout.findViewById(R.id.input_description)).getText().toString();
                 if (!categories.isEmpty()) {
@@ -169,10 +169,10 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
             final Expense itemToDelete = mAdapter.getDataSet().get(position);
 
             // remove the item from both the recycler view and the sharedPreferences
-            if (mPresenter.removeExpense(itemToDelete)){
+            if (mPresenter.removeExpense(itemToDelete)) {
                 Log.v(TAG, "Item removed: " + "\n" + itemToDelete.toString());
                 updateView();
-            }else{
+            } else {
                 Log.e(TAG, "Error when removing item from preferences");
             }
 
@@ -191,6 +191,10 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
                 }
             });
             snackbar.setActionTextColor(android.graphics.Color.YELLOW);
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
+                    snackbar.getView().getLayoutParams();
+            params.setMargins(0, 0, 0, 0);
+            snackbar.getView().setLayoutParams(params);
             snackbar.show();
         }
     }

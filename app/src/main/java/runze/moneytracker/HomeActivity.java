@@ -123,14 +123,23 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
                         }.getType());
         if (mUnsyncedExpenseList.isEmpty() &&
                 cachedUnsyncedChanges != null) {
-            mUnsyncedExpenseList.addAll(cachedUnsyncedChanges);
+            for (int i = 0; i < cachedUnsyncedChanges.size(); i++) {
+                if(cachedUnsyncedChanges.get(i) instanceof UnsyncedExpense) {
+                    mUnsyncedExpenseList.add(cachedUnsyncedChanges.get(i));
+                }
+            }
         }
 
-        user = getIntent().getParcelableExtra("userName");
-        database = FirebaseDatabase.getInstance();
+      //  if (getIntent().hasExtra("userName")) {
+            user = getIntent().getParcelableExtra("userName");
+            database = FirebaseDatabase.getInstance();
+            database.setPersistenceEnabled(true);
+
+
         DatabaseReference myRef = database.getReference(user.getUid());
-        // Read from the database
-        myRef.addValueEventListener(this);
+            // Read from the database
+            myRef.addValueEventListener(this);
+       // }
 
         setContentView(R.layout.base_layout);  // setContentView() to display a view
         initComponents();
@@ -194,51 +203,49 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         Iterator<UnsyncedExpense> iterator = mUnsyncedExpenseList.iterator();
         while (iterator.hasNext()) {
             final UnsyncedExpense tempUnsyncedExpense = iterator.next();
-            if (tempUnsyncedExpense.isAdd()) {
-                final DatabaseReference newChild = myRef.push();
-                tempUnsyncedExpense.getExpense().setChildId(newChild.getKey());
-                String unsyncedExpenseString = gson.toJson(tempUnsyncedExpense.getExpense());
-                newChild.setValue(unsyncedExpenseString, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                        if (databaseError == null) {
-                            mUnsyncedExpenseList.remove(tempUnsyncedExpense);
-                            String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
-                            mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
+            if (tempUnsyncedExpense.getExpense().getChildId() != null) {
+                if (tempUnsyncedExpense.isAdd()) {
+                    final DatabaseReference newChild = myRef.push();
+                    tempUnsyncedExpense.getExpense().setChildId(newChild.getKey());
+                    String unsyncedExpenseString = gson.toJson(tempUnsyncedExpense.getExpense());
+                    newChild.setValue(unsyncedExpenseString, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                                mUnsyncedExpenseList.remove(tempUnsyncedExpense);
+                                String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
+                                mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
+                            }
                         }
-                    }
-                });
-            } else {
-                // remove expense from database
-                myRef.child(tempUnsyncedExpense.getExpense().getChildId()).removeValue(new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                        if (databaseError == null) {
-                            mUnsyncedExpenseList.remove(tempUnsyncedExpense);
-                            String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
-                            mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
+                    });
+                } else {
+                    // remove expense from database
+                    myRef.child(tempUnsyncedExpense.getExpense().getChildId()).removeValue(new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                                mUnsyncedExpenseList.remove(tempUnsyncedExpense);
+                                String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
+                                mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
-
             String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
             mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
         }
-
-        // String dataModel = mSharedPreferences.getString(DATA_MODEL_KEY, EMPTY_DATA_MODEL);
-        // Log.v(TAG, dataModel);
     }
 
-    private void loadDataModel(List<Expense> loadFromDatabaseExpenseList) {
+    private void loadDataModel(List<Expense> databaseExpenseList) {
         HashSet<String> category = new HashSet<>();
-        if (!loadFromDatabaseExpenseList.isEmpty()) {
-            Iterator<Expense> iterator = loadFromDatabaseExpenseList.iterator();
+        if (!databaseExpenseList.isEmpty()) {
+            Iterator<Expense> iterator = databaseExpenseList.iterator();
             while (iterator.hasNext()) {
                 category.addAll(iterator.next().getCategory());
             }
             mDataModel.setCategoryList(category);
-            mDataModel.setExpenseList(loadFromDatabaseExpenseList);
+            mDataModel.setExpenseList(databaseExpenseList);
         }
 
     }
@@ -251,8 +258,8 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
         while (iterator.hasNext()) {
             userExpenseDataAsString = iterator.next().getValue(String.class);
-            Expense tempExpense = gson.fromJson(userExpenseDataAsString, new TypeToken<Expense>() {
-            }.getType());
+            Expense tempExpense = gson.fromJson(userExpenseDataAsString,
+                    new TypeToken<Expense>() {}.getType());
             loadFromDatabaseExpenseList.add(tempExpense);
         }
         //setup dataModel

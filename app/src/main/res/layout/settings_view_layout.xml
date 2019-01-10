@@ -23,6 +23,25 @@
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:visibility="gone"
         />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark"/>
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/offWhite"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:drawableStart="@drawable/ic_color_picker"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:text="@string/log_in"
+        android:textAlignment="viewStart"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:visibility="gone"
+        />
 
     <Space
         android:layout_width="match_parent"
@@ -57,6 +76,4 @@
         android:textAlignment="viewStart"
         android:background="@color/offWhite"
         android:paddingEnd="@dimen/activity_horizontal_margin"/>
-
-
 </LinearLayout>
