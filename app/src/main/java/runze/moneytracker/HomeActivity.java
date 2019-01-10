@@ -248,7 +248,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
             Iterator<UnsyncedExpense> iterator = mUnsyncedExpenseList.iterator();
             while (iterator.hasNext()) {
                 final UnsyncedExpense tempUnsyncedExpense = iterator.next();
-                if (tempUnsyncedExpense.getExpense().getChildId() == null) {
+                if (tempUnsyncedExpense.getExpense().getChildId() == null || !tempUnsyncedExpense.isAdd()) {
                     if (tempUnsyncedExpense.isAdd()) {
                         final DatabaseReference newChild = myRef.push();
                         tempUnsyncedExpense.getExpense().setChildId(newChild.getKey());
@@ -284,10 +284,10 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     }
 
     public void persistDataAndUpload() {
-        persistDataModel();
         if (mIsOnline) {
             uploadExpenses();
         }
+        persistDataModel();
     }
 
     private void loadDataModel(List<Expense> databaseExpenseList) {
