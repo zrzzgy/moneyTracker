@@ -65,7 +65,8 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     private String userExpenseDataAsString;
     private FirebaseUser user;
 
-    private boolean mIsOnline = false;
+    private boolean mIsLoggedIn = false;
+    private boolean mIsConnectedToInternet = false;
 
     @Inject
     List<UnsyncedExpense> mUnsyncedExpenseList;
@@ -132,17 +133,40 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
             }
         }
 
-        mIsOnline = getIntent().hasExtra("userName");
+        mIsLoggedIn = getIntent().hasExtra("userName");
 
-        if (mIsOnline) {
+        if (mIsLoggedIn) {
             user = getIntent().getParcelableExtra("userName");
+            getIntent().removeExtra("userName");
             database = FirebaseDatabase.getInstance();
-            database.setPersistenceEnabled(true);
 
             uploadExpenses();
             DatabaseReference myRef = database.getReference(user.getUid());
             // Read from the database
             myRef.addValueEventListener(this);
+
+            // Handles lost Internet connection if logged in the first place
+            DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+            connectedRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean connected = snapshot.getValue(Boolean.class);
+                    if (connected) {
+                        Log.d(TAG, "Internet connected");
+                        mIsConnectedToInternet = true;
+                        persistDataAndUpload();
+                    } else {
+                        mIsConnectedToInternet = false;
+                        Log.d(TAG, "Internet not connected");
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.w(TAG, "Listener was cancelled");
+                }
+            });
         } else {
             Log.v(TAG, "load from pref");
             loadDataModel(((DataModel) gson.fromJson(mSharedPreferences.getString(DATA_MODEL_KEY, ""),
@@ -156,46 +180,13 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
                         mInputFragment.updateView();
                     }
                 }
-            }, 1000);
+            }, 500);
 
         }
-
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    Log.d(TAG, "connected");
-                    mIsOnline = true;
-                    persistDataAndUpload();
-                } else {
-                    mIsOnline = false;
-                    Log.d(TAG, "not connected");
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG, "Listener was cancelled");
-            }
-        });
 
         setContentView(R.layout.base_layout);  // setContentView() to display a view
         initComponents();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mInputFragment).commit();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        persistDataAndUpload();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     public void initComponents() {
@@ -284,7 +275,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     }
 
     public void persistDataAndUpload() {
-        if (mIsOnline) {
+        if (mIsLoggedIn && mIsConnectedToInternet) {
             uploadExpenses();
         }
         persistDataModel();
