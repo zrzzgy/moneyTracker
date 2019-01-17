@@ -1,7 +1,6 @@
 package runze.moneytracker.presenters;
 
 import android.graphics.Color;
-import android.view.View;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;

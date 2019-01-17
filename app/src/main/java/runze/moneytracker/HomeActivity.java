@@ -169,7 +169,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
             });
         } else {
             Log.v(TAG, "load from pref");
-            loadDataModel(((DataModel) gson.fromJson(mSharedPreferences.getString(DATA_MODEL_KEY, ""),
+            populateDataModel(((DataModel) gson.fromJson(mSharedPreferences.getString(DATA_MODEL_KEY, ""),
                     new TypeToken<DataModel>() {
                     }.getType())).getExpenses());
             Handler handler = new Handler();
@@ -281,7 +281,7 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         persistDataModel();
     }
 
-    private void loadDataModel(List<Expense> databaseExpenseList) {
+    private void populateDataModel(List<Expense> databaseExpenseList) {
         HashSet<String> category = new HashSet<>();
         if (!databaseExpenseList.isEmpty()) {
             Iterator<Expense> iterator = databaseExpenseList.iterator();
@@ -309,10 +309,12 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         }
         //setup dataModel
         Log.d(TAG, "Value is: " + userExpenseDataAsString);
-        loadDataModel(loadFromDatabaseExpenseList);
+        populateDataModel(loadFromDatabaseExpenseList);
+
         if (mInputFragment != null) {
             mInputFragment.updateView();
         }
+
         if (mStatsFragment != null) {
             mStatsFragment.updateModel(mDataModel);
         }

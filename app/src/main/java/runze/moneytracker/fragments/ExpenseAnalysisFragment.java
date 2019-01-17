@@ -3,13 +3,11 @@ package runze.moneytracker.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,9 +20,7 @@ import runze.moneytracker.views.CategoryAnalysisView;
 import runze.moneytracker.views.DayAnalysisView;
 
 
-public class ExpenseAnalysisFragment extends BaseFragment {
-    private DayAnalysisView mDayAnalysisView;
-    private CategoryAnalysisView mCategoryAnalysisView;
+public class ExpenseAnalysisFragment extends Fragment {
     @Inject
     ExpenseAnalyzePresenter mAnalyzePresenter;
     private TabLayout mTabLayout;
@@ -33,6 +29,67 @@ public class ExpenseAnalysisFragment extends BaseFragment {
     private final int CATEGORY_TAB = 1;
     private ViewPager mViewPager;
     private MTPagerAdapter mPagerAdapter;
+    private DayAnalysisView mDayAnalysisView;
+    private CategoryAnalysisView mCategoryAnalysisView;
+    private DayAnalysisFragment mDayAnalysisFragment;
+    private CategoryAnalysisFragment mCategoryAnalysisFragment;
+
+    private TabLayout.OnTabSelectedListener mOnTabSelectedListener = new TabLayout.OnTabSelectedListener() {
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+            int tabPosition = tab.getPosition();
+            mViewPager.setCurrentItem(tabPosition);
+
+            switch (tabPosition) {
+                case DAILY_TAB:
+                    mAnalyzePresenter.attachView(mDayAnalysisView);
+                    mDayAnalysisFragment.attachPresenter(mAnalyzePresenter);
+                    mAnalyzePresenter.updateView();
+                    break;
+                case CATEGORY_TAB:
+                    mViewPager.setCurrentItem(tab.getPosition());
+                    mAnalyzePresenter.attachView(mCategoryAnalysisView);
+                    mCategoryAnalysisFragment.attachPresenter(mAnalyzePresenter);
+                    mAnalyzePresenter.updateView();
+                    break;
+
+            }
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
+        }
+    };
+
+    private ViewPager.SimpleOnPageChangeListener mSimpleOnPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            // When swiping between pages, select the
+            // corresponding tab.
+            switch (position) {
+                case DAILY_TAB:
+                    mViewPager.setCurrentItem(0);
+                    mAnalyzePresenter.attachView(mDayAnalysisView);
+                    mDayAnalysisView.attachPresenter(mAnalyzePresenter);
+                    mAnalyzePresenter.updateView();
+                    break;
+                case CATEGORY_TAB:
+                    mViewPager.setCurrentItem(1);
+                    mAnalyzePresenter.attachView(mCategoryAnalysisView);
+                    mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
+                    mAnalyzePresenter.updateView();
+                    break;
+            }
+
+        }
+
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,19 +105,26 @@ public class ExpenseAnalysisFragment extends BaseFragment {
 
         // Construct the view if it does not yet exist
         View view = LayoutInflater.from(getContext()).inflate(R.layout.analysis_base_layout, null);
-        if (mDayAnalysisView == null) {
-            mDayAnalysisView = new DayAnalysisView(getContext());
-            mDayAnalysisView.attachPresenter(mAnalyzePresenter);
-        }
-        if (mCategoryAnalysisView == null) {
-            mCategoryAnalysisView = new CategoryAnalysisView(getContext());
-            mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
-        }
-        init(view);
-        if (mDayAnalysisView.getParent() != null) {
-            ((ViewGroup) mDayAnalysisView.getParent()).removeView(mDayAnalysisView);
-        }
-       // mFrameLayout.addView(mDayAnalysisView);
+        mViewPager = view.findViewById(R.id.tab_view_pager);
+        mTabLayout = view.findViewById(R.id.tab_layout);
+        mTabDaily = mTabLayout.getTabAt(0);
+        mPagerAdapter = new MTPagerAdapter(getFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
+
+        mDayAnalysisView = new DayAnalysisView(getContext());
+        mCategoryAnalysisView = new CategoryAnalysisView(getContext());
+        mDayAnalysisFragment = new DayAnalysisFragment();
+        mCategoryAnalysisFragment = new CategoryAnalysisFragment();
+        mDayAnalysisFragment.setDayAnalysisView(mDayAnalysisView);
+        mCategoryAnalysisFragment.setCategoryAnalysisView(mCategoryAnalysisView);
+
+        mPagerAdapter.addFragment(mDayAnalysisFragment);
+        mPagerAdapter.addFragment(mCategoryAnalysisFragment);
+
+        mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
+        mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
+
+        mTabDaily.select();
         mViewPager.setCurrentItem(0);
         mAnalyzePresenter.attachView(mDayAnalysisView);
         mDayAnalysisView.attachPresenter(mAnalyzePresenter); // to set presenter
@@ -78,87 +142,6 @@ public class ExpenseAnalysisFragment extends BaseFragment {
         if (mAnalyzePresenter != null) {
             mAnalyzePresenter.updateModel(dataModel);
         }
-    }
-
-    private void init(View view) {
-        mViewPager = view.findViewById(R.id.tab_view_pager);
-        mTabLayout = view.findViewById(R.id.tab_layout);
-        mTabDaily = mTabLayout.getTabAt(0);
-        List<View> viewList = new ArrayList<>();
-        viewList.add(mDayAnalysisView);
-        viewList.add(mCategoryAnalysisView);
-        mPagerAdapter = new MTPagerAdapter(viewList);
-        mViewPager.setAdapter(mPagerAdapter);
-
-        mViewPager.addOnPageChangeListener(
-                new ViewPager.SimpleOnPageChangeListener() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        // When swiping between pages, select the
-                        // corresponding tab.
-                       switch(position) {
-                           case 0:
-                               if (mCategoryAnalysisView.getParent() != null) {
-                                   ((ViewGroup) mCategoryAnalysisView.getParent()).removeAllViews();
-                               }
-                               mViewPager.setCurrentItem(0);
-                               mAnalyzePresenter.attachView(mDayAnalysisView);
-                               mDayAnalysisView.attachPresenter(mAnalyzePresenter);
-                               mAnalyzePresenter.updateView();
-                               break;
-                           case 1:
-                               if (mDayAnalysisView.getParent() != null) {
-                                   ((ViewGroup) mDayAnalysisView.getParent()).removeAllViews();
-                               }
-                               mViewPager.setCurrentItem(1);
-                               mAnalyzePresenter.attachView(mCategoryAnalysisView);
-                               mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
-                               mAnalyzePresenter.updateView();
-                               break;
-                       }
-
-                    }
-
-                });
-
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case DAILY_TAB:
-                        if (mCategoryAnalysisView.getParent() != null) {
-                            ((ViewGroup) mCategoryAnalysisView.getParent()).removeAllViews();
-                        }
-                        mViewPager.setCurrentItem(tab.getPosition());
-                        mAnalyzePresenter.attachView(mDayAnalysisView);
-                        mDayAnalysisView.attachPresenter(mAnalyzePresenter);
-                        mAnalyzePresenter.updateView();
-                        break;
-                    case CATEGORY_TAB:
-                        if (mDayAnalysisView.getParent() != null) {
-                            ((ViewGroup) mDayAnalysisView.getParent()).removeAllViews();
-                        }
-                        mViewPager.setCurrentItem(tab.getPosition());
-                        mAnalyzePresenter.attachView(mCategoryAnalysisView);
-                        mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
-                        mAnalyzePresenter.updateView();
-                        break;
-
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        mTabDaily.select();
     }
 
     @Override
