@@ -13,6 +13,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,9 +23,12 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import runze.moneytracker.models.BaseExpenseTotal;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
+import runze.moneytracker.models.MonthlyExpenseTotal;
+import runze.moneytracker.models.WeeklyExpenseTotal;
 import runze.moneytracker.views.CategoryAnalysisView;
 import runze.moneytracker.views.DayAnalysisView;
 import runze.moneytracker.views.IView;
@@ -34,6 +38,8 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     private DataModel mDataModel;
     private List<Expense> mListOfSameCategory;
     private List<Expense> mListOfSameDay;
+    private List<Expense> mListOfSameWeek;
+    private List<Expense> mListOfSameMonth;
     private OnChartValueSelectedListener mPieChartOnClickListener = new OnChartValueSelectedListener() {
         @Override
         public void onNothingSelected() {
@@ -73,32 +79,69 @@ public class ExpenseAnalyzePresenter implements IPresenter {
      *
      * @return a list of daily expense total with expenses from the same date merged
      */
-    public List<DailyExpenseTotal> sortDataForDayAnalysis() {
-        boolean done;
-        boolean addNew = false;
-        List<DailyExpenseTotal> listOfDailyExpenseTotal = new ArrayList<>();
+    public void sortDataForDayAnalysis() {
+        boolean doneDay;
+        boolean doneWeek;
+        boolean doneMonth;
+        boolean addNewDay = false;
+        boolean addNewWeek = false;
+        boolean addNewMonth = false;
+        List<DailyExpenseTotal> dailyListOfExpenseTotalList = new ArrayList<>();
+        List<WeeklyExpenseTotal> weeklyListOfExpenseTotalList = new ArrayList<>();
+        List<MonthlyExpenseTotal> monthlyListOfExpenseTotalList = new ArrayList<>();
 
 
         for (int i = 0; i < mDataModel.getExpenses().size(); i++) {
             Expense expense = mDataModel.getExpenses().get(i);
-            done = false;
+            doneDay = false;
+            doneWeek = false;
+            doneMonth = false;
 
-            for (DailyExpenseTotal dailyExpenseTotal : listOfDailyExpenseTotal) {
-                if (dailyExpenseTotal.getDay().equals(expense.getDay())) {
-                    double sum = dailyExpenseTotal.getTotalAmount() + expense.getAmount();
-                    dailyExpenseTotal.setTotalAmount(sum);
-                    done = true;
+            addNewDay = false;
+            addNewWeek = false;
+            addNewMonth = false;
+
+            for (DailyExpenseTotal dailyExpenseTotal : dailyListOfExpenseTotalList) {
+                    if (dailyExpenseTotal.getDay().equals(expense.getDay())) {
+                        double sum = dailyExpenseTotal.getTotalAmount() + expense.getAmount();
+                        dailyExpenseTotal.setTotalAmount(sum);
+                        doneDay = true;
+                    }
+            }
+
+            for (WeeklyExpenseTotal weeklyExpenseTotal : weeklyListOfExpenseTotalList) {
+                if (isSameWeek((weeklyExpenseTotal).getWeek(), expense.getWeek())) {
+                    double sum = weeklyExpenseTotal.getTotalAmount() + expense.getAmount();
+                    weeklyExpenseTotal.setTotalAmount(sum);
+                    doneWeek = true;
                 }
             }
-            if (!done) {
-                addNew = true;
-                listOfDailyExpenseTotal.add(new DailyExpenseTotal(expense.getAmount(), expense.getDate()));
+
+            for (MonthlyExpenseTotal monthlyExpenseTotal : monthlyListOfExpenseTotalList) {
+                if (monthlyExpenseTotal.getMonth().equals(expense.getMonth())) {
+                    double sum = monthlyExpenseTotal.getTotalAmount() + expense.getAmount();
+                    monthlyExpenseTotal.setTotalAmount(sum);
+                    doneMonth = true;
+                }
+            }
+
+            if (!doneDay) {
+                addNewDay = true;
+                dailyListOfExpenseTotalList.add(new DailyExpenseTotal(expense.getAmount(), expense.getDate()));
+            }
+            if (!doneWeek) {
+                addNewWeek = true;
+                weeklyListOfExpenseTotalList.add(new WeeklyExpenseTotal(expense.getAmount(), expense.getDate()));
+            }
+            if (!doneMonth) {
+                addNewMonth = true;
+                monthlyListOfExpenseTotalList.add(new MonthlyExpenseTotal(expense.getAmount(), expense.getDate()));
             }
         }
-        if (addNew) {
-            return orderAndAddPlaceHolderDates(listOfDailyExpenseTotal);
+        if (addNewDay) {
+             orderAndAddPlaceHolderDates(dailyListOfExpenseTotalList);
         } else {
-            return listOfDailyExpenseTotal;
+            //return listOfExpenseTotal;
         }
     }
 
@@ -127,7 +170,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
                 }
             }
 
-            //add place holder dates
+            //add place holder
             for (int i = 1; i < n; i++) {
                 String day1 = data.get(i - 1).getDay();
                 String day2 = data.get(i).getDay();
@@ -212,6 +255,17 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         return sortedData.entrySet();
     }
 
+    private boolean isSameWeek(ArrayList<Integer> arrayList1, ArrayList<Integer> arrayList2) {
+        if(arrayList1.size() != arrayList2.size())
+            return false;
+        for (int i = 0; i<arrayList1.size(); i ++) {
+            if (arrayList1.get(i) != arrayList2.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void generateListOfSameCategory(String category) {
         mListOfSameCategory = new ArrayList<>();
         List<Expense> expenseList = mDataModel.getExpenses();
@@ -230,6 +284,35 @@ public class ExpenseAnalyzePresenter implements IPresenter {
                 mListOfSameDay.add(expenseList.get(i));
             }
         }
+    }
+
+    private void generateListOfSameWeek(Date date) {
+        mListOfSameWeek = new ArrayList<>();
+        List<Expense> expenseList = mDataModel.getExpenses();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int weekOfYear = cal.get(Calendar.WEEK_OF_YEAR);
+        int year = cal.get(Calendar.YEAR);
+        ArrayList<Integer> weekAndYear = new ArrayList<>();
+        weekAndYear.add(0, weekOfYear);
+        weekAndYear.add(1,year);
+        for (int i = 0; i < expenseList.size(); i++) {
+            if (isSameWeek(expenseList.get(i).getWeek(), weekAndYear)) {
+                mListOfSameWeek.add(expenseList.get(i));
+            }
+        }
+    }
+
+    private void generateListOfSameMonth(String date) {
+        mListOfSameMonth = new ArrayList<>();
+
+        List<Expense> expenseList = mDataModel.getExpenses();
+        for (int i = 0; i < expenseList.size(); i++) {
+            if (expenseList.get(i).getMonth().equals(date)) {
+                mListOfSameMonth.add(expenseList.get(i));
+            }
+        }
+
     }
 
     private void sortListOfSameCategory(String category) {
@@ -258,6 +341,16 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     public List<Expense> getListOfSameDay(String date) {
         generateListOfSameDay(date);
         return mListOfSameDay;
+    }
+
+    public List<Expense> getmListOfSameWeek(Date date) {
+        generateListOfSameWeek(date);
+        return mListOfSameWeek;
+    }
+
+    public List<Expense> getmListOfSameMonth(String date) {
+        generateListOfSameMonth(date);
+        return mListOfSameMonth;
     }
 
     public long getExpenseTotal() {

@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class DataModel {
     private List<DailyExpenseTotal> mDailyTotalList;
+    private List<WeeklyExpenseTotal> mWeeklyTotalList;
+    private List<MonthlyExpenseTotal> mMonthlyTotalList;
     private List<Expense> mExpenseList;
     private HashSet<String> mCategoryList;
     private List<Integer> mColorList;

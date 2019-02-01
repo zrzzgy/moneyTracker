@@ -6,11 +6,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,12 +21,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import runze.moneytracker.R;
-import runze.moneytracker.models.DailyExpenseTotal;
+import runze.moneytracker.models.BaseExpenseTotal;
 import runze.moneytracker.models.Expense;
 import runze.moneytracker.presenters.ExpenseAnalyzePresenter;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.utils.DailyAnalysisRecyclerAdapter;
-import runze.moneytracker.utils.DaySummaryBarChartRecyclerAdapter;
+import runze.moneytracker.utils.DateSummaryBarChartRecyclerAdapter;
 
 public class DayAnalysisView extends RelativeLayout implements IView {
 
@@ -33,6 +35,7 @@ public class DayAnalysisView extends RelativeLayout implements IView {
     private ExpenseAnalyzePresenter mPresenter;
     private RecyclerView mDailyExpenseDetailList;
     private TextView mDailyExpenseDetailTotal;
+    private Spinner mSpinner;
 
     public DayAnalysisView(Context context) {
         super(context);
@@ -41,12 +44,37 @@ public class DayAnalysisView extends RelativeLayout implements IView {
     }
 
     private void init(View view) {
-        mDailyExpenseMonth = view.findViewById(R.id.daily_expense_month);
-        mDailyExpenseDetailGraph = view.findViewById(R.id.date_sorted_expense_graph);
+        mDailyExpenseMonth = view.findViewById(R.id.time_range_month_year);
+        mDailyExpenseDetailGraph = view.findViewById(R.id.time_range_sorted_expense_graph);
         mDailyExpenseDetailList = view.findViewById(R.id.expense_detail_list_category);
         // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
-        mDailyExpenseDetailTotal = view.findViewById(R.id.daily_expense_detail_total);
+        mDailyExpenseDetailTotal = view.findViewById(R.id.time_range_expense_detail_total);
+        mSpinner = view.findViewById(R.id.time_range_spinner);
+        String[] mItems = getResources().getStringArray(R.array.date);
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item, mItems);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(adapter);
 
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+
+                String[] date = getResources().getStringArray(R.array.date);
+                if (date[pos].equals("Day")) {
+
+                } else if (date[pos].equals("Week")) {
+
+                } else if (date[pos].equals("Month")) {
+
+                }
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mDailyExpenseDetailGraph.setLayoutManager(mDailyExpenseDetailGraphLayoutManager);
 
@@ -64,7 +92,7 @@ public class DayAnalysisView extends RelativeLayout implements IView {
                     Map<String, Integer> keyValuePair = new HashMap<>();
 
                     for (int i = firstItemPosition; i <= lastItemPosition; i++) {
-                        Date itemDate = ((DaySummaryBarChartRecyclerAdapter) mDailyExpenseDetailGraph.getAdapter()).getItem(i).getDate();
+                        Date itemDate = ((DateSummaryBarChartRecyclerAdapter) mDailyExpenseDetailGraph.getAdapter()).getItem(i).getDate();
                         SimpleDateFormat dfMonth = new SimpleDateFormat("MM", Locale.getDefault());
                         String month = dfMonth.format(itemDate);
 
@@ -144,9 +172,9 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         mPresenter = null;
     }
 
-    public void updateBarChart(List<DailyExpenseTotal> expenseTotals) {
-        DaySummaryBarChartRecyclerAdapter mDaySummaryBarChartRecyclerAdapter = new DaySummaryBarChartRecyclerAdapter(expenseTotals);
-        mDailyExpenseDetailGraph.setAdapter(mDaySummaryBarChartRecyclerAdapter);
+    public void updateBarChart(List<BaseExpenseTotal> expenseTotals) {
+        DateSummaryBarChartRecyclerAdapter mDateSummaryBarChartRecyclerAdapter = new DateSummaryBarChartRecyclerAdapter(expenseTotals);
+        mDailyExpenseDetailGraph.setAdapter(mDateSummaryBarChartRecyclerAdapter);
     }
 
     public void setListOfSameDay(Date date) {

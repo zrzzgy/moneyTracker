@@ -4,31 +4,40 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/daily_expense_view"
+        android:id="@+id/time_range_expense_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
         android:background="@color/offWhite"
         android:orientation="vertical">
 
+        <Spinner
+            android:id="@+id/time_range_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/date"
+            android:layout_alignEnd="@id/time_range_month_year"
+            />
+
         <TextView
-            android:id="@+id/daily_expense_month"
+            android:id="@+id/time_range_month_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/December" />
+            android:text="@string/December"
+            android:layout_below="@+id/time_range_spinner"/>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/date_sorted_expense_graph"
+            android:id="@+id/time_range_sorted_expense_graph"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_below="@id/daily_expense_month" />
+            android:layout_below="@id/time_range_month_year" />
 
         <TextView
-            android:id="@+id/daily_expense_detail_total"
+            android:id="@+id/time_range_expense_detail_total"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/date_sorted_expense_graph"
+            android:layout_below="@id/time_range_sorted_expense_graph"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:gravity="end" />
@@ -37,7 +46,7 @@
             layout="@layout/analyze_view_expense_detail_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/daily_expense_detail_total" />
+            android:layout_below="@id/time_range_expense_detail_total" />
 
     </RelativeLayout>
 </ScrollView>
