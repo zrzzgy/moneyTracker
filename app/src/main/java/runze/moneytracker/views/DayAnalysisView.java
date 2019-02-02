@@ -172,7 +172,7 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         mPresenter = null;
     }
 
-    public void updateBarChart(List<BaseExpenseTotal> expenseTotals) {
+    public void updateBarChart(List<? extends BaseExpenseTotal> expenseTotals) {
         DateSummaryBarChartRecyclerAdapter mDateSummaryBarChartRecyclerAdapter = new DateSummaryBarChartRecyclerAdapter(expenseTotals);
         mDailyExpenseDetailGraph.setAdapter(mDateSummaryBarChartRecyclerAdapter);
     }

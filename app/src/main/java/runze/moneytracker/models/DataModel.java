@@ -51,11 +51,27 @@ public class DataModel {
         return mColorList;
     }
 
+    public List<MonthlyExpenseTotal> getMonthlyTotals() {
+        return mMonthlyTotalList;
+    }
+
+    public List<WeeklyExpenseTotal> getWeeklyTotals() {
+        return mWeeklyTotalList;
+    }
+
     public void setDailyTotalList(List<DailyExpenseTotal> dailyTotalList) {
         this.mDailyTotalList = dailyTotalList;
     }
     public void setExpenseList(List<Expense> expenseList) {
         this.mExpenseList = expenseList;
+    }
+
+    public void setWeeklyTotalList(List<WeeklyExpenseTotal> weeklyTotalList) {
+        this.mWeeklyTotalList = weeklyTotalList;
+    }
+
+    public void setMonthlyTotalList(List<MonthlyExpenseTotal> monthlyTotalList) {
+        this.mMonthlyTotalList = monthlyTotalList;
     }
 
     public void setCategoryList(HashSet<String> categoryList) {

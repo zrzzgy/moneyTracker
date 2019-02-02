@@ -23,7 +23,7 @@ import runze.moneytracker.views.DayAnalysisView;
  */
 public class DateSummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DateSummaryBarChartRecyclerAdapter.ViewHolder> {
     private final String TAG = this.getClass().getSimpleName();
-    private List<BaseExpenseTotal> mDataSet;
+    private List<? extends BaseExpenseTotal> mDataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private RelativeLayout mView;
@@ -38,7 +38,7 @@ public class DateSummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<Dat
         }
     }
 
-    public DateSummaryBarChartRecyclerAdapter(List<BaseExpenseTotal> dataSet) {
+    public DateSummaryBarChartRecyclerAdapter(List<? extends BaseExpenseTotal> dataSet) {
         mDataSet = dataSet;
     }
 
@@ -79,7 +79,7 @@ public class DateSummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<Dat
         return mDataSet.get(index);
     }
 
-    private double getMaxTotalInTimePeriod(List<BaseExpenseTotal> data) {
+    private double getMaxTotalInTimePeriod(List<? extends BaseExpenseTotal> data) {
         double max = 0;
 
         for (BaseExpenseTotal time : data) {

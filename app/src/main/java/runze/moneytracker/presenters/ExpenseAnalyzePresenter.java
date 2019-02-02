@@ -1,7 +1,6 @@
 package runze.moneytracker.presenters;
 
 import android.graphics.Color;
-import android.view.View;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -23,7 +22,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import runze.moneytracker.models.BaseExpenseTotal;
 import runze.moneytracker.models.DailyExpenseTotal;
 import runze.moneytracker.models.DataModel;
 import runze.moneytracker.models.Expense;
@@ -97,16 +95,12 @@ public class ExpenseAnalyzePresenter implements IPresenter {
             doneWeek = false;
             doneMonth = false;
 
-            addNewDay = false;
-            addNewWeek = false;
-            addNewMonth = false;
-
             for (DailyExpenseTotal dailyExpenseTotal : dailyListOfExpenseTotalList) {
-                    if (dailyExpenseTotal.getDay().equals(expense.getDay())) {
-                        double sum = dailyExpenseTotal.getTotalAmount() + expense.getAmount();
-                        dailyExpenseTotal.setTotalAmount(sum);
-                        doneDay = true;
-                    }
+                if (dailyExpenseTotal.getDay().equals(expense.getDay())) {
+                    double sum = dailyExpenseTotal.getTotalAmount() + expense.getAmount();
+                    dailyExpenseTotal.setTotalAmount(sum);
+                    doneDay = true;
+                }
             }
 
             for (WeeklyExpenseTotal weeklyExpenseTotal : weeklyListOfExpenseTotalList) {
@@ -139,9 +133,19 @@ public class ExpenseAnalyzePresenter implements IPresenter {
             }
         }
         if (addNewDay) {
-             orderAndAddPlaceHolderDates(dailyListOfExpenseTotalList);
+            dailyListOfExpenseTotalList = orderAndAddPlaceHolderDaily(dailyListOfExpenseTotalList);
+            mDataModel.setDailyTotalList(dailyListOfExpenseTotalList);
+        } else if (addNewWeek) {
+            weeklyListOfExpenseTotalList = orderAndAddPlaceHolderWeekly(weeklyListOfExpenseTotalList);
+            mDataModel.setWeeklyTotalList(weeklyListOfExpenseTotalList);
+        } else if (addNewMonth) {
+            monthlyListOfExpenseTotalList = orderAndAddPlaceHolderMonthly(monthlyListOfExpenseTotalList);
+            mDataModel.setMonthlyTotalList(monthlyListOfExpenseTotalList);
         } else {
-            //return listOfExpenseTotal;
+            mDataModel.setDailyTotalList(dailyListOfExpenseTotalList);
+            mDataModel.setWeeklyTotalList(weeklyListOfExpenseTotalList);
+            mDataModel.setMonthlyTotalList(monthlyListOfExpenseTotalList);
+
         }
     }
 
@@ -153,7 +157,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
      * @param data list of expenses sorted and merged by date
      * @return list of consecutive expenses sorted and merged by date
      */
-    private List<DailyExpenseTotal> orderAndAddPlaceHolderDates(List<DailyExpenseTotal> data) {
+    private List<DailyExpenseTotal> orderAndAddPlaceHolderDaily(List<DailyExpenseTotal> data) {
         List<DailyExpenseTotal> result = new LinkedList<>();
         int n = data.size();
 
@@ -201,9 +205,105 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         return result;
     }
 
+
+    private List<WeeklyExpenseTotal> orderAndAddPlaceHolderWeekly(List<WeeklyExpenseTotal> data) {
+        List<WeeklyExpenseTotal> result = new LinkedList<>();
+        int n = data.size();
+
+        if (n > 0) {
+            //ascending sort data
+            for (int i = 0; i < n; i++) {
+                for (int j = 1; j < n - i; j++) {
+                    if (data.get(j - 1).getWeek().get(0) < data.get(j).getWeek().get(0) &&
+                            data.get(j - 1).getWeek().get(1) <= data.get(j).getWeek().get(1)) {
+                        // swap data[j] and data[j+1]
+                        WeeklyExpenseTotal temp = data.get(j - 1);
+                        data.set(j - 1, data.get(j));
+                        data.set(j, temp);
+                    }
+                }
+            }
+
+            //add place holder
+            for (int i = 1; i < n; i++) {
+                long date1 = data.get(i - 1).getDate().getTime();
+                long date2 = data.get(i).getDate().getTime();
+
+
+                long timeInBetween = date1 - date2;
+                int weeksInBetween = (int) Math.floor((timeInBetween / (1000 * 60 * 60 * 24)) / 7);
+                weeksInBetween = weeksInBetween - 1;
+                result.add(data.get(i - 1)); // Add the latest day first
+
+                for (int j = 0; j < weeksInBetween; j++) {
+                    long nextTime = result.get(result.size() - 1).getDate().getTime() - 1000 * 60 * 60 * 24 * 7;
+                    Date nextDate = new Date(nextTime);
+                    WeeklyExpenseTotal placeHolder = new WeeklyExpenseTotal((double) 0, nextDate);
+                    result.add(placeHolder);
+                }
+            }
+
+            result.add(data.get(n - 1));
+        }
+
+        return result;
+    }
+
+    private List<MonthlyExpenseTotal> orderAndAddPlaceHolderMonthly(List<MonthlyExpenseTotal> data) {
+        List<MonthlyExpenseTotal> result = new LinkedList<>();
+        int n = data.size();
+
+        if (n > 0) {
+            //ascending sort data
+            for (int i = 0; i < n; i++) {
+                for (int j = 1; j < n - i; j++) {
+                    if (data.get(j - 1).getDate().getTime() < data.get(j).getDate().getTime()) {
+                        // swap data[j] and data[j+1]
+                        MonthlyExpenseTotal temp = data.get(j - 1);
+                        data.set(j - 1, data.get(j));
+                        data.set(j, temp);
+                    }
+                }
+            }
+
+            //add place holder
+            for (int i = 1; i < n; i++) {
+                Date monthData1 = data.get(i - 1).getDate();
+                Date monthData2 = data.get(i).getDate();
+                Calendar start = Calendar.getInstance();
+                start.setTime(monthData1);
+
+                Calendar end = Calendar.getInstance();
+                end.setTime(monthData2);
+
+                int monthsBetween = 0;
+
+                monthsBetween += end.get(Calendar.MONTH) - start.get(Calendar.MONTH) - 1;
+                monthsBetween += (end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12;
+
+                result.add(data.get(i - 1)); // Add the latest day first
+
+                for (int j = 0; j < monthsBetween; j++) {
+                    long nextTime = result.get(result.size() - 1).getDate().getTime() - 1000 * 60 * 60 * 24;
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(new Date(nextTime));
+                    calendar.add(Calendar.MONTH, 1);
+                    Date nextDate = calendar.getTime();
+                    MonthlyExpenseTotal placeHolder = new MonthlyExpenseTotal((double) 0, nextDate);
+                    result.add(placeHolder);
+                }
+            }
+
+            result.add(data.get(n - 1));
+        }
+
+        return result;
+    }
+
     public void updateView() {
         if (mView instanceof DayAnalysisView) {
-            ((DayAnalysisView) mView).updateBarChart(sortDataForDayAnalysis());
+            sortDataForDayAnalysis();
+            ((DayAnalysisView) mView).updateBarChart(mDataModel.getDailyTotals());
             ((DayAnalysisView) mView).setListOfSameDay(new Date());
         } else if (mView instanceof CategoryAnalysisView) {
             ((CategoryAnalysisView) mView).updatePieChart(sortDataForCategoryAnalysis());
@@ -256,9 +356,9 @@ public class ExpenseAnalyzePresenter implements IPresenter {
     }
 
     private boolean isSameWeek(ArrayList<Integer> arrayList1, ArrayList<Integer> arrayList2) {
-        if(arrayList1.size() != arrayList2.size())
+        if (arrayList1.size() != arrayList2.size())
             return false;
-        for (int i = 0; i<arrayList1.size(); i ++) {
+        for (int i = 0; i < arrayList1.size(); i++) {
             if (arrayList1.get(i) != arrayList2.get(i)) {
                 return false;
             }
@@ -295,7 +395,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         int year = cal.get(Calendar.YEAR);
         ArrayList<Integer> weekAndYear = new ArrayList<>();
         weekAndYear.add(0, weekOfYear);
-        weekAndYear.add(1,year);
+        weekAndYear.add(1, year);
         for (int i = 0; i < expenseList.size(); i++) {
             if (isSameWeek(expenseList.get(i).getWeek(), weekAndYear)) {
                 mListOfSameWeek.add(expenseList.get(i));
