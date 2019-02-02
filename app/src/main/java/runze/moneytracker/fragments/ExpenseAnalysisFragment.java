@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +22,19 @@ import runze.moneytracker.views.DayAnalysisView;
 
 
 public class ExpenseAnalysisFragment extends Fragment {
+    private final String TAG = this.getClass().getSimpleName();
+
     @Inject
     ExpenseAnalyzePresenter mAnalyzePresenter;
     private TabLayout mTabLayout;
     private TabLayout.Tab mTabDaily;
+    private TabLayout.Tab mTabCate;
     private final int DAILY_TAB = 0;
     private final int CATEGORY_TAB = 1;
     private ViewPager mViewPager;
     private MTPagerAdapter mPagerAdapter;
     private DayAnalysisView mDayAnalysisView;
     private CategoryAnalysisView mCategoryAnalysisView;
-    private DayAnalysisFragment mDayAnalysisFragment;
-    private CategoryAnalysisFragment mCategoryAnalysisFragment;
 
     private TabLayout.OnTabSelectedListener mOnTabSelectedListener = new TabLayout.OnTabSelectedListener() {
         @Override
@@ -43,13 +45,13 @@ public class ExpenseAnalysisFragment extends Fragment {
             switch (tabPosition) {
                 case DAILY_TAB:
                     mAnalyzePresenter.attachView(mDayAnalysisView);
-                    mDayAnalysisFragment.attachPresenter(mAnalyzePresenter);
+                    mDayAnalysisView.attachPresenter(mAnalyzePresenter);
                     mAnalyzePresenter.updateView();
                     break;
                 case CATEGORY_TAB:
                     mViewPager.setCurrentItem(tab.getPosition());
                     mAnalyzePresenter.attachView(mCategoryAnalysisView);
-                    mCategoryAnalysisFragment.attachPresenter(mAnalyzePresenter);
+                    mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
                     mAnalyzePresenter.updateView();
                     break;
 
@@ -74,16 +76,14 @@ public class ExpenseAnalysisFragment extends Fragment {
             // corresponding tab.
             switch (position) {
                 case DAILY_TAB:
-                    mViewPager.setCurrentItem(0);
-                    mAnalyzePresenter.attachView(mDayAnalysisView);
-                    mDayAnalysisView.attachPresenter(mAnalyzePresenter);
-                    mAnalyzePresenter.updateView();
+                    Log.v(TAG, "Swiped to time analysis.");
+                    //delegate to the OnTabSelectedListener to do everything
+                    mTabDaily.select();
                     break;
                 case CATEGORY_TAB:
-                    mViewPager.setCurrentItem(1);
-                    mAnalyzePresenter.attachView(mCategoryAnalysisView);
-                    mCategoryAnalysisView.attachPresenter(mAnalyzePresenter);
-                    mAnalyzePresenter.updateView();
+                    Log.v(TAG, "swiped to category analysis.");
+                    //delegate to the OnTabSelectedListener to do everything
+                    mTabCate.select();
                     break;
             }
 
@@ -107,25 +107,21 @@ public class ExpenseAnalysisFragment extends Fragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.analysis_base_layout, null);
         mViewPager = view.findViewById(R.id.tab_view_pager);
         mTabLayout = view.findViewById(R.id.tab_layout);
+
         mTabDaily = mTabLayout.getTabAt(0);
-        mPagerAdapter = new MTPagerAdapter(getFragmentManager());
-        mViewPager.setAdapter(mPagerAdapter);
+        mTabCate = mTabLayout.getTabAt(1);
 
         mDayAnalysisView = new DayAnalysisView(getContext());
         mCategoryAnalysisView = new CategoryAnalysisView(getContext());
-        mDayAnalysisFragment = new DayAnalysisFragment();
-        mCategoryAnalysisFragment = new CategoryAnalysisFragment();
-        mDayAnalysisFragment.setDayAnalysisView(mDayAnalysisView);
-        mCategoryAnalysisFragment.setCategoryAnalysisView(mCategoryAnalysisView);
 
-        mPagerAdapter.addFragment(mDayAnalysisFragment);
-        mPagerAdapter.addFragment(mCategoryAnalysisFragment);
+        mPagerAdapter = new MTPagerAdapter();
+        mPagerAdapter.addView(mDayAnalysisView);
+        mPagerAdapter.addView(mCategoryAnalysisView);
+        mViewPager.setAdapter(mPagerAdapter);
 
         mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
         mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
 
-        mTabDaily.select();
-        mViewPager.setCurrentItem(0);
         mAnalyzePresenter.attachView(mDayAnalysisView);
         mDayAnalysisView.attachPresenter(mAnalyzePresenter); // to set presenter
 

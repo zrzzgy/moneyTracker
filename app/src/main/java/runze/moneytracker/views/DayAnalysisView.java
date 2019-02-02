@@ -44,7 +44,6 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         mDailyExpenseMonth = view.findViewById(R.id.daily_expense_month);
         mDailyExpenseDetailGraph = view.findViewById(R.id.date_sorted_expense_graph);
         mDailyExpenseDetailList = view.findViewById(R.id.expense_detail_list_category);
-        // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
         mDailyExpenseDetailTotal = view.findViewById(R.id.daily_expense_detail_total);
 
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);

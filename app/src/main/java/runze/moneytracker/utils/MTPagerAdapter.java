@@ -1,31 +1,33 @@
 package runze.moneytracker.utils;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import runze.moneytracker.fragments.CategoryAnalysisFragment;
-import runze.moneytracker.fragments.DayAnalysisFragment;
-
 /**
  * Class used for swiping to switch between screens
  */
-public class MTPagerAdapter extends FragmentPagerAdapter {
-    private List<Fragment> mFragmentList;
+public class MTPagerAdapter extends PagerAdapter {
+    private List<View> mViewList;
 
-    public MTPagerAdapter(FragmentManager fm) {
-        super(fm);
-        mFragmentList = new ArrayList<>();
+    public MTPagerAdapter() {
+        super();
+        mViewList = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
-        return mFragmentList.size();
+        return mViewList.size();
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        View targetView = mViewList.get(position);
+        container.addView(targetView);
+        return targetView;
     }
 
     @Override
@@ -37,12 +39,7 @@ public class MTPagerAdapter extends FragmentPagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);    }
 
-    @Override
-    public Fragment getItem(int position) {
-        return mFragmentList.get(position);
-    }
-
-    public void addFragment(Fragment fragment){
-        mFragmentList.add(fragment);
+    public void addView(View view){
+        mViewList.add(view);
     }
 }
