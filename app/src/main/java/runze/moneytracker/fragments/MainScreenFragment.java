@@ -2,6 +2,7 @@ package runze.moneytracker.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import runze.moneytracker.HomeActivity;
 import runze.moneytracker.presenters.MainScreenPresenter;
 import runze.moneytracker.views.MainView;
 
-public class MainScreenFragment extends BaseFragment<MainView, MainScreenPresenter> {
+public class MainScreenFragment extends Fragment {
     private MainView mView;
     @Inject
     MainScreenPresenter mPresenter;

@@ -149,7 +149,7 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
                     calendar.set(year, month, day);
                     Date date = calendar.getTime();
                     mPresenter.saveData(categories, amount, description, date);
-                    ((HomeActivity) getContext()).saveDataModel();
+                    ((HomeActivity) getContext()).persistDataAndUpload();
                     Log.v(TAG, "input validated, dismissing input dialog");
                     mAlertDialog.dismiss();
                     updateView();
@@ -171,6 +171,7 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
             // remove the item from both the recycler view and the sharedPreferences
             if (mPresenter.removeExpense(itemToDelete)) {
                 Log.v(TAG, "Item removed: " + "\n" + itemToDelete.toString());
+                ((HomeActivity) getContext()).persistDataAndUpload();
                 updateView();
             } else {
                 Log.e(TAG, "Error when removing item from preferences");

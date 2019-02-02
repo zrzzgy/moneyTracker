@@ -3,9 +3,8 @@
     android:id="@+id/daily_item"
     android:background="@color/offWhite"
     android:gravity="bottom"
-    android:layout_width="35dp"
+    android:layout_width="15dp"
     android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/tight_activity_horizontal_margin"
     android:layout_marginEnd="@dimen/tight_activity_horizontal_margin"
     android:animateLayoutChanges="true">
 
@@ -13,9 +12,7 @@
         android:id="@+id/bar_chart_color_block"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/gradient_background"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"/>
+        android:background="@drawable/gradient_background"/>
 
     <TextView
         android:id="@+id/bar_chart_date"
