@@ -118,6 +118,7 @@ public class ExpenseAnalysisFragment extends Fragment {
         mPagerAdapter.addView(mDayAnalysisView);
         mPagerAdapter.addView(mCategoryAnalysisView);
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
         mViewPager.addOnPageChangeListener(mSimpleOnPageChangeListener);
         mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
