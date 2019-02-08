@@ -47,6 +47,7 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         mDailyExpenseMonth = view.findViewById(R.id.time_range_month_year);
         mDailyExpenseDetailGraph = view.findViewById(R.id.time_range_sorted_expense_graph);
         mDailyExpenseDetailList = view.findViewById(R.id.expense_detail_list_category);
+        Add_Time_Range
         // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
         mDailyExpenseDetailTotal = view.findViewById(R.id.time_range_expense_detail_total);
         mSpinner = view.findViewById(R.id.time_range_spinner);
