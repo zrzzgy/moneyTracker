@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class DayAnalysisView extends RelativeLayout implements IView {
     private ExpenseAnalyzePresenter mPresenter;
     private RecyclerView mDateExpenseDetailList;
     private TextView mDateExpenseDetailTotal;
-    private Spinner mSpinner;
+    private Spinner mTimeRangeSpinner;
     private int whichSpinnerIsSelected = 1;
     private Button mDataAnalysisButton;
     private View mAlertLayout;
@@ -57,31 +58,30 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         mDailyExpenseDetailGraph = view.findViewById(R.id.time_range_sorted_expense_graph);
         mDateExpenseDetailList = view.findViewById(R.id.expense_detail_list_category);
         mDataAnalysisButton = view.findViewById(R.id.data_analyze_button);
+        mDateExpenseDetailTotal = view.findViewById(R.id.time_range_expense_detail_total);
+        mTimeRangeSpinner = view.findViewById(R.id.time_range_spinner);
 
         mDataAnalysisButton.setOnClickListener(dataAnalysisButtonListener);
-        // mAnalysisDetailList = view.findViewById(R.id.analyze_view_expense_detail_list);
-        mDateExpenseDetailTotal = view.findViewById(R.id.time_range_expense_detail_total);
-        mSpinner = view.findViewById(R.id.time_range_spinner);
         String[] mItems = getResources().getStringArray(R.array.date);
+
         ArrayAdapter<String> adapter=new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item, mItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(adapter);
-
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mTimeRangeSpinner.setAdapter(adapter);
+        mTimeRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
 
                 String[] date = getResources().getStringArray(R.array.date);
-                if (date[pos].equals("Day")) {
+                if (date[pos].equals(getResources().getString(R.string.day))) {
                     mPresenter.updateSpinnerView(1);
                     whichSpinnerIsSelected = 1;
 
-                } else if (date[pos].equals("Week")) {
+                } else if (date[pos].equals(getResources().getString(R.string.week))) {
                     mPresenter.updateSpinnerView(2);
                     whichSpinnerIsSelected = 2;
 
-                } else if (date[pos].equals("Month")) {
+                } else if (date[pos].equals(getResources().getString(R.string.month))) {
                     mPresenter.updateSpinnerView(3);
                     whichSpinnerIsSelected =3;
 
@@ -204,12 +204,15 @@ public class DayAnalysisView extends RelativeLayout implements IView {
             for (Expense expense : listOfSameDay) {
                 dayAmount += expense.getAmount();
             }
+            DecimalFormat df2 = new DecimalFormat(".##");
+            String dayAmountString = df2.format(dayAmount);
+
             SimpleDateFormat day = new SimpleDateFormat("dd", Locale.getDefault());
             mDateExpenseDetailTotal.setText(String.format("%s %s%s %s%s%s",
                     mDailyExpenseMonth.getText(),
                     day.format(date),
                     getContext().getString(R.string.partVsTotal),
-                    String.valueOf(dayAmount),
+                    dayAmountString,
                     getContext().getString(R.string.slash),
                     String.valueOf(mPresenter.getExpenseTotal())));
             mDateExpenseDetailList.setAdapter(new DailyAnalysisRecyclerAdapter(listOfSameDay));
