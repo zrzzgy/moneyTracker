@@ -30,8 +30,6 @@
     <string name="drop_down_title">Choose a Category</string>
     <string name="no_category_entered">No Category Entered</string>
     <string name="category_already_exists">Category Already Exists</string>
-    <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
     <string name="change_theme">Change Theme</string>
     <string name="log_out">Log out</string>
     <string name="log_in">Log in</string>

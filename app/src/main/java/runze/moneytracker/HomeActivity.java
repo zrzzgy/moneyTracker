@@ -195,13 +195,6 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
-    }
-
-    @Override
     public void onBackPressed() {
         if (getCurrentFragment() instanceof AboutFragment) {
             getSupportFragmentManager().popBackStackImmediate();
