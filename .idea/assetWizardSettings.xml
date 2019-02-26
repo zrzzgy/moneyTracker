@@ -16,27 +16,12 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
-                        <option name="children">
-                          <map>
-                            <entry key="clipartAsset">
-                              <value>
-                                <PersistentState>
-                                  <option name="values">
-                                    <map>
-                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_brightness_1_black_24dp.xml" />
-                                    </map>
-                                  </option>
-                                </PersistentState>
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ff5638" />
-                            <entry key="outputName" value="ic_logout" />
-                            <entry key="sourceFile" value="$PROJECT_DIR$/../logout.psd" />
+                            <entry key="outputName" value="ic_login" />
+                            <entry key="sourceFile" value="C:\Users\runze\Desktop\iconfinder_login_4115234.svg" />
                           </map>
                         </option>
                       </PersistentState>

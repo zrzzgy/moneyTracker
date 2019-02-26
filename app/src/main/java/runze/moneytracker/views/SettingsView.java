@@ -20,25 +20,43 @@ import runze.moneytracker.fragments.SettingsScreenFragment;
 import runze.moneytracker.presenters.IPresenter;
 import runze.moneytracker.presenters.SettingsPresenter;
 
+import static runze.moneytracker.AppConstants.DIRECT_SIGN_IN;
+
 
 /**
  *
  */
-public class SettingsView extends LinearLayout implements IView{
+public class SettingsView extends LinearLayout implements IView {
     private SettingsPresenter mPresenter;
+    private Button mLoginButton;
     private Button mLogoutButton;
     private Button mAboutButton;
     private ContextThemeWrapper themeWrapper;
+    private GoogleSignInClient mGoogleSignInClient;
 
-    public SettingsView(Context context){
+    public SettingsView(Context context) {
         super(context);
         themeWrapper = new ContextThemeWrapper(getContext(), R.style.AppTheme);
         LayoutInflater layoutInflater = LayoutInflater.from(themeWrapper);
         View v = layoutInflater.inflate(R.layout.settings_view_layout, this);
         init(v);
+
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getResources().getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null){
+            mLoginButton.setVisibility(VISIBLE);
+            mLogoutButton.setVisibility(GONE);
+        }
     }
 
-    private void init(View view){
+    private void init(View view) {
+        mLoginButton = findViewById(R.id.login_button);
         mLogoutButton = view.findViewById(R.id.logout_button);
         mAboutButton = view.findViewById(R.id.about_button);
     }
@@ -53,34 +71,40 @@ public class SettingsView extends LinearLayout implements IView{
         mPresenter = null;
     }
 
-    public void setLogOutListener(OnClickListener listener){
+    public void setLogInListener(OnClickListener logInListener) {
+        mLoginButton.setOnClickListener(logInListener);
+    }
+
+    public void setLogOutListener(OnClickListener listener) {
         mLogoutButton.setOnClickListener(listener);
     }
 
-    public void setAboutListener(OnClickListener listener){
+    public void setAboutListener(OnClickListener listener) {
         mAboutButton.setOnClickListener(listener);
     }
 
-    public void signOut(){
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getResources().getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+    public void signIn() {
+        navigateSignInActivity(true);
+    }
 
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
-        googleSignInClient.signOut();
+    public void signOut() {
+        mGoogleSignInClient.signOut();
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signOut();
 
+        navigateSignInActivity(false);
+    }
+
+    private void navigateSignInActivity(boolean directSignIn) {
         Intent intent = new Intent();
         intent.setClass(getContext(), SignInActivity.class);
+        intent.putExtra(DIRECT_SIGN_IN, directSignIn);
         getContext().startActivity(intent);
         ((HomeActivity) getContext()).finish();
     }
 
-    public void navigateToAboutScreen(){
-         (( SettingsScreenFragment) ((HomeActivity) getContext()).getCurrentFragment()).navigateAboutScreen();
+    public void navigateToAboutScreen() {
+        ((SettingsScreenFragment) ((HomeActivity) getContext()).getCurrentFragment()).navigateAboutScreen();
     }
 }
