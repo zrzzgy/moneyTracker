@@ -2,6 +2,7 @@ package runze.moneytracker.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -17,7 +18,7 @@ import runze.moneytracker.views.SettingsView;
 
 
 
-public class SettingsScreenFragment extends BaseFragment {
+public class SettingsScreenFragment extends Fragment {
     private SettingsView mView;
     @Inject
     SettingsPresenter mPresenter;
