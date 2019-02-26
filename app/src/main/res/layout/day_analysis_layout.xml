@@ -31,7 +31,8 @@
             android:id="@+id/time_range_sorted_expense_graph"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_below="@id/time_range_month_year" />
+            android:layout_below="@id/time_range_month_year"
+            android:overScrollMode="never"/>
 
         <TextView
             android:id="@+id/time_range_expense_detail_total"
