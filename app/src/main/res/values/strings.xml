@@ -63,6 +63,7 @@
     <string name="slash">/</string>
     <string name="analyze_data">Analyze Data</string>
     <string name="data_analysis_title">Data Analysis</string>
+    <string name="time_range_label">Sort chart by: </string>
 
     <!--about screen-->
     <string name = "app_version">Version 1.0.0</string>
