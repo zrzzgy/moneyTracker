@@ -42,6 +42,10 @@
     <string name="expenses_by_date">按日期分类</string>
     <string name="tab_tile_daily">按日期</string>
     <string name="tab_title_category">按类别</string>
+    <string name="day">日</string>
+    <string name="week">星期</string>
+    <string name="month">月</string>
+    <string name="year">年</string>
 
     <string name="January">一月</string>
     <string name="February">二月</string>
@@ -56,6 +60,8 @@
     <string name="November">十一月</string>
     <string name="December">十二月</string>
     <string name="partVsTotal">/总计：</string>
+    <string name="analyze_data">分析数据</string>
+    <string name="data_analysis_title">数据分析</string>
 
     <!--about screen-->
     <string name = "app_version">版本 1.0.0</string>

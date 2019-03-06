@@ -25,6 +25,7 @@
         android:layout_height="match_parent"
         android:background="@color/offWhite"
         android:layout_below="@id/total_text_view"
+        android:overScrollMode="never"
         />
 
     <android.support.design.widget.FloatingActionButton

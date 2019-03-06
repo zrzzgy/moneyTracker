@@ -4,6 +4,7 @@ package runze.moneytracker;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -90,14 +92,17 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_input:
+                    Log.v(TAG, "navigate main screen");
                     fragmentTransaction.replace(R.id.fragment_container, mInputFragment, "inputFragment");
                     fragmentTransaction.addToBackStack("inputFragment");
                     break;
                 case R.id.navigation_stats:
+                    Log.v(TAG, "navigate stats screen");
                     fragmentTransaction.replace(R.id.fragment_container, mStatsFragment, "statsFragment");
                     fragmentTransaction.addToBackStack("statsFragment");
                     break;
                 case R.id.navigation_settings:
+                    Log.v(TAG, "navigate settings screen");
                     fragmentTransaction.replace(R.id.fragment_container, mSettingsFragment, "settingsFragment");
                     fragmentTransaction.addToBackStack("settingsFragment");
                     break;
@@ -122,12 +127,11 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
 
         List<UnsyncedExpense> cachedUnsyncedChanges =
                 gson.fromJson(mSharedPreferences.getString(UNSYNCED_EXPENSE_KEY, ""),
-                        new TypeToken<List>() {
-                        }.getType());
+                        new TypeToken<List<UnsyncedExpense>>(){}.getType());
         if (mUnsyncedExpenseList.isEmpty() &&
                 cachedUnsyncedChanges != null) {
             for (int i = 0; i < cachedUnsyncedChanges.size(); i++) {
-                if (cachedUnsyncedChanges.get(i) instanceof UnsyncedExpense) {
+                if (cachedUnsyncedChanges.get(i) != null) {
                     mUnsyncedExpenseList.add(cachedUnsyncedChanges.get(i));
                 }
             }
@@ -195,13 +199,6 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
-    }
-
-    @Override
     public void onBackPressed() {
         if (getCurrentFragment() instanceof AboutFragment) {
             getSupportFragmentManager().popBackStackImmediate();
@@ -233,50 +230,49 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     }
 
     private void uploadExpenses() {
-            // Write a message to the database
-            final DatabaseReference myRef = database.getReference(user.getUid());
-
-            Iterator<UnsyncedExpense> iterator = mUnsyncedExpenseList.iterator();
-            while (iterator.hasNext()) {
-                final UnsyncedExpense tempUnsyncedExpense = iterator.next();
-                if (tempUnsyncedExpense.getExpense().getChildId() == null || !tempUnsyncedExpense.isAdd()) {
-                    if (tempUnsyncedExpense.isAdd()) {
-                        final DatabaseReference newChild = myRef.push();
-                        tempUnsyncedExpense.getExpense().setChildId(newChild.getKey());
-                        String unsyncedExpenseString = gson.toJson(tempUnsyncedExpense.getExpense());
-                        newChild.setValue(unsyncedExpenseString, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                if (databaseError == null) {
-                                    mUnsyncedExpenseList.remove(tempUnsyncedExpense);
-                                    String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
-                                    mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
-                                }
+        // Write a message to the database
+        final DatabaseReference myRef = database.getReference(user.getUid());
+        String unsyncedExpenseList = "";
+        for (final UnsyncedExpense tempUnsyncedExpense : mUnsyncedExpenseList) {
+            if (tempUnsyncedExpense.getExpense().getChildId() == null || !tempUnsyncedExpense.isAdd()) {
+                if (tempUnsyncedExpense.isAdd()) {
+                    final DatabaseReference newChild = myRef.push();
+                    tempUnsyncedExpense.getExpense().setChildId(newChild.getKey());
+                    String unsyncedExpenseString = gson.toJson(tempUnsyncedExpense.getExpense());
+                    newChild.setValue(unsyncedExpenseString, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                                mUnsyncedExpenseList.remove(tempUnsyncedExpense);
+                                String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
+                                mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
                             }
-                        });
-                    } else {
-                        // remove expense from database
-                        myRef.child(tempUnsyncedExpense.getExpense().getChildId()).removeValue(new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                if (databaseError == null) {
-                                    mUnsyncedExpenseList.remove(tempUnsyncedExpense);
-                                    String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
-                                    mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
-                                }
+                        }
+                    });
+                } else {
+                    // remove expense from database
+                    myRef.child(tempUnsyncedExpense.getExpense().getChildId()).removeValue(new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                                mUnsyncedExpenseList.remove(tempUnsyncedExpense);
+                                String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
+                                mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
                             }
-                        });
-                    }
+                        }
+                    });
                 }
+            }
 
-            String unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
-            mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
+            unsyncedExpenseList = gson.toJson(mUnsyncedExpenseList);
         }
+
+        mEditor.putString(UNSYNCED_EXPENSE_KEY, unsyncedExpenseList).apply();
     }
 
     public void persistDataAndUpload() {
         if (mIsLoggedIn && mIsConnectedToInternet) {
-            uploadExpenses();
+            new UploadFileTask().execute();
         }
         persistDataModel();
     }
@@ -284,9 +280,8 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     private void populateDataModel(List<Expense> databaseExpenseList) {
         HashSet<String> category = new HashSet<>();
         if (!databaseExpenseList.isEmpty()) {
-            Iterator<Expense> iterator = databaseExpenseList.iterator();
-            while (iterator.hasNext()) {
-                category.addAll(iterator.next().getCategory());
+            for (Expense aDatabaseExpenseList : databaseExpenseList) {
+                category.addAll(aDatabaseExpenseList.getCategory());
             }
             mDataModel.setCategoryList(category);
             mDataModel.setExpenseList(databaseExpenseList);
@@ -299,9 +294,8 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
         List<Expense> loadFromDatabaseExpenseList = new ArrayList<>();
         // This method is called once with the initial value and again
         // whenever data at this location is updated.
-        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
-        while (iterator.hasNext()) {
-            userExpenseDataAsString = iterator.next().getValue(String.class);
+        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+            userExpenseDataAsString = dataSnapshot1.getValue(String.class);
             Expense tempExpense = gson.fromJson(userExpenseDataAsString,
                     new TypeToken<Expense>() {
                     }.getType());
@@ -324,5 +318,19 @@ public class HomeActivity extends AppCompatActivity implements ValueEventListene
     public void onCancelled(@NonNull DatabaseError databaseError) {
         // Failed to read value
         Log.w(TAG, "Failed to read value.", databaseError.toException());
+    }
+
+    private class UploadFileTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            uploadExpenses();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Toast.makeText(getApplicationContext(), "sync successful", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -30,8 +30,6 @@
     <string name="drop_down_title">Choose a Category</string>
     <string name="no_category_entered">No Category Entered</string>
     <string name="category_already_exists">Category Already Exists</string>
-    <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
     <string name="change_theme">Change Theme</string>
     <string name="log_out">Log out</string>
     <string name="log_in">Log in</string>
@@ -44,6 +42,10 @@
     <string name="expenses_by_date">Expenses By Date</string>
     <string name="tab_tile_daily">By Date</string>
     <string name="tab_title_category">By Category</string>
+    <string name="day">Day</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
 
     <string name="January">Jan</string>
     <string name="February">Feb</string>
@@ -59,6 +61,9 @@
     <string name="December">Dec</string>
     <string name="partVsTotal">/total :</string>
     <string name="slash">/</string>
+    <string name="analyze_data">Analyze Data</string>
+    <string name="data_analysis_title">Data Analysis</string>
+    <string name="time_range_label">Sort chart by: </string>
 
     <!--about screen-->
     <string name = "app_version">Version 1.0.0</string>

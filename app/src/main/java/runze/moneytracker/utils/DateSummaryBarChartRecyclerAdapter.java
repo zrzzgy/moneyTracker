@@ -15,15 +15,15 @@ import java.util.List;
 import java.util.Locale;
 
 import runze.moneytracker.R;
-import runze.moneytracker.models.DailyExpenseTotal;
+import runze.moneytracker.models.BaseExpenseTotal;
 import runze.moneytracker.views.DayAnalysisView;
 
 /**
  * Class used in the recycler view that shows daily spending bar chart
  */
-public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DaySummaryBarChartRecyclerAdapter.ViewHolder> {
+public class DateSummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DateSummaryBarChartRecyclerAdapter.ViewHolder> {
     private final String TAG = this.getClass().getSimpleName();
-    private List<DailyExpenseTotal> mDataSet;
+    private List<? extends BaseExpenseTotal> mDataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private RelativeLayout mView;
@@ -38,53 +38,56 @@ public class DaySummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<DayS
         }
     }
 
-    public DaySummaryBarChartRecyclerAdapter(List<DailyExpenseTotal> dataSet) {
+    public DateSummaryBarChartRecyclerAdapter(List<? extends BaseExpenseTotal> dataSet) {
         mDataSet = dataSet;
     }
 
     @NonNull
     @Override
-    public DaySummaryBarChartRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DateSummaryBarChartRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.daily_expense_total_bar_chart_bar_layout, parent, false);
-        return new DaySummaryBarChartRecyclerAdapter.ViewHolder(relativeLayout);
+        return new DateSummaryBarChartRecyclerAdapter.ViewHolder(relativeLayout);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull final DaySummaryBarChartRecyclerAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final DateSummaryBarChartRecyclerAdapter.ViewHolder holder, final int position) {
         // int position: the position of the ViewHolder item
-        DailyExpenseTotal singleExpense = (DailyExpenseTotal) mDataSet.toArray()[position];
+        BaseExpenseTotal singleExpense = (BaseExpenseTotal) mDataSet.toArray()[position];
         SimpleDateFormat df = new SimpleDateFormat("dd", Locale.getDefault());
 
         holder.mBarDate.setText(df.format(singleExpense.getDate()));
-        holder.mBarColorBlock.setHeight((int) (150 * singleExpense.getTotalAmount() / getMaxDailyTotal(mDataSet)));
+        holder.mBarColorBlock.setHeight((int) (150 * singleExpense.getTotalAmount() / getMaxTotalInTimePeriod(mDataSet)));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // on list item click
                 Log.v(TAG, "Clicked " + position);
                 ((DayAnalysisView) view.getParent().getParent().getParent().getParent()).
-                        setListOfSameDay(getItem(position).getDate());
+                        setListOfSameDate(getItem(position).getDate());
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mDataSet.size();
+        if (mDataSet != null) {
+            return mDataSet.size();
+        }
+        return 0;
     }
 
-    public DailyExpenseTotal getItem(int index) {
+    public BaseExpenseTotal getItem(int index) {
         return mDataSet.get(index);
     }
 
-    private double getMaxDailyTotal(List<DailyExpenseTotal> data) {
+    private double getMaxTotalInTimePeriod(List<? extends BaseExpenseTotal> data) {
         double max = 0;
 
-        for (DailyExpenseTotal daily : data) {
-            if (max < daily.getTotalAmount()) {
-                max = daily.getTotalAmount();
+        for (BaseExpenseTotal time : data) {
+            if (max < time.getTotalAmount()) {
+                max = time.getTotalAmount();
             }
         }
         return max;

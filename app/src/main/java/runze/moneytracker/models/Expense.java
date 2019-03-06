@@ -3,6 +3,8 @@ package runze.moneytracker.models;
 import android.support.annotation.NonNull;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
@@ -58,6 +60,22 @@ public class Expense {
 
     public String getDay() {
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+        return df.format(mDate);
+    }
+
+    public ArrayList<Integer> getWeek() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(mDate);
+        int weekOfYear = cal.get(Calendar.WEEK_OF_YEAR);
+        int year = cal.get(Calendar.YEAR);
+        ArrayList<Integer> weekAndYear = new ArrayList<>();
+        weekAndYear.add(0, weekOfYear);
+        weekAndYear.add(1, year);
+        return weekAndYear;
+    }
+
+    public String getMonth() {
+        SimpleDateFormat df = new SimpleDateFormat("MM-yyyy", Locale.getDefault());
         return df.format(mDate);
     }
 
