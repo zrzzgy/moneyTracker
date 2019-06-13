@@ -134,10 +134,18 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         }
         if (addNewDay) {
             dailyListOfExpenseTotalList = orderAndAddPlaceHolderDaily(dailyListOfExpenseTotalList);
+            mDataModel.setDailyTotalList(dailyListOfExpenseTotalList);
         } else if (addNewWeek) {
             weeklyListOfExpenseTotalList = orderAndAddPlaceHolderWeekly(weeklyListOfExpenseTotalList);
+            mDataModel.setWeeklyTotalList(weeklyListOfExpenseTotalList);
         } else if (addNewMonth) {
             monthlyListOfExpenseTotalList = orderAndAddPlaceHolderMonthly(monthlyListOfExpenseTotalList);
+            mDataModel.setMonthlyTotalList(monthlyListOfExpenseTotalList);
+        } else {
+            mDataModel.setDailyTotalList(dailyListOfExpenseTotalList);
+            mDataModel.setWeeklyTotalList(weeklyListOfExpenseTotalList);
+            mDataModel.setMonthlyTotalList(monthlyListOfExpenseTotalList);
+
         }
         mDataModel.setDailyTotalList(dailyListOfExpenseTotalList);
         mDataModel.setWeeklyTotalList(weeklyListOfExpenseTotalList);
@@ -201,7 +209,6 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
         return result;
     }
-
 
     private List<WeeklyExpenseTotal> orderAndAddPlaceHolderWeekly(List<WeeklyExpenseTotal> data) {
         List<WeeklyExpenseTotal> result = new LinkedList<>();

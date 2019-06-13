@@ -66,6 +66,7 @@ public class DayAnalysisView extends RelativeLayout implements IView {
 
         ArrayAdapter<String> adapter=new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item, mItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         mTimeRangeSpinner.setAdapter(adapter);
         mTimeRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
