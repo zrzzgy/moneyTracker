@@ -11,42 +11,63 @@
         android:background="@color/offWhite"
         android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/time_range_spinner"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/time_range_spinner_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/date"
             android:layout_alignEnd="@id/time_range_month_year"
-            />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_range_label" />
+
+            <Spinner
+                android:id="@+id/time_range_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/date" />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/time_range_month_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/time_range_spinner_layout"
             android:gravity="center"
-            android:text="@string/December"
-            android:layout_below="@+id/time_range_spinner"/>
+            android:text="@string/December" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/time_range_sorted_expense_graph"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_below="@id/time_range_month_year" />
+            android:layout_below="@id/time_range_month_year"
+            android:overScrollMode="never" />
 
         <TextView
             android:id="@+id/time_range_expense_detail_total"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/time_range_sorted_expense_graph"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:gravity="end" />
+
+        <Button
+            android:id="@+id/data_analyze_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/time_range_expense_detail_total"
+            android:text="@string/analyze_data"
+            android:visibility="gone" />
 
         <include
             layout="@layout/analyze_view_expense_detail_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/time_range_expense_detail_total" />
+            android:layout_below="@id/data_analyze_button" />
 
     </RelativeLayout>
 </ScrollView>

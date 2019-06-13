@@ -60,6 +60,8 @@
     <string name="November">十一月</string>
     <string name="December">十二月</string>
     <string name="partVsTotal">/总计：</string>
+    <string name="analyze_data">分析数据</string>
+    <string name="data_analysis_title">数据分析</string>
 
     <!--about screen-->
     <string name = "app_version">版本 1.0.0</string>

@@ -55,10 +55,9 @@ public class CategoryAnalysisRecyclerAdapter extends RecyclerView.Adapter<Catego
     public void onBindViewHolder(ViewHolder holder, int position) {
         Expense singleExpense = mDataSet.get(position);
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
-        String categoriesList = Arrays.toString(singleExpense.getCategory().toArray());
 
         holder.mAmountTextView.setText(singleExpense.getAmount().toString());
-        holder.mCategoryTextView.setVisibility(View.INVISIBLE);
+        holder.mCategoryTextView.setVisibility(View.GONE);
         holder.mDateTextView.setText(df.format(singleExpense.getDate()));
         holder.mDateTextView.setVisibility(View.VISIBLE);
         holder.mDescriptionView.setText(singleExpense.getDescription());

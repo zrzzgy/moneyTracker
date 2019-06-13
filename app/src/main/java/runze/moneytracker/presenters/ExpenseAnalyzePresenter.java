@@ -147,6 +147,11 @@ public class ExpenseAnalyzePresenter implements IPresenter {
             mDataModel.setMonthlyTotalList(monthlyListOfExpenseTotalList);
 
         }
+        mDataModel.setDailyTotalList(dailyListOfExpenseTotalList);
+        mDataModel.setWeeklyTotalList(weeklyListOfExpenseTotalList);
+        mDataModel.setMonthlyTotalList(monthlyListOfExpenseTotalList);
+
+
     }
 
 
@@ -204,7 +209,6 @@ public class ExpenseAnalyzePresenter implements IPresenter {
 
         return result;
     }
-
 
     private List<WeeklyExpenseTotal> orderAndAddPlaceHolderWeekly(List<WeeklyExpenseTotal> data) {
         List<WeeklyExpenseTotal> result = new LinkedList<>();
@@ -304,10 +308,25 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         if (mView instanceof DayAnalysisView) {
             sortDataForDayAnalysis();
             ((DayAnalysisView) mView).updateBarChart(mDataModel.getDailyTotals());
-            ((DayAnalysisView) mView).setListOfSameDay(new Date());
+            ((DayAnalysisView) mView).setListOfSameDate(new Date());
         } else if (mView instanceof CategoryAnalysisView) {
             ((CategoryAnalysisView) mView).updatePieChart(sortDataForCategoryAnalysis());
             ((CategoryAnalysisView) mView).setListOfSameCategory(0, mDataModel.getExpenseTotal());
+        }
+    }
+
+    public void updateSpinnerView(int whichViewSelected) {
+        sortDataForDayAnalysis();
+        if(whichViewSelected == 1) {
+            ((DayAnalysisView) mView).updateBarChart(mDataModel.getDailyTotals());
+            ((DayAnalysisView) mView).setListOfSameDate(new Date());
+        } else if(whichViewSelected == 2) {
+            ((DayAnalysisView) mView).updateBarChart(mDataModel.getWeeklyTotals());
+            ((DayAnalysisView) mView).setListOfSameDate(new Date());
+        } else  if(whichViewSelected == 3) {
+            ((DayAnalysisView) mView).updateBarChart(mDataModel.getMonthlyTotals());
+            ((DayAnalysisView) mView).setListOfSameDate(new Date());
+
         }
     }
 
@@ -359,7 +378,7 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         if (arrayList1.size() != arrayList2.size())
             return false;
         for (int i = 0; i < arrayList1.size(); i++) {
-            if (arrayList1.get(i) != arrayList2.get(i)) {
+            if (!arrayList1.get(i).equals(arrayList2.get(i))) {
                 return false;
             }
         }
@@ -443,12 +462,12 @@ public class ExpenseAnalyzePresenter implements IPresenter {
         return mListOfSameDay;
     }
 
-    public List<Expense> getmListOfSameWeek(Date date) {
+    public List<Expense> getListOfSameWeek(Date date) {
         generateListOfSameWeek(date);
         return mListOfSameWeek;
     }
 
-    public List<Expense> getmListOfSameMonth(String date) {
+    public List<Expense> getListOfSameMonth(String date) {
         generateListOfSameMonth(date);
         return mListOfSameMonth;
     }

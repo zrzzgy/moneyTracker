@@ -1,17 +1,22 @@
 package runze.moneytracker.views;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,12 +35,17 @@ import runze.moneytracker.utils.DateSummaryBarChartRecyclerAdapter;
 
 public class DayAnalysisView extends RelativeLayout implements IView {
 
+    private final String TAG = this.getClass().getSimpleName();
     private TextView mDailyExpenseMonth;
     private RecyclerView mDailyExpenseDetailGraph;
     private ExpenseAnalyzePresenter mPresenter;
-    private RecyclerView mDailyExpenseDetailList;
-    private TextView mDailyExpenseDetailTotal;
-    private Spinner mSpinner;
+    private RecyclerView mDateExpenseDetailList;
+    private TextView mDateExpenseDetailTotal;
+    private Spinner mTimeRangeSpinner;
+    private int whichSpinnerIsSelected = 1;
+    private Button mDataAnalysisButton;
+    private View mAlertLayout;
+    private AlertDialog mAlertDialog;
 
     public DayAnalysisView(Context context) {
         super(context);
@@ -46,25 +56,35 @@ public class DayAnalysisView extends RelativeLayout implements IView {
     private void init(View view) {
         mDailyExpenseMonth = view.findViewById(R.id.time_range_month_year);
         mDailyExpenseDetailGraph = view.findViewById(R.id.time_range_sorted_expense_graph);
-        mDailyExpenseDetailList = view.findViewById(R.id.expense_detail_list_category);
-        mDailyExpenseDetailTotal = view.findViewById(R.id.time_range_expense_detail_total);
-        mSpinner = view.findViewById(R.id.time_range_spinner);
+        mDateExpenseDetailList = view.findViewById(R.id.expense_detail_list_category);
+        mDataAnalysisButton = view.findViewById(R.id.data_analyze_button);
+        mDateExpenseDetailTotal = view.findViewById(R.id.time_range_expense_detail_total);
+        mTimeRangeSpinner = view.findViewById(R.id.time_range_spinner);
+
+        mDataAnalysisButton.setOnClickListener(dataAnalysisButtonListener);
         String[] mItems = getResources().getStringArray(R.array.date);
+
         ArrayAdapter<String> adapter=new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item, mItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(adapter);
 
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mTimeRangeSpinner.setAdapter(adapter);
+        mTimeRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
 
                 String[] date = getResources().getStringArray(R.array.date);
-                if (date[pos].equals("Day")) {
+                if (date[pos].equals(getResources().getString(R.string.day))) {
+                    mPresenter.updateSpinnerView(1);
+                    whichSpinnerIsSelected = 1;
 
-                } else if (date[pos].equals("Week")) {
+                } else if (date[pos].equals(getResources().getString(R.string.week))) {
+                    mPresenter.updateSpinnerView(2);
+                    whichSpinnerIsSelected = 2;
 
-                } else if (date[pos].equals("Month")) {
+                } else if (date[pos].equals(getResources().getString(R.string.month))) {
+                    mPresenter.updateSpinnerView(3);
+                    whichSpinnerIsSelected =3;
 
                 }
 
@@ -77,9 +97,9 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         LinearLayoutManager mDailyExpenseDetailGraphLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         mDailyExpenseDetailGraph.setLayoutManager(mDailyExpenseDetailGraphLayoutManager);
 
-        mDailyExpenseDetailList.setHasFixedSize(true);
+        mDateExpenseDetailList.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        mDailyExpenseDetailList.setLayoutManager(mLayoutManager);
+        mDateExpenseDetailList.setLayoutManager(mLayoutManager);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mDailyExpenseDetailGraph.setOnScrollChangeListener(new OnScrollChangeListener() {
@@ -176,22 +196,88 @@ public class DayAnalysisView extends RelativeLayout implements IView {
         mDailyExpenseDetailGraph.setAdapter(mDateSummaryBarChartRecyclerAdapter);
     }
 
-    public void setListOfSameDay(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
-        List<Expense> listOfSameDay = mPresenter.getListOfSameDay(df.format(date));
-        mDailyExpenseDetailTotal.setText("");
-        double dayAmount = 0;
-        for (Expense expense : listOfSameDay) {
-            dayAmount += expense.getAmount();
+    public void setListOfSameDate(Date date) {
+        if (whichSpinnerIsSelected == 1) {
+            SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+            List<Expense> listOfSameDay = mPresenter.getListOfSameDay(df.format(date));
+            mDateExpenseDetailTotal.setText("");
+            double dayAmount = 0;
+            for (Expense expense : listOfSameDay) {
+                dayAmount += expense.getAmount();
+            }
+            DecimalFormat df2 = new DecimalFormat(".##");
+            String dayAmountString = df2.format(dayAmount);
+
+            SimpleDateFormat day = new SimpleDateFormat("dd", Locale.getDefault());
+            mDateExpenseDetailTotal.setText(String.format("%s %s%s %s%s%s",
+                    mDailyExpenseMonth.getText(),
+                    day.format(date),
+                    getContext().getString(R.string.partVsTotal),
+                    dayAmountString,
+                    getContext().getString(R.string.slash),
+                    String.valueOf(mPresenter.getExpenseTotal())));
+            mDateExpenseDetailList.setAdapter(new DailyAnalysisRecyclerAdapter(listOfSameDay));
+        } else if (whichSpinnerIsSelected == 2) {
+            List<Expense> listOfSameWeek = mPresenter.getListOfSameWeek(date);
+            mDateExpenseDetailTotal.setText("");
+            double dayAmount = 0;
+            for (Expense expense : listOfSameWeek) {
+                dayAmount += expense.getAmount();
+            }
+            SimpleDateFormat day = new SimpleDateFormat("dd", Locale.getDefault());
+            mDateExpenseDetailTotal.setText(String.format("%s %s%s %s%s%s",
+                    mDailyExpenseMonth.getText(),
+                    day.format(date),
+                    getContext().getString(R.string.partVsTotal),
+                    String.valueOf(dayAmount),
+                    getContext().getString(R.string.slash),
+                    String.valueOf(mPresenter.getExpenseTotal())));
+            mDateExpenseDetailList.setAdapter(new DailyAnalysisRecyclerAdapter(listOfSameWeek));
+        } else if(whichSpinnerIsSelected == 3) {
+            SimpleDateFormat df = new SimpleDateFormat("MM-yyyy", Locale.getDefault());
+            List<Expense> listOfSameMonth = mPresenter.getListOfSameMonth(df.format(date));
+            mDateExpenseDetailTotal.setText("");
+            double dayAmount = 0;
+            for (Expense expense : listOfSameMonth) {
+                dayAmount += expense.getAmount();
+            }
+            SimpleDateFormat day = new SimpleDateFormat("dd", Locale.getDefault());
+            mDateExpenseDetailTotal.setText(String.format("%s %s%s %s%s%s",
+                    mDailyExpenseMonth.getText(),
+                    day.format(date),
+                    getContext().getString(R.string.partVsTotal),
+                    String.valueOf(dayAmount),
+                    getContext().getString(R.string.slash),
+                    String.valueOf(mPresenter.getExpenseTotal())));
+            mDateExpenseDetailList.setAdapter(new DailyAnalysisRecyclerAdapter(listOfSameMonth));
         }
-        SimpleDateFormat day = new SimpleDateFormat("dd", Locale.getDefault());
-        mDailyExpenseDetailTotal.setText(String.format("%s %s%s %s%s%s",
-                mDailyExpenseMonth.getText(),
-                day.format(date),
-                getContext().getString(R.string.partVsTotal),
-                String.valueOf(dayAmount),
-                getContext().getString(R.string.slash),
-                String.valueOf(mPresenter.getExpenseTotal())));
-        mDailyExpenseDetailList.setAdapter(new DailyAnalysisRecyclerAdapter(listOfSameDay));
+
     }
+
+    private OnClickListener dataAnalysisButtonListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.v(TAG, "creating new item dialog");
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            assert inflater != null;
+
+            mAlertLayout = inflater.inflate(R.layout.analysis_dialog, null);
+            mAlertDialog = new AlertDialog.Builder(getContext())
+                    .setView(mAlertLayout)
+                    .setTitle(getResources().getString(R.string.data_analysis_title))
+                    .setPositiveButton(getResources().getString(R.string.ok), mInputDialogConfirmListener)
+                    .create();
+
+            mAlertDialog.setCanceledOnTouchOutside(false);
+            mAlertDialog.show();
+        }
+    };
+
+    private DialogInterface.OnClickListener mInputDialogConfirmListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            Log.v(TAG, "confirming output dialog");
+
+        }
+    };
 }

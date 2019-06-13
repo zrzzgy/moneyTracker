@@ -24,6 +24,7 @@ public class SettingsPresenter implements IPresenter {
     @Override
     public void attachView(IView view) {
         mView = (SettingsView) view;
+        mView.setLogInListener(mLogInListener);
         mView.setLogOutListener(mLogOutListener);
         mView.setAboutListener(mAboutListener);
     }
@@ -32,6 +33,13 @@ public class SettingsPresenter implements IPresenter {
     public void detachView() {
         mView = null;
     }
+
+    private View.OnClickListener mLogInListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ((SettingsView) view.getParent().getParent()).signIn();
+        }
+    };
 
     private View.OnClickListener mLogOutListener = new View.OnClickListener() {
         @Override

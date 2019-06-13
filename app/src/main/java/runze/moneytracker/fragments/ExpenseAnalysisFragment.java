@@ -111,8 +111,12 @@ public class ExpenseAnalysisFragment extends Fragment {
         mTabDaily = mTabLayout.getTabAt(0);
         mTabCate = mTabLayout.getTabAt(1);
 
-        mDayAnalysisView = new DayAnalysisView(getContext());
-        mCategoryAnalysisView = new CategoryAnalysisView(getContext());
+        if (mDayAnalysisView == null) {
+            mDayAnalysisView = new DayAnalysisView(getContext());
+        }
+        if (mCategoryAnalysisView == null) {
+            mCategoryAnalysisView = new CategoryAnalysisView(getContext());
+        }
 
         mPagerAdapter = new MTPagerAdapter();
         mPagerAdapter.addView(mDayAnalysisView);

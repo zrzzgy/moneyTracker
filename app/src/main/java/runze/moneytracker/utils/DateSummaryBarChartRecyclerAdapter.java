@@ -65,14 +65,17 @@ public class DateSummaryBarChartRecyclerAdapter extends RecyclerView.Adapter<Dat
                 // on list item click
                 Log.v(TAG, "Clicked " + position);
                 ((DayAnalysisView) view.getParent().getParent().getParent().getParent()).
-                        setListOfSameDay(getItem(position).getDate());
+                        setListOfSameDate(getItem(position).getDate());
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mDataSet.size();
+        if (mDataSet != null) {
+            return mDataSet.size();
+        }
+        return 0;
     }
 
     public BaseExpenseTotal getItem(int index) {

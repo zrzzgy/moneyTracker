@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -103,10 +104,12 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
                     .setView(mAlertLayout)
                     .setTitle(getResources().getString(R.string.input_dialog_title))
                     .setNegativeButton(getResources().getString(R.string.cancel), mCancelListener)
-                    .setPositiveButton(getResources().getString(R.string.ok), mInputDialogConfirmListener)
+                    .setPositiveButton(getResources().getString(R.string.ok), null) // This
+                    // is intended to make dialog not disappear if input is invalid
                     .create();
 
             mAlertDialog.setCanceledOnTouchOutside(false);
+            mAlertDialog.setOnShowListener(mOnShowListener); // Make dialog not disappear if input is invalid
             mAlertDialog.show();
 
             //setup auto-complete for categories
@@ -128,13 +131,23 @@ public class MainView extends RelativeLayout implements IView, RecyclerItemTouch
         }
     };
 
-
-    private DialogInterface.OnClickListener mInputDialogConfirmListener = new DialogInterface.OnClickListener() {
+    private DialogInterface.OnShowListener mOnShowListener = new DialogInterface.OnShowListener() {
+        //Confirm dialog
         @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
+        public void onShow(DialogInterface dialogInterface) {
+            Button confirmButton = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            confirmButton.setOnClickListener(mInputDialogConfirmListener);
+        }
+    };
+
+    private OnClickListener mInputDialogConfirmListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
             Log.v(TAG, "confirming input dialog");
 
-            Double amount = Double.parseDouble(((EditText) mAlertLayout.findViewById(R.id.input_amount)).getText().toString());
+            String rawStringAmount = ((EditText) mAlertLayout.findViewById(R.id.input_amount)).getText().toString();
+            double amount = rawStringAmount.equals("") ?  -1 : Double.parseDouble(rawStringAmount);
+
             if (amount <= 0) {
                 mErrorMessage.setText(getResources().getString(R.string.amount_invalid));
             } else {
